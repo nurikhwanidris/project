@@ -73,10 +73,10 @@
                 <div id="collapseCRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">CRM Components</h6>
-                        <a class="collapse-item" href="admin/crm/add">Customers</a>
-                        <a class="collapse-item" href="admin/crm/summary">Summary</a>
-                        <a class="collapse-item" href="admin/crm/reports">Reports</a>
-                        <a class="collapse-item" href="admin/crm/settings">Settings</a>
+                        <a class="collapse-item" href="/project/templates/admin/crm/add">Customers</a>
+                        <a class="collapse-item" href="/project/templates/admin/crm/summary">Summary</a>
+                        <a class="collapse-item" href="/project/templates/admin/crm/reports">Reports</a>
+                        <a class="collapse-item" href="/project/templates/admin/crm/settings">Settings</a>
                     </div>
                 </div>
             </li>
