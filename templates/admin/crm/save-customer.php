@@ -31,7 +31,14 @@ $modified = date('Y-m-d H:i:s');
 $customer = "INSERT INTO customers (staffName, source, customerName, customerName, customerPhone, address1, city, postcode, state, created, modified) VALUE ('$staffName', '$source', '$customerName', '$customerEmail', '$customerPhone', '$address1', '$city', '$postcode', '$state', '$created', '$modified')";
 if ($resultCustomer = mysqli_query($conn, $customer)) {
     echo "Berjaya insert dalam customer's table<br>";
+} else {
+    echo mysqli_error($conn) . "<br>";
 }
 
 // Insert into enquiry table
 $enquiry = "INSERT INTO enquiries (customerID, packageType, packageName, packageDate, packageTWN, packageSGL, packageCTW, packageCWB, packageCNB, request, created, modified) VALUE ('$customerID', '$packageType', '$packageName', '$packageDate', '$packageTWN', '$packageSGL', '$packageCTW', '$packageCWB', '$packageCNB', '$request', '$created', '$modified',)";
+if ($resultEnquiry = mysqli_query($conn, $enquiry)) {
+    echo "Berjaya insert dalam enquiry table";
+} else {
+    echo mysqli_error($conn) . "<br>";
+}
