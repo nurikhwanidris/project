@@ -57,13 +57,12 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tour Components</h6>
                         <a class="collapse-item" href="/project/templates/admin/tours/dashboard">Tours</a>
-                        <a class="collapse-item" href="/project/templates/admin/tours/summary">Summary</a>
+                        <!-- <a class="collapse-item" href="/project/templates/admin/tours/summary">Summary</a> -->
                         <a class="collapse-item" href="/project/templates/admin/tours/reports">Reports</a>
                         <a class="collapse-item" href="/project/templates/admin/tours/settings">Settings</a>
                     </div>
                 </div>
             </li>
-
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCRM" aria-expanded="true" aria-controls="collapseCRM">

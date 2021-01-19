@@ -7,22 +7,19 @@
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-<!-- Get Package ID -->
+<!-- Get Customer Details -->
 <?php
-$sql = "SELECT id FROM customers ORDER BY id DESC";
+$customerID = $_GET['customerID'];
+$sql = "SELECT * FROM customers WHERE id = '$customerID'";
 $resultSql = mysqli_query($conn, $sql);
-if ($resultSql) {
-    $row = mysqli_fetch_assoc($resultSql);
-    $customerID = $row['id'] + 1;
-} else {
-    echo mysqli_error($conn);
-}
+$rowCustomer = mysqli_fetch_assoc($resultSql)
 ?>
 
-<!-- Get Package -->
+<!-- Get Package Details -->
 <?php
-$package = "SELECT * FROM tours";
+$package = "SELECT * FROM enquiries WHERE customerID = '$customerID'";
 $resultPackage = mysqli_query($conn, $package);
+$packageDetails = mysqli_fetch_assoc($resultPackage);
 ?>
 
 <!-- Get the Source -->
@@ -44,8 +41,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             <div class="col xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Add Customers - <?= $customerID; ?></h6>
-                        <input type="text" name="customerID" id="" class="d-none" value="<?= $customerID; ?>">
+                        <h6 class="m-0 font-weight-bold text-primary">Add Customers - <?= $rowCustomer['id']; ?></h6>
+                        <input type="text" name="customerID" id="" class="d-none" value="<?= $rowCustomer['id']; ?>">
                     </div>
                     <div class="card-body">
                         <div class="tab-content" id="myTabContent">
@@ -54,11 +51,11 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <div class="row my-2">
                                     <div class="col-4">
                                         <label for="staffName">Staff Name</label>
-                                        <input type="text" name="staffName" id="" class="form-control">
+                                        <input type="text" name="staffName" id="" class="form-control" value="<?= $rowCustomer['staffName']; ?>" readonly>
                                     </div>
                                     <div class="col-4">
                                         <label for="tourDate">Insert Date</label>
-                                        <input type="text" name="insertDate" id="" class="form-control" value="<?= date("d-m-Y"); ?>" readonly>
+                                        <input type="text" name="insertDate" id="" class="form-control" value="<?= $rowCustomer['created']; ?>" readonly>
                                     </div>
                                     <div class="col-4">
                                         <label for="source">Source</label>
@@ -74,34 +71,34 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <div class="row my-2">
                                     <div class="col-4 form-group">
                                         <label for="">Client Name</label>
-                                        <input type="text" name="customerName" id="" class="form-control">
+                                        <input type="text" name="customerName" id="" class="form-control" value="<?= $rowCustomer['customerName']; ?>">
                                     </div>
                                     <div class="col-4 form-group">
                                         <label for="">Client Phone</label>
-                                        <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1">
+                                        <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1" value="<?= $rowCustomer['customerPhone']; ?>">
                                     </div>
                                     <div class="col-4 form-group">
                                         <label for="">Client Email</label>
-                                        <input type="email" name="customerEmail" id="" class="form-control">
+                                        <input type="email" name="customerEmail" id="" class="form-control" value="<?= $rowCustomer['customerEmail']; ?>">
                                     </div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-6">
                                         <label for="address1">Address</label>
-                                        <input type="text" name="address1" id="" class="form-control">
+                                        <input type="text" name="address1" id="" class="form-control" value="<?= $rowCustomer['address1']; ?>">
                                     </div>
                                     <div class="col-2">
                                         <label for="address1">City</label>
-                                        <input type="text" name="city" id="" class="form-control">
+                                        <input type="text" name="city" id="" class="form-control" value="<?= $rowCustomer['city']; ?>">
                                     </div>
                                     <div class="col-2">
                                         <label for="address1">Postcode</label>
-                                        <input type="text" name="postcode" id="" class="form-control">
+                                        <input type="text" name="postcode" id="" class="form-control" value="<?= $rowCustomer['postcode']; ?>">
                                     </div>
                                     <div class="col-2   ">
                                         <label for="address1">State</label>
                                         <select name="state" id="" class="form-control">
-                                            <option value="">Select</option>
+                                            <option value="<?= $rowCustomer['state']; ?>"><?= $rowCustomer['state']; ?></option>
                                             <option value="Johor">Johor</option>
                                             <option value="Kedah">Kedah</option>
                                             <option value="Kelantan">Kelantan</option>
@@ -126,7 +123,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     <div class="col-2">
                                         <label for="">Package Type</label>
                                         <select name="packageType" id="" class="form-control" required>
-                                            <option value="">Select</option>
+                                            <option value="<?= $packageDetails['packageType']; ?>"><?= $packageDetails['packageType']; ?></option>
                                             <option value="SD">SD</option>
                                             <option value="FIT">FIT</option>
                                             <option value="Private">Private</option>
@@ -135,7 +132,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     </div>
                                     <div class="col-4">
                                         <label for="">Package Name</label>
-                                        <input type="text" name="packageName" id="" list="packageName" class="form-control">
+                                        <input type="text" name="packageName" id="" list="packageName" class="form-control" value="<?= $packageDetails['packageName']; ?>">
                                         <datalist id="packageName">
                                             <?php while ($rowPackage = mysqli_fetch_assoc($resultPackage)) : ?>
                                                 <option value="<?= $rowPackage['name']; ?>">
@@ -144,36 +141,36 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     </div>
                                     <div class="col-2">
                                         <label for="">Package Date</label>
-                                        <input type="date" name="packageDate" id="" class="form-control">
+                                        <input type="text" name="packageDate" id="" class="form-control" value="<?= $packageDetails['packageDate']; ?>">
                                     </div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-2 mt-2">
                                         <label for="">TWN</label>
-                                        <input type="number" name="packageTWN" id="" class="form-control">
+                                        <input type="number" name="packageTWN" id="" class="form-control" value="<?= $packageDetails['packageTWN']; ?>">
                                     </div>
                                     <div class="col-2 mt-2">
                                         <label for="">SGL</label>
-                                        <input type="number" name="packageSGL" id="" class="form-control">
+                                        <input type="number" name="packageSGL" id="" class="form-control" value="<?= $packageDetails['packageSGL']; ?>">
                                     </div>
                                     <div class="col-2 mt-2">
                                         <label for="">CTW</label>
-                                        <input type="number" name="packageCTW" id="" class="form-control">
+                                        <input type="number" name="packageCTW" id="" class="form-control" value="<?= $packageDetails['packageCTW']; ?>">
                                     </div>
                                     <div class="col-2 mt-2">
                                         <label for="">CWB</label>
-                                        <input type="number" name="packageCWB" id="" class="form-control">
+                                        <input type="number" name="packageCWB" id="" class="form-control" value="<?= $packageDetails['packageCWB']; ?>">
                                     </div>
                                     <div class="col-2 mt-2">
                                         <label for="">CNB</label>
-                                        <input type="number" name="packageCNB" id="" class="form-control">
+                                        <input type="number" name="packageCNB" id="" class="form-control" value="<?= $packageDetails['packageCNB']; ?>">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row my-2">
                                     <div class="col">
                                         <h6 class="text-info font-weight-bold"><u>Other Request</u></h6>
-                                        <textarea name="request" id="" cols="30" rows="5" class="form-control"></textarea>
+                                        <textarea name="request" id="" cols="30" rows="5" class="form-control"><?= $packageDetails['request']; ?></textarea>
                                     </div>
                                 </div>
                                 <div class="row mt-4">

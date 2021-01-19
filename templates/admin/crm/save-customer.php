@@ -1,6 +1,6 @@
 <?php
 
-include('../../src/model/dbconn.php');
+include('../../../src/model/dbconn.php');
 
 $customerID = $_POST['customerID'];
 $staffName = $_POST['staffName'];
@@ -8,6 +8,7 @@ $source = $_POST['source'];
 $customerName = $_POST['customerName'];
 $customerEmail = $_POST['customerEmail'];
 $customerPhone = $_POST['customerPhone'];
+$strippedSpace = str_replace(' ', '', $customerPhone);
 $address1 = $_POST['address1'];
 $city = $_POST['city'];
 $postcode = $_POST['postcode'];
@@ -28,7 +29,7 @@ $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
 
 // Insert into customer table
-$customer = "INSERT INTO customers (staffName, source, customerName, customerName, customerPhone, address1, city, postcode, state, created, modified) VALUE ('$staffName', '$source', '$customerName', '$customerEmail', '$customerPhone', '$address1', '$city', '$postcode', '$state', '$created', '$modified')";
+$customer = "INSERT INTO customers (staffName, source, customerName, customerEmail, customerPhone, address1, city, postcode, state, created, modified) VALUE ('$staffName', '$source', '$customerName', '$customerEmail', '$strippedSpace', '$address1', '$city', '$postcode', '$state', '$created', '$modified')";
 if ($resultCustomer = mysqli_query($conn, $customer)) {
     echo "Berjaya insert dalam customer's table<br>";
 } else {
@@ -36,7 +37,7 @@ if ($resultCustomer = mysqli_query($conn, $customer)) {
 }
 
 // Insert into enquiry table
-$enquiry = "INSERT INTO enquiries (customerID, packageType, packageName, packageDate, packageTWN, packageSGL, packageCTW, packageCWB, packageCNB, request, created, modified) VALUE ('$customerID', '$packageType', '$packageName', '$packageDate', '$packageTWN', '$packageSGL', '$packageCTW', '$packageCWB', '$packageCNB', '$request', '$created', '$modified',)";
+$enquiry = "INSERT INTO enquiries (customerID, packageType, packageName, packageDate, packageTWN, packageSGL, packageCTW, packageCWB, packageCNB, request, created, modified) VALUE ('$customerID', '$packageType', '$packageName', '$packageDate', '$packageTWN', '$packageSGL', '$packageCTW', '$packageCWB', '$packageCNB', '$request', '$created', '$modified')";
 if ($resultEnquiry = mysqli_query($conn, $enquiry)) {
     echo "Berjaya insert dalam enquiry table";
 } else {
