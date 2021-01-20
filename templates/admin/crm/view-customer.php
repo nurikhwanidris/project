@@ -29,6 +29,41 @@ $resultSource = mysqli_query($conn, $source);
 date_default_timezone_set("Asia/Kuala_Lumpur");
 ?>
 
+<?php
+// Update into database
+if (isset($_POST['submit'])) {
+    $customerID = $_POST['customerID'];
+    $staffName = $_POST['staffName'];
+    $source = $_POST['source'];
+    $customerName = $_POST['customerName'];
+    $customerEmail = $_POST['customerEmail'];
+    $customerPhone = $_POST['customerPhone'];
+    $strippedSpace = str_replace(' ', '', $customerPhone);
+    $address1 = $_POST['address1'];
+    $city = $_POST['city'];
+    $postcode = $_POST['postcode'];
+    $state = $_POST['state'];
+    $packageType = $_POST['packageType'];
+    $packageName = $_POST['packageName'];
+    $packageDate = $_POST['packageDate'];
+    $packageTWN = $_POST['packageTWN'];
+    $packageSGL = $_POST['packageSGL'];
+    $packageCTW = $_POST['packageCTW'];
+    $packageCWB = $_POST['packageCWB'];
+    $packageCNB = $_POST['packageCNB'];
+    $request = $_POST['request'];
+
+    // Date created and modified
+    date_default_timezone_set("Asia/Kuala_Lumpur");
+    $created = date('Y-m-d H:i:s');
+    $modified = date('Y-m-d H:i:s');
+
+    // $updateCustomer = "UPDATE customers SET staffName "
+}
+
+
+?>
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -36,7 +71,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
         <h1 class="h3 mb-0 text-gray-800">Customers Management</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    <form action="save-customer.php" method="POST">
+    <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
         <div class="row">
             <div class="col xl-12 col-lg-12">
                 <div class="card shadow mb-4">
@@ -59,7 +94,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     </div>
                                     <div class="col-4">
                                         <label for="source">Source</label>
-                                        <select name="source" id="" class="form-control">
+                                        <select name="source" id="" class="form-control" <?php if ($packageDetails['status'] == 'Confirmed' || $packageDetails['status'] == 'Cancelled') : echo "readonly";
+                                                                                            endif; ?>>
                                             <?php while ($rowSource = mysqli_fetch_assoc($resultSource)) : ?>
                                                 <option value="<?= $rowSource['sourceName']; ?>"><?= $rowSource['sourceName']; ?></option>
                                             <?php endwhile; ?>
@@ -173,9 +209,33 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                         <textarea name="request" id="" cols="30" rows="5" class="form-control"><?= $packageDetails['request']; ?></textarea>
                                     </div>
                                 </div>
+                                <hr>
+                                <h6 class="text-info font-weight-bold"><u>Assignment</u></h6>
+                                <div class="row my-2">
+                                    <div class="col-4">
+                                        <label for="">Assign Staff</label>
+                                        <input type="text" name="assignStaff" id="" list="assignStaff" class="form-control" value="<?= $packageDetails['assigned']; ?>">
+                                        <datalist id="assignStaff">
+                                            <option value="Danial">Danial</option>
+                                            <option value="Nadia">Nadia</option>
+                                            <option value="Apocalyspe">Apocalyspe</option>
+                                            <option value="Kacang">Kacang</option>
+                                        </datalist>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="">Status</label>
+                                        <input type="text" name="status" id="" class="form-control" list="statusList" value="<?= $packageDetails['status']; ?>">
+                                        <datalist id="statusList">
+                                            <option value="Confirmed">Confirmed</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Unassigned">Unassigned</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                        </datalist>
+                                    </div>
+                                </div>
                                 <div class="row mt-4">
                                     <div class="col">
-                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                        <button class="btn btn-primary" type="submit" name="submit">Submit</button>
                                     </div>
                                 </div>
                             </div>

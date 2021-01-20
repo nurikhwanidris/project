@@ -9,11 +9,11 @@
 
 <?php
 // Fetch customer
-$customer = "SELECT * FROM customers";
+$customer = "SELECT * FROM customers ORDER BY id";
 $resultCustomer = mysqli_query($conn, $customer);
 
 // Fetch Package based on customer ID
-$enquiry = "SELECT * FROM enquiries";
+$enquiry = "SELECT * FROM enquiries ORDER BY customerID";
 $resultEnquiries = mysqli_query($conn, $enquiry);
 ?>
 
@@ -95,7 +95,7 @@ $resultEnquiries = mysqli_query($conn, $enquiry);
                                     <td class="align-middle">
                                         <?= $row['customerEmail']; ?>
                                     </td>
-                                    <td class="align-middle">
+                                    <td class=" text-center align-middle">
                                         <?= $rowPackage['assigned']; ?>
                                     </td>
                                     <td class="text-center">
@@ -104,6 +104,8 @@ $resultEnquiries = mysqli_query($conn, $enquiry);
                                         <?php elseif ($rowPackage['status'] == 'Pending') : ?>
                                             <span class="badge badge-warning"><?= $rowPackage['status']; ?></span>
                                         <?php elseif ($rowPackage['status'] == "Cancelled") : ?> <span class="badge badge-danger"><?= $rowPackage['status']; ?></span>
+                                        <?php elseif (empty($rowPackage['assigned'])) : ?>
+                                            <span class="badge badge-secondary">Unassigned</span>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -115,9 +117,6 @@ $resultEnquiries = mysqli_query($conn, $enquiry);
         </div>
     </div>
 </div>
-
-
-
 
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>

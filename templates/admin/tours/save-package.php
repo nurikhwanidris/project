@@ -1,5 +1,7 @@
 <?php
+
 include('../../../src/model/dbconn.php');
+
 $tourID = $_POST['tourID'];
 $tourName = $_POST['tourName'];
 $tourDate = $_POST['tourDate'];
@@ -100,3 +102,6 @@ if ($resultSetting = mysqli_query($conn, $toursSetting)) {
 } else {
     echo mysqli_error($conn) . "<br>";
 }
+
+// Redirect to summary
+header('Location:/project/templates/admin/tours/dashboard.php');
