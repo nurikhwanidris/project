@@ -45,7 +45,7 @@ $resultEnquiries = mysqli_query($conn, $enquiry);
             <!-- Card Body -->
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th class="text-center align-middle">Enquiry #</th>
@@ -105,7 +105,7 @@ $resultEnquiries = mysqli_query($conn, $enquiry);
                                             <span class="badge badge-warning"><?= $rowPackage['status']; ?></span>
                                         <?php elseif ($rowPackage['status'] == "Cancelled") : ?> <span class="badge badge-danger"><?= $rowPackage['status']; ?></span>
                                         <?php elseif (empty($rowPackage['assigned'])) : ?>
-                                            <span class="badge badge-secondary">Unassigned</span>
+                                            <span class="badge badge-dark">Unassigned</span>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -117,6 +117,17 @@ $resultEnquiries = mysqli_query($conn, $enquiry);
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            "order": [
+                [0, "desc"]
+            ]
+        });
+    });
+</script>
+
 
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>

@@ -178,7 +178,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col">
-                                        <button class="btn btn-primary" type="submit">Submit</button>
+                                        <button class="btn btn-sm btn-primary" type="submit">Submit</button>
                                     </div>
                                 </div>
                             </div>

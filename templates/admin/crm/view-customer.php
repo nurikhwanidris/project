@@ -52,13 +52,34 @@ if (isset($_POST['submit'])) {
     $packageCWB = $_POST['packageCWB'];
     $packageCNB = $_POST['packageCNB'];
     $request = $_POST['request'];
+    $assignStaff = $_POST['assignStaff'];
+    $status = $_POST['status'];
 
     // Date created and modified
     date_default_timezone_set("Asia/Kuala_Lumpur");
     $created = date('Y-m-d H:i:s');
     $modified = date('Y-m-d H:i:s');
 
-    // $updateCustomer = "UPDATE customers SET staffName "
+    // Update the customer information
+    $updateCustomer = "UPDATE customers SET staffName = '$staffName', source = '$source', customerName = '$customerName', customerEmail = '$customerEmail', customerPhone = '$strippedSpace', address1 = '$address1', city = '$city', postcode = '$postcode', state = '$state', modified ='$modified' WHERE id = '$customerID'";
+    if ($resultCustomer = mysqli_query($conn, $updateCustomer)) {
+        $msg = 'The customer information has been sucessfully updated';
+        $alert = '-success';
+    } else {
+        $msg = 'Error on ' . mysqli_error($conn);
+        $alert = '-danger';
+    }
+
+    // Update the package information
+    $updatePackage = "UPDATE enquiries SET packageType = '$packageType', packageName = '$packageName', packageDate = '$packageDate', packageTWN = '$packageTWN', packageSGL = '$packageSGL', packageCTW = '$packageCTW', packageCWB = '$packageCWB', packageCNB = '$packageCNB', modified = '$modified', assigned = '$assignStaff', status = '$status'  WHERE customerID = '$customerID'";
+    if ($resultUpdatePackage = mysqli_query($conn, $updatePackage)) {
+        $msg  = '<strong>Success!</strong> All the updated information will appeared after the page refreshed in <strong><u><span class="c" id="5"></span></u></strong>.';
+        $alert = '-success';
+        echo "<meta http-equiv='refresh' content='4.5'>";
+    } else {
+        $msg = 'Error on ' . mysqli_error($conn);
+        $alert = '-danger';
+    }
 }
 
 
@@ -70,6 +91,18 @@ if (isset($_POST['submit'])) {
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Customers Management</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    </div>
+    <div class="row">
+        <div class="col">
+            <?php if (isset($_POST['submit'])) : ?>
+                <div class="alert alert<?= $alert; ?> alert-dismissible fade show" role="alert">
+                    <?= $msg; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
     <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
         <div class="row">
@@ -258,4 +291,29 @@ if (isset($_POST['submit'])) {
             this.value = prefix + this.value;
         }
     });
+</script>
+
+<script>
+    function c() {
+        var n = $('.c').attr('id');
+        var c = n;
+        $('.c').text(c);
+        setInterval(function() {
+            c--;
+            if (c >= 0) {
+                $('.c').text(c);
+            }
+            if (c == 0) {
+                $('.c').text(n);
+            }
+        }, 1000);
+    }
+
+    // Start
+    c();
+
+    // Loop
+    setInterval(function() {
+        c();
+    }, 5000);
 </script>
