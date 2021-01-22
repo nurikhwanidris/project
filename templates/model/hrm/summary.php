@@ -1,42 +1,19 @@
-<!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
-
-<!-- Query the database -->
-<?php
-$sql = "SELECT
-    tours.name AS name,
-    tours.id AS id,
-    tours.date AS date,
-    tours.created AS created,
-    tours_settings.status AS status,
-    tours_settings.type AS type
-FROM
-    tours INNER JOIN
-    tours_settings ON tours_settings.tour_id = tours.id";
-$result = mysqli_query($conn, $sql);
-
-// Count rows
-$rowCount = mysqli_num_rows($result);
-?>
-
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
+
+<!-- Get DB conn -->
+<?php include('../../../src/model/dbconn.php') ?>
 
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-<!-- Begin Page Content -->
 <div class="container-fluid">
-
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Tour Dashboard</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-
-    <!-- Content Row -->
     <div class="row">
-
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -45,7 +22,7 @@ $rowCount = mysqli_num_rows($result);
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Package Created</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCount; ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">000</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-id-card fa-2x text-gray-300"></i>
@@ -118,95 +95,80 @@ $rowCount = mysqli_num_rows($result);
             </div>
         </div>
     </div>
-
-    <!-- Content Row -->
-
     <div class="row">
-
-        <!-- Area Chart -->
         <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Packages</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Dropdown Header:</div>
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Employee List</h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <a href="/project/templates/model/tours/add.php" class="btn btn-success btn-sm mb-3">Add Package</a>
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th class="text-center align-middle">Package ID</th>
-                                    <th class="text-center align-middle">Created</th>
-                                    <th class="align-middle">Program</th>
-                                    <th class="text-center align-middle">Available Date</th>
-                                    <th class="text-center align-middle">Type</th>
-                                    <th class="align-middle">Created by</th>
-                                    <th class="align-middle">Modified by</th>
-                                    <th class="text-center align-middle">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = mysqli_fetch_array($result)) : ?>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <a href="/project/templates/model/tours/add.php" class="btn btn-success btn-sm mb-3">Add Employee</a>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center align-middle">Employee ID</th>
+                                        <th class="text-center align-middle">Image</th>
+                                        <th class="align-middle">Name</th>
+                                        <th class="text-center align-middle">Department</th>
+                                        <th class="text-center align-middle">Phone</th>
+                                        <th class="align-middle">Date Joined</th>
+                                        <th class="text-center align-middle">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <tr>
                                         <td class="text-center align-middle">
                                             <a href="#" class="btn btn-sm btn-info">
-                                                <i class="fas fa-eye"></i> <?= $row['id']; ?>
+                                                <i class="fas fa-eye"></i> 1
                                             </a>
                                         </td>
                                         <td class="text-center align-middle">
-                                            <?= $row['created']; ?>
+                                            <img src="/project/assets/img/male.png" alt="" style="width: 100px;">
                                         </td>
                                         <td class="align-middle">
-                                            <?= $row['name']; ?>
+                                            Mammon
                                         </td>
                                         <td class="text-center align-middle">
-                                            <?= $row['date']; ?>
+                                            IT
                                         </td>
                                         <td class="align-middle text-center">
-                                            <?= $row['type']; ?>
+                                            +60125853744
                                         </td>
-                                        <td class="align-middle">
-                                            Mammon
+                                        <td class="text-center align-middle">
+                                            2020-05-02
                                         </td>
-                                        <td class="align-middle">
-                                            Mammon
-                                        </td>
-                                        <td class="text-center">
-                                            <?php if ($row['status'] == 'enabled') : ?>
-                                                <span class="badge badge-success">Enabled</span>
-                                            <?php elseif ($row['status'] == 'disabled') : ?>
-                                                <span class="badge badge-danger">Disabled</span>
-                                            <?php endif; ?>
+                                        <td class="text-center align-middle">
+                                            <span class="badge badge-success">Active</span>
                                         </td>
                                     </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Content Row -->
-
     </div>
-    <!-- /.container-fluid -->
-
 </div>
-<!-- End of Main Content -->
 
+
+
+
+<!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>

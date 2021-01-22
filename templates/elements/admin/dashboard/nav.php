@@ -11,7 +11,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">SB model <sup>2</sup></div>
             </a>
 
             <!-- Divider -->
@@ -56,10 +56,10 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tour Components</h6>
-                        <a class="collapse-item" href="/project/templates/admin/tours/dashboard">Tours</a>
-                        <!-- <a class="collapse-item" href="/project/templates/admin/tours/summary">Summary</a> -->
-                        <a class="collapse-item" href="/project/templates/admin/tours/reports">Reports</a>
-                        <a class="collapse-item" href="/project/templates/admin/tours/settings">Settings</a>
+                        <a class="collapse-item" href="/project/templates/model/tours/dashboard">Tours</a>
+                        <!-- <a class="collapse-item" href="/project/templates/model/tours/summary">Summary</a> -->
+                        <a class="collapse-item" href="/project/templates/model/tours/reports">Reports</a>
+                        <a class="collapse-item" href="/project/templates/model/tours/settings">Settings</a>
                     </div>
                 </div>
             </li>
@@ -72,10 +72,10 @@
                 <div id="collapseCRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">CRM Components</h6>
-                        <a class="collapse-item" href="/project/templates/admin/crm/add">Customers</a>
-                        <a class="collapse-item" href="/project/templates/admin/crm/summary">Summary</a>
-                        <a class="collapse-item" href="/project/templates/admin/crm/reports">Reports</a>
-                        <a class="collapse-item" href="/project/templates/admin/crm/settings">Settings</a>
+                        <a class="collapse-item" href="/project/templates/model/crm/add">Customers</a>
+                        <a class="collapse-item" href="/project/templates/model/crm/summary">Summary</a>
+                        <a class="collapse-item" href="/project/templates/model/crm/reports">Reports</a>
+                        <a class="collapse-item" href="/project/templates/model/crm/settings">Settings</a>
                     </div>
                 </div>
             </li>
@@ -89,10 +89,27 @@
                 <div id="collapseHotel" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Hotel Components</h6>
-                        <a class="collapse-item" href="admin/crm/add">Hotels</a>
-                        <a class="collapse-item" href="admin/crm/summary">Rooms</a>
-                        <a class="collapse-item" href="admin/crm/reports">Services</a>
-                        <a class="collapse-item" href="admin/crm/settings">Settings</a>
+                        <a class="collapse-item" href="model/crm/add">Hotels</a>
+                        <a class="collapse-item" href="model/crm/summary">Rooms</a>
+                        <a class="collapse-item" href="model/crm/reports">Services</a>
+                        <a class="collapse-item" href="model/crm/settings">Settings</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHRM" aria-expanded="true" aria-controls="collapseHRM">
+                    <i class="far fa-user-circle"></i>
+                    <span>HRM</span>
+                </a>
+                <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">HR Management</h6>
+                        <a class="collapse-item" href="/project/templates/model/hrm/summary">Employee List</a>
+                        <a class="collapse-item" href="/project/templates/model/hrm/add">Add Employee</a>
+                        <a class="collapse-item" href="/project/templates/model/hrm/report">Report</a>
+                        <a class="collapse-item" href="/project/templates/model/hrm/add">Settings</a>
                     </div>
                 </div>
             </li>
