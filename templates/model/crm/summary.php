@@ -17,9 +17,7 @@ $enquiry = "SELECT * FROM enquiries ORDER BY customerID";
 $resultEnquiries = mysqli_query($conn, $enquiry);
 
 // Count rows
-
 $rowCountEnq = mysqli_num_rows($resultEnquiries);
-
 
 // Special case
 $selectCustomer = "SELECT customerName FROM customers GROUP BY customerName";

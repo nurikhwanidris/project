@@ -7,6 +7,16 @@
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
+<?php
+// Get data from employee infomation table
+$getEmp = "SELECT * FROM employee_information ORDER BY id";
+$resultEmp = mysqli_query($conn, $getEmp);
+
+// Get data from employee office table
+$getOffice = "SELECT * FROM employee_office ORDER BY emp_id";
+$resultOffice = mysqli_query($conn, $getOffice);
+?>
+
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -117,46 +127,56 @@
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
-                        <a href="/project/templates/model/tours/add.php" class="btn btn-success btn-sm mb-3">Add Employee</a>
+                        <a href="/project/templates/model/hrm/add" class="btn btn-success btn-sm mb-3">Add Employee</a>
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th class="text-center align-middle">Employee ID</th>
-                                        <th class="text-center align-middle">Image</th>
                                         <th class="align-middle">Name</th>
+                                        <th class="text-center align-middle">Employee IC</th>
                                         <th class="text-center align-middle">Department</th>
                                         <th class="text-center align-middle">Phone</th>
-                                        <th class="align-middle">Date Joined</th>
+                                        <th class="text-center align-middle">Date Joined</th>
                                         <th class="text-center align-middle">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="text-center align-middle">
-                                            <a href="#" class="btn btn-sm btn-info">
-                                                <i class="fas fa-eye"></i> 1
-                                            </a>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <img src="/project/assets/img/male.png" alt="" style="width: 100px;">
-                                        </td>
-                                        <td class="align-middle">
-                                            Mammon
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            IT
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            +60125853744
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            2020-05-02
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <span class="badge badge-success">Active</span>
-                                        </td>
-                                    </tr>
+                                    <?php while ($rowEmp = mysqli_fetch_assoc($resultEmp) and $rowOff = mysqli_fetch_assoc($resultOffice)) : ?>
+                                        <tr>
+                                            <td class="text-center align-middle">
+                                                <a href="#" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i> <?= $rowEmp['id']; ?>
+                                                </a>
+                                            </td>
+                                            <td class="align-middle">
+                                                <?= $rowEmp['fName'] . ' ' . $rowEmp['lName'] ?>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <span id="ic">
+                                                    <?= $rowEmp['ic']; ?>
+                                                </span>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <?= $rowOff['dept']; ?>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <?= $rowEmp['phone']; ?>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <?= $rowOff['doh']; ?>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <?php if ($rowOff['status'] == 'Active') : ?>
+                                                    <span class="badge badge-success">Active</span>
+                                                <?php elseif ($rowOff['status'] == 'Resigned') : ?>
+                                                    <span class="badge badge-secondary">Resigned</span>
+                                                <?php elseif ($rowOff['status'] == 'Terminated') : ?>
+                                                    <span class="badge badge-danger">Terminated</span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -167,8 +187,5 @@
     </div>
 </div>
 
-
-
-
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php include('../../elements/admin/dashboard/footer.php'); ?>
