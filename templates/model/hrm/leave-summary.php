@@ -50,7 +50,9 @@
                             <tbody>
                                 <tr>
                                     <td class="text-center align-middle">
-                                        <a href="#" class="btn btn-sm btn-info">1</a>
+                                        <h5>
+                                            <a href="#" class="badge badge-info">1</a>
+                                        </h5>
                                     </td>
                                     <td class="align-middle">
                                         Nur Ikhwan Idris Abdul Rahman
@@ -74,14 +76,14 @@
                                         Arzu Abdullah
                                     </td>
                                     <td class="text-center align-middle">
-                                        <span class="badge badge-success">Approved</span>
+                                        <h5>
+                                            <span class="badge badge-success">Approved</span>
+                                        </h5>
                                     </td>
                                     <td class="text-center align-middle">
-                                        <strong style="background-color:green;">
-                                            <u style="color: white;">
-                                                13
-                                            </u>
-                                        </strong>
+                                        <h5>
+                                            <span class="badge badge-success">13</span>
+                                        </h5>
                                     </td>
                                 </tr>
                             </tbody>
