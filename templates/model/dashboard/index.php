@@ -14,7 +14,6 @@
 
     <!-- Content Row -->
     <div class="row">
-
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -103,6 +102,14 @@
 
         <!-- Area Chart -->
         <div class="col-xl-12 col-lg-12">
+            <?php if (isset($_GET['success'])) : ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Welcome back!</strong> You have 14 task on pending.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <?php endif; ?>
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">

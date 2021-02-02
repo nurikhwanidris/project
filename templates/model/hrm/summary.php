@@ -105,6 +105,18 @@ $resultOffice = mysqli_query($conn, $getOffice);
             </div>
         </div>
     </div>
+    <?php if (isset($_GET['success']) == 'yes') : ?>
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> User account for <strong><?= $_GET['user']; ?></strong> is created.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
     <div class="row">
         <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">

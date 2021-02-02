@@ -67,15 +67,16 @@ $empId = $row['id'] + 1;
                                 <div class="row my-2">
                                     <div class="col-4">
                                         <label for="">Username <small class="text-danger">Mandatory</small></label>
-                                        <input type="text" name="username" id="" class="form-control">
+                                        <input type="text" name="username" id="" class="form-control" required>
                                     </div>
                                     <div class="col-4">
                                         <label for="">Password <small class="text-danger">Mandatory</small></label>
-                                        <input type="password" name="password1" id="" class="form-control">
+                                        <input type="password" name="password1" id="password1" class="form-control" required>
                                     </div>
                                     <div class="col-4">
                                         <label for="">Confirm Password <small class="text-danger">Mandatory</small></label>
-                                        <input type="password" name="password2" id="" class="form-control">
+                                        <input type="password" name="password2" id="password2" class="form-control" required>
+                                        <span id="message"></span>
                                     </div>
                                 </div>
                                 <hr>
@@ -83,11 +84,11 @@ $empId = $row['id'] + 1;
                                 <div class="row my-2">
                                     <div class="col-4">
                                         <label for="">Personal Phone Number <small class="text-danger">Mandatory</small></label>
-                                        <input type="text" name="phone" id="" class="form-control">
+                                        <input type="text" name="phone" id="" class="form-control" required>
                                     </div>
                                     <div class="col-4">
                                         <label for="">Personal Email <small class="text-danger">Mandatory</small></label>
-                                        <input type="email" name="email" id="" class="form-control">
+                                        <input type="email" name="email" id="" class="form-control" required>
                                     </div>
                                 </div>
                                 <hr>
@@ -133,7 +134,7 @@ $empId = $row['id'] + 1;
                                 <div class="row my-2">
                                     <div class="col-3">
                                         <label for="">Department</label>
-                                        <select name="dept" id="" class="form-control">
+                                        <select name="dept" id="" class="form-control" required>
                                             <option value="">Select</option>
                                             <option value="Insurance">Insurance</option>
                                             <option value="Tour">Tour</option>
@@ -144,7 +145,7 @@ $empId = $row['id'] + 1;
                                     </div>
                                     <div class="col-3">
                                         <label for="">Position</label>
-                                        <select name="position" id="" class="form-control">
+                                        <select name="position" id="" class="form-control" required>
                                             <option value="">Select</option>
                                             <option value="Telemarketer">Telemarketer</option>
                                             <option value="Tour Executive">Tour Executive</option>
@@ -156,11 +157,11 @@ $empId = $row['id'] + 1;
                                     </div>
                                     <div class="col-3">
                                         <label for="">Date of Hire</label>
-                                        <input type="date" name="doh" id="" class="form-control">
+                                        <input type="date" name="doh" id="" class="form-control" required>
                                     </div>
                                     <div class="col-3">
                                         <label for="">Status</label>
-                                        <select name="status" id="" class="form-control">
+                                        <select name="status" id="" class="form-control" required>
                                             <option value="">Select</option>
                                             <option value="Active">Active</option>
                                             <option value="Resigned">Resigned</option>
@@ -255,6 +256,7 @@ $empId = $row['id'] + 1;
     });
 </script>
 
+<!-- SSN Script -->
 <script type="text/javascript">
     $('#ssn').keyup(function() {
         var val = this.value.replace(/\D/g, '');
@@ -262,5 +264,15 @@ $empId = $row['id'] + 1;
         val = val.replace(/-(\d{2})/, '-$1-');
         val = val.replace(/(\d)-(\d{4}).*/, '$1-$2');
         this.value = val;
+    });
+</script>
+
+<!-- Password check -->
+<script>
+    $('#password1, #password2').on('keyup', function() {
+        if ($('#password1').val() == $('#password2').val()) {
+            $('#message').html('Both passwords are matching').css('color', 'green');
+        } else
+            $('#message').html('One of the password does not match').css('color', 'red');
     });
 </script>

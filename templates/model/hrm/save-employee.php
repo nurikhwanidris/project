@@ -15,7 +15,7 @@ $postcode = $_POST['postcode'];
 $city = $_POST['city'];
 $state = $_POST['state'];
 $username = $_POST['username'];
-$password2 = $_POST['password2'];
+$passwordHash = password_hash($_POST['password2'], PASSWORD_DEFAULT);
 $dept = $_POST['dept'];
 $position = $_POST['position'];
 $doh = $_POST['doh'];
@@ -64,5 +64,14 @@ if (mysqli_num_rows($resultCheck) > 0) {
         echo "Berjaya insert dalam table leave allotment <br>";
     } else {
         echo mysqli_error($conn) . "<br>";
+    }
+
+    // Insert into the user table
+    $user = "INSERT INTO users (emp_id, username, password, created, modified) VALUE ('$empID','$username','$passwordHash','$created','$modified')";
+    if ($resultUser = mysqli_query($conn, $user)) {
+        echo "Berjaya insert dalam user table";
+        header('Location:/project/templates/model/hrm/summary?success=yes&user=' . $fName . ' ' . $lName);
+    } else {
+        echo mysqli_error($conn);
     }
 }

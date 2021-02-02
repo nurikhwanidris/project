@@ -1,3 +1,12 @@
+<!-- Get user data -->
+<?php
+$id = $_SESSION['id'];
+$user = "SELECT * FROM employee_information where id = '$id'";
+$result = mysqli_query($conn, $user);
+$row = mysqli_fetch_array($result);
+?>
+
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -11,7 +20,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB model <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">ETSB System</div>
             </a>
 
             <!-- Divider -->
@@ -331,7 +340,9 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?= $row['fName']; ?>
+                                </span>
                                 <img class="img-profile rounded-circle" src="../../../assets/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
