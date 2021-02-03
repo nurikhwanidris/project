@@ -6,7 +6,9 @@
 
 <!-- Check for existing session -->
 <?php
-
+if (isset($_SESSION['id'])) {
+    header('Location:/project/templates/model/dashboard/index.php');
+}
 ?>
 
 <!-- Get DB conn -->

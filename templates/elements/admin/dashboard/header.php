@@ -4,9 +4,6 @@
 <!-- DB Conn -->
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/project/src/model/dbconn.php'); ?>
 
-<!-- Session ID -->
-<?php //$id = $_SESSION['id']; 
-?>
 <!DOCTYPE html>
 <html lang="en">
 

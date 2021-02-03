@@ -1,11 +1,11 @@
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php include('../../../elements/admin/dashboard/header.php') ?>
 
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php include('../../../../src/model/dbconn.php') ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php include('../../../elements/admin/dashboard/nav.php') ?>
 
 <div class="container-fluid">
     <form action="">
@@ -21,15 +21,15 @@
                                 <div class="row">
                                     <div class="col-3">
                                         <label for="">Employee Name</label>
-                                        <input type="text" name="" id="" class="form-control">
+                                        <input type="text" name="" id="" class="form-control" value="<?= $row['fName'] . ' ' . $row['lName']; ?>" readonly>
                                     </div>
                                     <div class="col-3">
                                         <label for="">Employee IC</label>
-                                        <input type="text" name="" id="" class="form-control">
+                                        <input type="text" name="" id="" class="form-control" value="<?= $row['ic']; ?>" readonly>
                                     </div>
                                     <div class="col-3">
                                         <label for="">Department</label>
-                                        <input type="text" name="" id="" class="form-control" list="dept">
+                                        <input type="text" name="" id="" class="form-control" list="dept" value="<?= $rowOffice['dept']; ?>" readonly>
                                         <datalist id="dept">
                                             <option value="">Select</option>
                                             <option value="Insurance">Insurance</option>
@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="col-3">
                                         <label for="">Position</label>
-                                        <input type="text" name="" id="" class="form-control" list="position">
+                                        <input type="text" name="" id="" class="form-control" list="position" value="<?= $rowOffice['position']; ?>" readonly>
                                         <datalist id="position">
                                             <option value="Telemarketer">Telemarketer</option>
                                             <option value="Tour Executive">Tour Executive</option>
@@ -56,7 +56,7 @@
                                 <div class="row">
                                     <div class="col-3">
                                         <label for="">Type of Leave</label>
-                                        <select name="type" id="" class="form-control">
+                                        <select name="type" id="" class="form-control" readonly>
                                             <option value="">Select</option>
                                             <option value="AL">Annual Leave</option>
                                             <option value="BR">Bereavement</option>
@@ -69,25 +69,25 @@
                                     </div>
                                     <div class="col-2">
                                         <label for="">From</label>
-                                        <input type="date" name="" id="" class="form-control">
+                                        <input type="date" name="" id="" class="form-control" readonly>
                                     </div>
                                     <div class="col-2">
                                         <label for="">To</label>
-                                        <input type="date" name="" id="" class="form-control">
+                                        <input type="date" name="" id="" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="">Reason of Leave</label>
-                                        <textarea name="" id="" cols="30" rows="5" class="form-control"></textarea>
+                                        <textarea name="" id="" cols="30" rows="5" class="form-control" readonly></textarea>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row my-3">
                                     <div class="col-2">
                                         <label for="">Verified by</label>
-                                        <input type="text" name="" id="" class="form-control">
+                                        <input type="text" name="" id="" class="form-control" readonly>
                                     </div>
                                     <div class="col-2">
                                         <label for="">Approved by</label>
@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="row my-3">
                                     <div class="col-4">
-                                        <button class="btn btn-sm btn-primary">Submit</button>
+                                        <button class="btn btn-sm btn-primary" type="submit" name="submit">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
 </div>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php include('../../../elements/admin/dashboard/footer.php') ?>
 
 <script>
     document.getElementById('status').addEventListener('change', function() {

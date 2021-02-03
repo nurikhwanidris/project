@@ -1,11 +1,23 @@
-<!-- Get user data -->
+<!-- Check for session -->
 <?php
-$id = $_SESSION['id'];
-$user = "SELECT * FROM employee_information where id = '$id'";
-$result = mysqli_query($conn, $user);
-$row = mysqli_fetch_array($result);
+if (!isset($_SESSION['id'])) {
+    header('Location:/project/user/login');
+}
 ?>
 
+<!-- Get user data -->
+<?php
+// Data from employee information table
+$id = $_SESSION['id'];
+$user = "SELECT * FROM employee_information WHERE id = '$id'";
+$result = mysqli_query($conn, $user);
+$row = mysqli_fetch_array($result);
+
+// Data from employee office table
+$office = "SELECT * FROM employee_office WHERE emp_id = '$id'";
+$resultOffice = mysqli_query($conn, $office);
+$rowOffice = mysqli_fetch_array($resultOffice);
+?>
 
 <body id="page-top">
 
@@ -289,7 +301,7 @@ $row = mysqli_fetch_array($result);
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../../../assets/img/undraw_profile_1.svg" alt="">
+                                        <img class="rounded-circle" src="/project/assets/img/undraw_profile_1.svg" alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -300,7 +312,7 @@ $row = mysqli_fetch_array($result);
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../../../assets/img/undraw_profile_2.svg" alt="">
+                                        <img class="rounded-circle" src="/project/assets/img/undraw_profile_2.svg" alt="">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -311,7 +323,7 @@ $row = mysqli_fetch_array($result);
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../../../assets/img/undraw_profile_3.svg" alt="">
+                                        <img class="rounded-circle" src="/project/assets/img/undraw_profile_3.svg" alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -343,7 +355,7 @@ $row = mysqli_fetch_array($result);
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?= $row['fName']; ?>
                                 </span>
-                                <img class="img-profile rounded-circle" src="../../../assets/img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="/project/assets/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

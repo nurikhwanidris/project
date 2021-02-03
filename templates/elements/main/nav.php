@@ -51,7 +51,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/project/templates/model/dashboard" class="nav-link border border-light rounded waves-effect" target="_blank">
+                            <a href="/project/user/login" class="nav-link border border-light rounded waves-effect" target="_blank">
                                 <i class="fab fa-github mr-2"></i>MDB GitHub
                             </a>
                         </li>
