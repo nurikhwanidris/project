@@ -30,10 +30,10 @@ if (isset($_POST['submit'])) {
     $resultLeave = mysqli_query($conn, $leave);
 
     // Deduct the leave
-    $datetime1 = date_create('2009-10-11');
-    $datetime2 = date_create('2009-10-13');
-    $countDays = date_diff($datetime1, $datetime2);
-    $days = $countDays->format();
+    // function dateDiff($leaveFrom, $leaveTo){
+    //     $diff = strtotime($leaveFrom)-strtotime($leaveTo);
+    //     return abs(round($diff/86400));
+    // }
 
     // Display message after submit
     if ($resultLeave) {
