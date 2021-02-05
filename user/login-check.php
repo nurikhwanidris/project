@@ -19,10 +19,10 @@ if (mysqli_num_rows($result) > 0) {
             $_SESSION['last_login_timestamp'] = time();
             header('Location:/project/templates/model/dashboard/index.php?success');
         } else {
-            header('Location:/project/user/login?msg=Username or password is not right.&alert=-danger');
+            header('Location:/project/user/login?msg=Username or password is not right.&alert=danger');
         }
     }
 } else {
-    header('Location:/project/user/login?msg=Username or password is not right.&alert=-danger');
+    header('Location:/project/user/login?msg=Username or password is not right.&alert=danger');
 }
 ?>

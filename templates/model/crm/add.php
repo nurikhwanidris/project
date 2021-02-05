@@ -41,7 +41,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     </div>
     <form action="save-customer.php" method="POST">
         <div class="row">
-            <div class="col xl-12 col-lg-12">
+            <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Add Customers - <?= $customerID; ?></h6>
@@ -52,15 +52,15 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                             <div class="tab-pane fade show active" id="General" role="tabpanel" aria-labelledby="General-tab">
                                 <h6 class="font-weight-bold text-info"><u>Staff Details</u></h6>
                                 <div class="row my-2">
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="staffName">Staff Name</label>
                                         <input type="text" name="staffName" id="" class="form-control">
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="tourDate">Insert Date</label>
                                         <input type="text" name="insertDate" id="" class="form-control" value="<?= date("d-m-Y"); ?>" readonly>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="source">Source</label>
                                         <select name="source" id="" class="form-control">
                                             <?php while ($rowSource = mysqli_fetch_assoc($resultSource)) : ?>
@@ -72,33 +72,33 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <hr>
                                 <h6 class="font-weight-bold text-info"><u>Customer Details</u></h6>
                                 <div class="row my-2">
-                                    <div class="col-4 form-group">
+                                    <div class="col-lg-4 form-group">
                                         <label for="">Client Name</label>
                                         <input type="text" name="customerName" id="" class="form-control">
                                     </div>
-                                    <div class="col-4 form-group">
+                                    <div class="col-lg-4 form-group">
                                         <label for="">Client Phone</label>
                                         <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1">
                                     </div>
-                                    <div class="col-4 form-group">
+                                    <div class="col-lg-4 form-group">
                                         <label for="">Client Email</label>
                                         <input type="email" name="customerEmail" id="" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row my-2">
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <label for="address1">Address</label>
                                         <input type="text" name="address1" id="" class="form-control">
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="address1">City</label>
                                         <input type="text" name="city" id="" class="form-control">
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="address1">Postcode</label>
                                         <input type="text" name="postcode" id="" class="form-control">
                                     </div>
-                                    <div class="col-2   ">
+                                    <div class="col-lg-2   ">
                                         <label for="address1">State</label>
                                         <select name="state" id="" class="form-control">
                                             <option value="">Select</option>
@@ -123,7 +123,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <hr>
                                 <h6 class="font-weight-bold text-info"><u>Package Details</u></h6>
                                 <div class="row my-2">
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="">Package Type</label>
                                         <select name="packageType" id="" class="form-control" required>
                                             <option value="">Select</option>
@@ -133,7 +133,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                             <option value="Academic">Academic</option>
                                         </select>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">Package Name</label>
                                         <input type="text" name="packageName" id="" list="packageName" class="form-control">
                                         <datalist id="packageName">
@@ -142,29 +142,29 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                                 <?php endwhile; ?>
                                         </datalist>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="">Package Date</label>
                                         <input type="date" name="packageDate" id="" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row my-2">
-                                    <div class="col-2 mt-2">
+                                    <div class="col-lg-2 mt-2">
                                         <label for="">TWN</label>
                                         <input type="number" name="packageTWN" id="" class="form-control">
                                     </div>
-                                    <div class="col-2 mt-2">
+                                    <div class="col-lg-2 mt-2">
                                         <label for="">SGL</label>
                                         <input type="number" name="packageSGL" id="" class="form-control">
                                     </div>
-                                    <div class="col-2 mt-2">
+                                    <div class="col-lg-2 mt-2">
                                         <label for="">CTW</label>
                                         <input type="number" name="packageCTW" id="" class="form-control">
                                     </div>
-                                    <div class="col-2 mt-2">
+                                    <div class="col-lg-2 mt-2">
                                         <label for="">CWB</label>
                                         <input type="number" name="packageCWB" id="" class="form-control">
                                     </div>
-                                    <div class="col-2 mt-2">
+                                    <div class="col-lg-2 mt-2">
                                         <label for="">CNB</label>
                                         <input type="number" name="packageCNB" id="" class="form-control">
                                     </div>

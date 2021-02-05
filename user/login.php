@@ -58,7 +58,7 @@ if (isset($_SESSION['id'])) {
                     </div>
                 </div>
                 <?php if (isset($_GET['msg'])) : ?>
-                    <div class="alert alert<?= $_GET['alert']; ?> alert-dismissible fade show mt-4" role="alert">
+                    <div class="alert alert-<?= $_GET['alert']; ?> alert-dismissible fade show mt-4" role="alert">
                         <?= $_GET['msg']; ?>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

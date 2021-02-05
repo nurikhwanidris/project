@@ -1,7 +1,7 @@
 <!-- Check for session -->
 <?php
 if (!isset($_SESSION['id'])) {
-    header('Location:/project/user/login');
+    header('Location:/project/user/login?msg=Please login first.&alert=info');
 }
 ?>
 
@@ -128,7 +128,7 @@ $rowOffice = mysqli_fetch_array($resultOffice);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">HR Management</h6>
                         <a class="collapse-item" href="/project/templates/model/hrm/summary">Employee List</a>
-                        <a class="collapse-item" href="/project/templates/model/hrm/leave-summary">Leave Summary</a>
+                        <a class="collapse-item" href="/project/templates/model/hrm//leave/summary">Leave Summary</a>
                         <a class="collapse-item" href="/project/templates/model/hrm/add">Add Employee</a>
                         <a class="collapse-item" href="/project/templates/model/hrm/report">Report</a>
                         <a class="collapse-item" href="/project/templates/model/hrm/add">Settings</a>

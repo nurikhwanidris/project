@@ -35,25 +35,25 @@ $empId = $row['id'] + 1;
                             <div class="tab-pane fade show active">
                                 <h6 class="font-weight-bold text-info">Basic Information</h6>
                                 <div class="row my-2">
-                                    <div class="col-3">
+                                    <div class="col-lg-3">
                                         <label for="">IC Number <small class="text-danger">Mandatory</small></label>
                                         <input type="text" name="ic" id="ssn" class="form-control" maxlength="14" required>
                                     </div>
                                 </div>
                                 <div class="row my-2">
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">First Name <small class="text-danger">Mandatory</small></label>
                                         <input type="text" name="fName" id="" class="form-control" required>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">Last Name <small class="text-danger">Mandatory</small></label>
                                         <input type="text" name="lName" id="" class="form-control">
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="">Date of Birth</label>
                                         <input type="date" name="dob" id="" class="form-control">
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="">Gender</label>
                                         <input type="text" name="gender" id="" class="form-control" list="gender">
                                         <datalist id="gender">
@@ -65,15 +65,15 @@ $empId = $row['id'] + 1;
                                 <hr>
                                 <h6 class="font-weight-bold text-info">Login Information</h6>
                                 <div class="row my-2">
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">Username <small class="text-danger">Mandatory</small></label>
                                         <input type="text" name="username" id="" class="form-control" required>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">Password <small class="text-danger">Mandatory</small></label>
                                         <input type="password" name="password1" id="password1" class="form-control" required>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">Confirm Password <small class="text-danger">Mandatory</small></label>
                                         <input type="password" name="password2" id="password2" class="form-control" required>
                                         <span id="message"></span>
@@ -82,11 +82,11 @@ $empId = $row['id'] + 1;
                                 <hr>
                                 <h6 class="font-weight-bold text-info">Contact Info</h6>
                                 <div class="row my-2">
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">Personal Phone Number <small class="text-danger">Mandatory</small></label>
                                         <input type="text" name="phone" id="" class="form-control" required>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-lg-4">
                                         <label for="">Personal Email <small class="text-danger">Mandatory</small></label>
                                         <input type="email" name="email" id="" class="form-control" required>
                                     </div>
@@ -94,19 +94,19 @@ $empId = $row['id'] + 1;
                                 <hr>
                                 <h6 class="font-weight-bold text-info">Residence</h6>
                                 <div class="row my-2">
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <label for="">Address</label>
                                         <input type="text" name="address" id="" class="form-control">
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="">Postcode</label>
                                         <input type="text" name="postcode" id="" class="form-control">
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="">City</label>
                                         <input type="text" name="city" id="" class="form-control">
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-2">
                                         <label for="">State</label>
                                         <input list="state" type="text" name="state" id="" class="form-control">
                                         <datalist id="state">
@@ -132,7 +132,7 @@ $empId = $row['id'] + 1;
                                 <hr>
                                 <h6 class="font-weight-bold text-info">Work</h6>
                                 <div class="row my-2">
-                                    <div class="col-3">
+                                    <div class="col-lg-3">
                                         <label for="">Department</label>
                                         <select name="dept" id="" class="form-control" required>
                                             <option value="">Select</option>
@@ -143,7 +143,7 @@ $empId = $row['id'] + 1;
                                             <option value="Finance">Finance</option>
                                         </select>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-lg-3">
                                         <label for="">Position</label>
                                         <select name="position" id="" class="form-control" required>
                                             <option value="">Select</option>
@@ -155,11 +155,11 @@ $empId = $row['id'] + 1;
                                             <option value="Accountant">Accountant</option>
                                         </select>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-lg-3">
                                         <label for="">Date of Hire</label>
                                         <input type="date" name="doh" id="" class="form-control" required>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-lg-3">
                                         <label for="">Status</label>
                                         <select name="status" id="" class="form-control" required>
                                             <option value="">Select</option>
