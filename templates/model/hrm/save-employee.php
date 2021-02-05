@@ -18,6 +18,7 @@ $username = $_POST['username'];
 $passwordHash = password_hash($_POST['password2'], PASSWORD_DEFAULT);
 $dept = $_POST['dept'];
 $position = $_POST['position'];
+$role = $_POST['role'];
 $doh = $_POST['doh'];
 $status = $_POST['status'];
 $al = $_POST['al'];
@@ -51,7 +52,7 @@ if (mysqli_num_rows($resultCheck) > 0) {
     }
 
     // insert into employee_office
-    $office = "INSERT INTO employee_office (emp_id, doh, dept, position, status, created, modified) VALUE ('$empID','$doh','$dept','$position','$status','$created','$modified')";
+    $office = "INSERT INTO employee_office (emp_id, doh, dept, position, role, status, created, modified) VALUE ('$empID','$doh','$dept','$position','$role','$status','$created','$modified')";
     if ($resultOffice = mysqli_query($conn, $office)) {
         echo "Berjaya insert dalam table employee_office <br>";
     } else {

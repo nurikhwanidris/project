@@ -171,6 +171,21 @@ $empId = $row['id'] + 1;
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row my-3">
+                                    <div class="col-lg-3">
+                                        <label for="">Role</label>
+                                        <input type="text" name="role" id="" class="form-control" list="role">
+                                        <datalist id="role">
+                                            <?php if ($rowOffice['role'] == 'Admin') : ?>
+                                                <option value="Admin"></option>
+                                                <option value="Manager"></option>
+                                                <option value="Staff"></option>
+                                            <?php else : ?>
+                                                <option value="Staff"></option>
+                                            <?php endif; ?>
+                                        </datalist>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

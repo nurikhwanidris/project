@@ -53,37 +53,42 @@ $rowOffice = mysqli_fetch_array($resultOffice);
                 Interface
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="far fa-window-maximize"></i>
-                    <span>CMS</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Components</h6>
-                        <a class="collapse-item" href="#">REMOVE THIS LATER</a>
-                        <a class="collapse-item" href="#">REMOVE THIS LATER</a>
+            <?php if ($rowOffice['role'] == 'Admin') : ?>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="far fa-window-maximize"></i>
+                        <span>CMS</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Components</h6>
+                            <a class="collapse-item" href="#">REMOVE THIS LATER</a>
+                            <a class="collapse-item" href="#">REMOVE THIS LATER</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            <?php endif; ?>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-globe-asia"></i>
-                    <span>Tours</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Tour Components</h6>
-                        <a class="collapse-item" href="/project/templates/model/tours/dashboard">Tours</a>
-                        <!-- <a class="collapse-item" href="/project/templates/model/tours/summary">Summary</a> -->
-                        <a class="collapse-item" href="/project/templates/model/tours/reports">Reports</a>
-                        <a class="collapse-item" href="/project/templates/model/tours/settings">Settings</a>
+            <?php if ($rowOffice['dept'] == 'Tour' || $rowOffice['role'] == 'Admin') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-globe-asia"></i>
+                        <span>Tours</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Tour Components</h6>
+                            <a class="collapse-item" href="/project/templates/model/tours/dashboard">Tours</a>
+                            <!-- <a class="collapse-item" href="/project/templates/model/tours/summary">Summary</a> -->
+                            <a class="collapse-item" href="/project/templates/model/tours/reports">Reports</a>
+                            <a class="collapse-item" href="/project/templates/model/tours/settings">Settings</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            <?php endif; ?>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCRM" aria-expanded="true" aria-controls="collapseCRM">
@@ -101,41 +106,61 @@ $rowOffice = mysqli_fetch_array($resultOffice);
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHotel" aria-expanded="true" aria-controls="collapseHotel">
-                    <i class="fas fa-hotel"></i>
-                    <span>Hotel</span>
-                </a>
-                <div id="collapseHotel" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Hotel Components</h6>
-                        <a class="collapse-item" href="model/crm/add">Hotels</a>
-                        <a class="collapse-item" href="model/crm/summary">Rooms</a>
-                        <a class="collapse-item" href="model/crm/reports">Services</a>
-                        <a class="collapse-item" href="model/crm/settings">Settings</a>
+            <?php if ($rowOffice['dept'] == 'Tour' || $rowOffice['role'] == 'Admin') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHotel" aria-expanded="true" aria-controls="collapseHotel">
+                        <i class="fas fa-hotel"></i>
+                        <span>Hotel</span>
+                    </a>
+                    <div id="collapseHotel" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Hotel Components</h6>
+                            <a class="collapse-item" href="model/crm/add">Hotels</a>
+                            <a class="collapse-item" href="model/crm/summary">Rooms</a>
+                            <a class="collapse-item" href="model/crm/reports">Services</a>
+                            <a class="collapse-item" href="model/crm/settings">Settings</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            <?php endif; ?>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHRM" aria-expanded="true" aria-controls="collapseHRM">
-                    <i class="far fa-user-circle"></i>
-                    <span>HRM</span>
-                </a>
-                <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">HR Management</h6>
-                        <a class="collapse-item" href="/project/templates/model/hrm/summary">Employee List</a>
-                        <a class="collapse-item" href="/project/templates/model/hrm//leave/summary">Leave Summary</a>
-                        <a class="collapse-item" href="/project/templates/model/hrm/add">Add Employee</a>
-                        <a class="collapse-item" href="/project/templates/model/hrm/report">Report</a>
-                        <a class="collapse-item" href="/project/templates/model/hrm/add">Settings</a>
+            <?php if ($rowOffice['role'] == 'Admin' || $rowOffice['role'] == 'Manager') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHRM" aria-expanded="true" aria-controls="collapseHRM">
+                        <i class="far fa-user-circle"></i>
+                        <span>HRM</span>
+                    </a>
+                    <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">HR Management</h6>
+                            <a class="collapse-item" href="/project/templates/model/hrm/summary">Employee List</a>
+                            <a class="collapse-item" href="/project/templates/model/hrm//leave/summary">Leave Summary</a>
+                            <a class="collapse-item" href="/project/templates/model/hrm/add">Add Employee</a>
+                            <a class="collapse-item" href="/project/templates/model/hrm/report">Report</a>
+                            <a class="collapse-item" href="/project/templates/model/hrm/add">Settings</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            <?php endif; ?>
 
+            <?php if ($rowOffice['role'] == 'Staff') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHRM" aria-expanded="true" aria-controls="collapseHRM">
+                        <i class="fas fa-leaf"></i>
+                        <span>Leave</span>
+                    </a>
+                    <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Leave Management</h6>
+                            <a class="collapse-item" href="/project/templates/model/hrm/summary">Leave Application</a>
+                            <a class="collapse-item" href="/project/templates/model/hrm//leave/summary">Leave Summary</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
 

@@ -8,13 +8,22 @@
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
 <?php
-// Get data from employee infomation table
-$getEmp = "SELECT * FROM employee_information ORDER BY id";
-$resultEmp = mysqli_query($conn, $getEmp);
+// Get data properly
+$sql = "SELECT
+employee_information.id AS id,
+employee_information.fName AS fName,
+employee_information.lName AS lName,
+employee_information.ic AS ic,
+employee_information.phone AS phone,
+employee_office.dept AS dept,
+employee_office.doh AS doh,
+employee_office.status AS status
+FROM
+employee_information
+JOIN employee_office
+ON employee_office.emp_id = employee_information.id";
 
-// Get data from employee office table
-$getOffice = "SELECT * FROM employee_office ORDER BY emp_id";
-$resultOffice = mysqli_query($conn, $getOffice);
+$result = mysqli_query($conn, $sql);
 ?>
 
 <div class="container-fluid">
@@ -154,36 +163,36 @@ $resultOffice = mysqli_query($conn, $getOffice);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php while ($rowEmp = mysqli_fetch_assoc($resultEmp) and $rowOff = mysqli_fetch_assoc($resultOffice)) : ?>
+                                    <?php while ($row = mysqli_fetch_array($result)) : ?>
                                         <tr>
                                             <td class="text-center align-middle">
                                                 <a href="#" class="btn btn-sm btn-info">
-                                                    <i class="fas fa-eye"></i> <?= $rowEmp['id']; ?>
+                                                    <i class="fas fa-eye"></i> <?= $row['id']; ?>
                                                 </a>
                                             </td>
                                             <td class="align-middle">
-                                                <?= $rowEmp['fName'] . ' ' . $rowEmp['lName'] ?>
+                                                <?= $row['fName'] . ' ' . $row['lName'] ?>
                                             </td>
                                             <td class="text-center align-middle">
                                                 <span id="ic">
-                                                    <?= $rowEmp['ic']; ?>
+                                                    <?= $row['ic']; ?>
                                                 </span>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <?= $rowOff['dept']; ?>
+                                                <?= $row['dept']; ?>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <?= $rowEmp['phone']; ?>
+                                                <?= $row['phone']; ?>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <?= $rowOff['doh']; ?>
+                                                <?= $row['doh']; ?>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <?php if ($rowOff['status'] == 'Active') : ?>
+                                                <?php if ($row['status'] == 'Active') : ?>
                                                     <span class="badge badge-success">Active</span>
-                                                <?php elseif ($rowOff['status'] == 'Resigned') : ?>
+                                                <?php elseif ($row['status'] == 'Resigned') : ?>
                                                     <span class="badge badge-secondary">Resigned</span>
-                                                <?php elseif ($rowOff['status'] == 'Terminated') : ?>
+                                                <?php elseif ($row['status'] == 'Terminated') : ?>
                                                     <span class="badge badge-danger">Terminated</span>
                                                 <?php endif; ?>
                                             </td>
