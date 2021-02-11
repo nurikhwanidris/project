@@ -17,6 +17,11 @@ $row = mysqli_fetch_array($result);
 $office = "SELECT * FROM employee_office WHERE emp_id = '$id'";
 $resultOffice = mysqli_query($conn, $office);
 $rowOffice = mysqli_fetch_array($resultOffice);
+
+// Data from employee leave allotment table
+$leave = "SELECT * FROM leave_allotment WHERE emp_id = '$id'";
+$resultLeave = mysqli_query($conn, $leave);
+$rowLeave = mysqli_fetch_array($resultLeave);
 ?>
 
 <body id="page-top">
@@ -384,15 +389,15 @@ $rowOffice = mysqli_fetch_array($resultOffice);
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/project/templates/users/profile">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/project/templates/users/settings">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/project/templates/users/activity">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
