@@ -7,7 +7,7 @@
 <!-- Check for existing session -->
 <?php
 if (isset($_SESSION['id'])) {
-    header('Location:/project/templates/model/dashboard/index.php');
+    header('Location:/project/templates/travel/dashboard/index.php');
 }
 ?>
 

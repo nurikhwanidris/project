@@ -1,5 +1,6 @@
 <!-- Start Sessions -->
-<?php session_start(); ?>
+<?php session_start();
+?>
 
 <!-- DB -->
 <?php include('../src/model/dbconn.php') ?>
@@ -17,7 +18,7 @@ if (mysqli_num_rows($result) > 0) {
         if (password_verify($password, $row['password'])) {
             $_SESSION["id"] = $row['emp_id'];
             $_SESSION['last_login_timestamp'] = time();
-            header('Location:/project/templates/model/dashboard/index.php?success');
+            header('Location:/project/templates/travel/dashboard/index.php?success');
         } else {
             header('Location:/project/user/login?msg=Username or password is not right.&alert=danger');
         }

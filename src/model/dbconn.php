@@ -1,3 +1,3 @@
 <?php
 
-$conn = mysqli_connect('localhost', 'root', '', 'enrich-new');
+$conn = mysqli_connect('localhost', 'root', '', 'project');

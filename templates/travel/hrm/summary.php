@@ -148,7 +148,7 @@ $result = mysqli_query($conn, $sql);
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
-                        <a href="/project/templates/model/hrm/add" class="btn btn-success btn-sm mb-3">Add Employee</a>
+                        <a href="/project/templates/travel/hrm/add" class="btn btn-success btn-sm mb-3">Add Employee</a>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>

@@ -104,4 +104,4 @@ if ($resultSetting = mysqli_query($conn, $toursSetting)) {
 }
 
 // Redirect to summary
-header('Location:/project/templates/model/tours/dashboard.php');
+header('Location:/project/templates/travel/tours/dashboard.php');

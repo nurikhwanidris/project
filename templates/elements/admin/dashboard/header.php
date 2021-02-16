@@ -1,5 +1,6 @@
 <!-- Start session -->
-<?php session_start(); ?>
+<?php session_start();
+?>
 
 <!-- DB Conn -->
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/project/src/model/dbconn.php'); ?>
@@ -38,8 +39,12 @@
     <!-- Custom styles for this template-->
     <link href="/project/assets/css/sb-admin-2.min.css" rel="stylesheet">
 
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
 </head>
 
 <style>

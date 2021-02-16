@@ -1002,7 +1002,7 @@ if (mysqLi_num_rows($resultCheck) > 0) {
                                                                 <td class="align-middle"
                                                                   style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; margin: 0;"
                                                                   align="left">
-                                                                  <a href="/project/templates/model/crm/view-customer?customerID=' . $customerID . '">Click
+                                                                  <a href="/project/templates/travel/crm/view-customer?customerID=' . $customerID . '">Click
                                                                     here to assign staff</a>
                                                                 </td>
                                                               </tr>
@@ -1120,5 +1120,5 @@ if (mysqLi_num_rows($resultCheck) > 0) {
   mail($to, $subject, $message, $headers);
 
   // Redirect to summary
-  header('Location:/project/templates/model/crm/summary.php');
+  header('Location:/project/templates/travel/crm/summary.php');
 }

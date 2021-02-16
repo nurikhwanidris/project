@@ -52,11 +52,7 @@
 <script src="/project/assets/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/project/assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-<!-- Page level custom scripts -->
-<script src="/project/assets/js/demo/datatables-demo.js"></script>
-
-<!-- Select search -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
 <!-- Tooltips -->
 <script>

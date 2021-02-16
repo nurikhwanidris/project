@@ -71,7 +71,7 @@ if (mysqli_num_rows($resultCheck) > 0) {
     $user = "INSERT INTO users (emp_id, username, password, created, modified) VALUE ('$empID','$username','$passwordHash','$created','$modified')";
     if ($resultUser = mysqli_query($conn, $user)) {
         echo "Berjaya insert dalam user table";
-        header('Location:/project/templates/model/hrm/summary?success=yes&user=' . $fName . ' ' . $lName);
+        header('Location:/project/templates/travel/hrm/summary?success=yes&user=' . $fName . ' ' . $lName);
     } else {
         echo mysqli_error($conn);
     }

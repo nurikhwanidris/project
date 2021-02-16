@@ -55,7 +55,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Travel
             </div>
 
             <?php if ($rowOffice['role'] == 'Admin') : ?>
@@ -85,10 +85,10 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Tour Components</h6>
-                            <a class="collapse-item" href="/project/templates/model/tours/dashboard">Tours</a>
-                            <!-- <a class="collapse-item" href="/project/templates/model/tours/summary">Summary</a> -->
-                            <a class="collapse-item" href="/project/templates/model/tours/reports">Reports</a>
-                            <a class="collapse-item" href="/project/templates/model/tours/settings">Settings</a>
+                            <a class="collapse-item" href="/project/templates/travel/tours/dashboard">Tours</a>
+                            <!-- <a class="collapse-item" href="/project/templates/travel/tours/summary">Summary</a> -->
+                            <a class="collapse-item" href="/project/templates/travel/tours/reports">Reports</a>
+                            <a class="collapse-item" href="/project/templates/travel/tours/settings">Settings</a>
                         </div>
                     </div>
                 </li>
@@ -103,10 +103,10 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                 <div id="collapseCRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">CRM Components</h6>
-                        <a class="collapse-item" href="/project/templates/model/crm/add">Customers</a>
-                        <a class="collapse-item" href="/project/templates/model/crm/summary">Summary</a>
-                        <a class="collapse-item" href="/project/templates/model/crm/reports">Reports</a>
-                        <a class="collapse-item" href="/project/templates/model/crm/settings">Settings</a>
+                        <a class="collapse-item" href="/project/templates/travel/crm/add">Customers</a>
+                        <a class="collapse-item" href="/project/templates/travel/crm/summary">Summary</a>
+                        <a class="collapse-item" href="/project/templates/travel/crm/reports">Reports</a>
+                        <a class="collapse-item" href="/project/templates/travel/crm/settings">Settings</a>
                     </div>
                 </div>
             </li>
@@ -129,7 +129,13 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     </div>
                 </li>
             <?php endif; ?>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
 
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Human Resource
+            </div>
             <?php if ($rowOffice['role'] == 'Admin' || $rowOffice['role'] == 'Manager') : ?>
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
@@ -140,11 +146,11 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">HR Management</h6>
-                            <a class="collapse-item" href="/project/templates/model/hrm/summary">Employee List</a>
-                            <a class="collapse-item" href="/project/templates/model/hrm//leave/summary">Leave Summary</a>
-                            <a class="collapse-item" href="/project/templates/model/hrm/add">Add Employee</a>
-                            <a class="collapse-item" href="/project/templates/model/hrm/report">Report</a>
-                            <a class="collapse-item" href="/project/templates/model/hrm/add">Settings</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/summary">Employee List</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm//leave/summary">Leave Summary</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/add">Add Employee</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/report">Report</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/add">Settings</a>
                         </div>
                     </div>
                 </li>
@@ -160,12 +166,50 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Leave Management</h6>
-                            <a class="collapse-item" href="/project/templates/model/hrm/summary">Leave Application</a>
-                            <a class="collapse-item" href="/project/templates/model/hrm//leave/summary">Leave Summary</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/summary">Leave Application</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm//leave/summary">Leave Summary</a>
                         </div>
                     </div>
                 </li>
             <?php endif; ?>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Arzu Home
+            </div>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCRMdecor" aria-expanded="true" aria-controls="collapseCRMdecor">
+                    <i class="fas fa-meteor"></i>
+                    <span>CRM</span>
+                </a>
+                <div id="collapseCRMdecor" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Customer Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/crm/add">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/crm/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/crm/category">Category</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="true" aria-controls="collapseProduct">
+                    <i class="fas fa-meteor"></i>
+                    <span>Products</span>
+                </a>
+                <div id="collapseProduct" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Product Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/product/add">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/product/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/product/category">Category</a>
+                    </div>
+                </div>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
 

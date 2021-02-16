@@ -144,7 +144,7 @@ $rowCount = mysqli_num_rows($result);
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <a href="/project/templates/model/tours/add.php" class="btn btn-success btn-sm mb-3">Add Package</a>
+                    <a href="/project/templates/travel/tours/add.php" class="btn btn-success btn-sm mb-3">Add Package</a>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
