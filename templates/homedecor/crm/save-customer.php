@@ -13,6 +13,7 @@ $address1 = $_POST['address1'];
 $city = $_POST['city'];
 $postcode = $_POST['postcode'];
 $state = $_POST['state'];
+$status = 'Pending';
 
 // Get data from array
 $product = implode(',', $_POST['product']);
@@ -28,7 +29,7 @@ $customer = "INSERT INTO homedecor_customer (staffName, source, customerName, cu
 $resultInsert = mysqli_query($conn, $customer);
 
 // Insert into purchase table
-$purchase = "INSERT INTO homedecor_enquiries (customer_id, product_id, quantity, created, modified) VALUES ('$customerID','$product','$quantity','$created','$modified')";
+$purchase = "INSERT INTO homedecor_order (customer_id, product_id, quantity, status, created, modified) VALUES ('$customerID','$product','$quantity','$status','$created','$modified')";
 $resultPurchase = mysqli_query($conn, $purchase);
 
 if ($resultInsert && $resultPurchase) {

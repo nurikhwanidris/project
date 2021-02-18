@@ -23,7 +23,7 @@ $resultproduct = mysqli_query($conn, $product);
 
 <!-- Get enquiries data -->
 <?php
-$enquiry = "SELECT * FROM homedecor_enquiries WHERE customer_id = '$customerID'";
+$enquiry = "SELECT * FROM homedecor_order WHERE customer_id = '$customerID'";
 $resultEnquiry = mysqli_query($conn, $enquiry);
 $rowEnquiry = mysqli_fetch_array($resultEnquiry);
 ?>
@@ -133,7 +133,7 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
                                 <hr>
                                 <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
                                 <div class="row my-2">
-                                    <div class="col-lg-9">
+                                    <div class="col-lg-12">
                                         <table class="table table-stripped table-bordered">
                                             <thead>
                                                 <tr>
@@ -171,11 +171,7 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
                                             </tbody>
                                         </table>
                                         <button type="button" class="btn btn-danger delete-row">Delete Row</button>
-                                    </div>
-                                </div>
-                                <div class="row my-2">
-                                    <div class="col">
-                                        <button class="btn btn-primary float-right">Submit</button>
+                                        <button class="btn btn-primary float-right">Create PO</button>
                                     </div>
                                 </div>
                             </div>

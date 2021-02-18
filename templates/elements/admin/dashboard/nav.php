@@ -30,7 +30,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion d-print-none" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
@@ -207,6 +207,20 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <a class="collapse-item" href="/project/templates/homedecor/product/add">Add</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/list">List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/category">Category</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="true" aria-controls="collapseOrder">
+                    <i class="fas fa-meteor"></i>
+                    <span>Order</span>
+                </a>
+                <div id="collapseOrder" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Order Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/order/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/order/report">Report</a>
                     </div>
                 </div>
             </li>
