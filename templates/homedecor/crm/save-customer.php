@@ -2,6 +2,7 @@
 
 include('../../../src/model/dbconn.php');
 
+// Customer details
 $customerID = $_POST['customerID'];
 $staffName = $_POST['staffName'];
 $source = $_POST['source'];
@@ -14,10 +15,13 @@ $city = $_POST['city'];
 $postcode = $_POST['postcode'];
 $state = $_POST['state'];
 $status = 'Pending';
+$discountAll = $_POST['discountAll'];
 
-// Get data from array
-$product = implode(',', $_POST['product']);
+// Item details
+$productId = implode(',', $_POST['productId']);
 $quantity = implode(',', $_POST['quantity']);
+$productPrice = implode(',', $_POST['productPrice']);
+$discountItem = implode(',', $_POST['discountItem']);
 
 // Date created and modified
 date_default_timezone_set("Asia/Kuala_Lumpur");
@@ -29,13 +33,21 @@ $customer = "INSERT INTO homedecor_customer (staffName, source, customerName, cu
 $resultInsert = mysqli_query($conn, $customer);
 
 // Insert into purchase table
-$purchase = "INSERT INTO homedecor_order (customer_id, product_id, quantity, status, created, modified) VALUES ('$customerID','$product','$quantity','$status','$created','$modified')";
+$purchase = "INSERT INTO homedecor_purchase_order (customer_id, product_id, quantity, price, discount_all, discount_items, status, created, modified) VALUES ('$customerID', '$productId', '$quantity', '$productPrice', '$discountAll', '$discountItem', '$status', '$created', '$modified')";
 $resultPurchase = mysqli_query($conn, $purchase);
 
-if ($resultInsert && $resultPurchase) {
-    $_POST['msg'] = "Successfully inserted";
+if ($resultInsert) {
+    $msg = "Successfully inserted <br>";
     $alert = "success";
-    header('Location:/project/template/homedecor/purchase/list');
+    //header('Location:/project/template/homedecor/purchase/list');
 } else {
     $msg = "Error occured. " . mysqli_error($conn);
 }
+if ($resultPurchase) {
+    $msg = "Successfully inserted <br>";
+    $alert = "success";
+    //header('Location:/project/template/homedecor/purchase/list');
+} else {
+    $msg = "Error occured. " . mysqli_error($conn);
+}
+echo $msg;

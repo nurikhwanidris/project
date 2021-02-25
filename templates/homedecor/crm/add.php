@@ -23,6 +23,10 @@ if ($resultSql) {
 <?php
 $product = "SELECT * FROM homedecor_product WHERE quantity != 0 ";
 $resultproduct = mysqli_query($conn, $product);
+$productSelectOptions = array();
+while ($rowProduct = $resultproduct->fetch_assoc()) {
+    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'];
+}
 ?>
 
 <!-- Get the Source -->
@@ -124,35 +128,64 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
                                 <div class="row my-4">
                                     <div class="col-lg-4">
-                                        <select name="product" id="name" class="selectpicker form-control" data-live-search="true">
-                                            <?php while ($rowProduct = mysqli_fetch_array($resultproduct)) : ?>
-                                                <option value="<?= $rowProduct['id']; ?>"><?= $rowProduct['name']; ?></option>
-                                            <?php endwhile; ?>
+                                        <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
+                                            <?php foreach ($productSelectOptions as $val => $text) : ?>
+                                                <option value="<?= $val; ?>"><?= $text; ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <div class="col-lg-2">
-                                        <input type="number" name="quantity" id="quantity" class="form-control" placeholder="Quantity">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Quantity</span>
+                                            </div>
+                                            <input type="number" name="" id="quantity" class="form-control" placeholder="Quantity">
+                                        </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-2 d-none">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Discount for Single Item</span>
+                                            </div>
+                                            <input type="number" name="" id="discountItem" class="form-control" placeholder="Discount" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Discount for All Items</span>
+                                            </div>
+                                            <input type="number" name="" id="discountAll" class="form-control" placeholder="Discount" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 d-none">
+                                        <input type="text" name="id_text" id="productOrderNo" />
+                                        <input type="text" name="id_text" id="productName" />
+                                        <input type="text" name="id_text" id="productCost" />
+                                    </div>
+                                    <div class="col-lg-2">
                                         <input type="button" class="btn btn-info add-row" value="Add Item">
                                     </div>
                                 </div>
                                 <div class="row my-2">
-                                    <div class="col-lg-9">
+                                    <div class="col-lg-10">
                                         <table class="table table-stripped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th class="align-middle text-center" style="width: 5%;">Select</th>
+                                                    <th class="align-middle text-center">/</th>
+                                                    <th class="align-middle text-center">Product ID</th>
                                                     <th class="align-middle" style="width: 60%;">Product Name</th>
                                                     <th class="align-middle text-center">Quantity</th>
+                                                    <th class="align-middle text-center">Price</th>
+                                                    <th class="align-middle text-center">Discount %</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-lg-3">
-                                        <button type="button" class="btn btn-danger delete-row"><i class="far fa-trash-alt"></i> Delete Item</button>
+                                    <div class="col-lg-2">
+                                        <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i> Delete Item</button>
                                     </div>
                                 </div>
                                 <div class="row my-3">
@@ -181,16 +214,54 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
         }
     });
 </script>
+
+<script>
+    var $productSelect = $('#product');
+    var $productOrderNo = $('#productOrderNo');
+    var $productName = $('#productName');
+    var $productCost = $('#productCost');
+
+    // This should be the path to a PHP script set up to receive $_POST['product']
+    // and return the product info in a JSON encoded array.
+    // You should also set the Content-Type of the response to application/json so as our javascript parses it automatically.
+    var apiUrl = 'getProductInfo.php';
+
+    function refreshInputsForProduct(product) {
+        $.post(apiUrl, {
+            product: product
+        }, function(r) {
+            /**
+             * Assuming your PHP API responds with a JSON encoded array, with the ID available.
+             */
+            $productOrderNo.val(r.orderNo);
+            $productName.val(r.name);
+            $productCost.val(r.cost);
+        });
+    }
+
+    // Listen for when a new product is selected.
+    $productSelect.change(function() {
+        var product = $(this).val();
+        refreshInputsForProduct(product);
+    });
+</script>
+
 <script>
     $(document).ready(function() {
         $(".add-row").click(function() {
-            // var e = document.getElementById("ddlViewBy");
-            // var name = e.value;
-            var e = document.getElementById("name");
+            var e = document.getElementById("product");
             var getID = e.value;
             var name = e.options[e.selectedIndex].text;
+            var productOrderNo = parseInt($("#productOrderNo").val());
             var quantity = parseInt($("#quantity").val());
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='product[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td></tr>";
+            var discountItem = parseInt($("#discountItem").val());
+
+            // Calculate price based on cost
+            var productCost = parseFloat($("#productCost").val());
+            var productPrice = Math.round((productCost * 2.5) + 6) * quantity;
+
+            // Create tabel rows
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center border-0 form-control' value='" + discountItem + "'></td></tr>";
             $("table tbody").append(markup);
         });
 

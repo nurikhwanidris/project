@@ -224,6 +224,20 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     </div>
                 </div>
             </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
+                    <i class="fas fa-meteor"></i>
+                    <span>Invoice</span>
+                </a>
+                <div id="collapseInvoice" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Invoice Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/invoice/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/invoice/report">Report</a>
+                    </div>
+                </div>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
 

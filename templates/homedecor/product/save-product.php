@@ -14,7 +14,7 @@ $quantity = $_POST['quantity'];
 // Upload image
 $image = $_FILES['imgSave']['name'];
 $trimmedImage = str_replace(' ', '-', $image);
-$target = "../../../upload/img/products" . basename($trimmedImage);
+$target = "../../../upload/img/products/" . basename($trimmedImage);
 
 // Create SKU
 $cutName = substr(str_replace(' ', '', strtoupper($name)), 0, 6);
@@ -33,7 +33,7 @@ if ($result = mysqli_query($conn, $insert)) {
     $msg = "Successfull inserted the product";
     $alert = "success";
 
-    header('Location: /arzuhome/templates/model/product/list');
+    header('Location: /project/templates/homedecor/product/list');
 } else {
     $msg = "Error occured." . mysqli_error($conn);
     $alert = "danger";

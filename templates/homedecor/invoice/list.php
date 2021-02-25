@@ -7,16 +7,50 @@
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-<!-- Get item from database -->
 <?php
-$sql = "SELECT * FROM homedecor_product";
-$result = mysqli_query($conn, $sql);
+// Fetch customer
+$invoice = "SELECT
+homedecor_customer.customerName as customerName,
+homedecor_customer.staffName as staffName,
+homedecor_order_product.status as status,
+homedecor_purchase_order.id as orderID,
+homedecor_purchase_order.product_id as productName,
+homedecor_purchase_order.cost as cost,
+homedecor_purchase_order.quantity as quantity,
+homedecor_purchase_order.total as price,
+homedecor_purchase_order.payment_type as paymentType,
+homedecor_purchase_order.created as created,
+homedecor_purchase_order.modified as modified
+FROM homedecor_purchase_order
+JOIN homedecor_customer
+ON homedecor_purchase_order.customer_id = homedecor_customer.id
+JOIN homedecor_order_product
+ON homedecor_purchase_order.customer_id = homedecor_order_product.customer_id";
 
+$resultinvoice = mysqli_query($conn, $invoice);
+
+// Fetch Package based on customer ID
+$enquiry = "SELECT * FROM homedecor_order_product ORDER BY customer_ID";
+$resultEnquiries = mysqli_query($conn, $enquiry);
+
+// Count rows
+$rowCountEnq = mysqli_num_rows($resultEnquiries);
+
+// Special case
+$selectCustomer = "SELECT customerName FROM homedecor_customer GROUP BY customerName";
+$resultCst = mysqli_query($conn, $selectCustomer);
+$rowCountCust = mysqli_num_rows($resultCst);
+
+// Count Pending
+$pending = "SELECT status FROM homedecor_order_product WHERE status = 'Pending'";
+$resultPending = mysqli_query($conn, $pending);
+$rowCountPending = mysqli_num_rows($resultPending);
 ?>
+
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Product List</h1>
+        <h1 class="h3 mb-0 text-gray-800">Invoice List</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
     <!-- Content Row -->
@@ -29,10 +63,8 @@ $result = mysqli_query($conn, $sql);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Enquiries Inserted</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?//= $rowCountEnq; ?>
-                            </div>
+                                Invoice Inserted</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCountEnq; ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-id-card fa-2x text-gray-300"></i>
@@ -50,9 +82,7 @@ $result = mysqli_query($conn, $sql);
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Total Clients</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?//= $rowCountCust; ?>
-                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCountCust; ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -97,9 +127,7 @@ $result = mysqli_query($conn, $sql);
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Pending Assigned Requests</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?//= $rowCountPending; ?>
-                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCountPending; ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -116,7 +144,7 @@ $result = mysqli_query($conn, $sql);
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Invoice Management</h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -136,93 +164,52 @@ $result = mysqli_query($conn, $sql);
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th class="text-center align-middle">Order No</th>
-                                    <th class="align-middle">Name</th>
-                                    <th class="text-center align-middle">Category</th>
-                                    <th class="text-center align-middle">Supplier Code</th>
-                                    <th class="text-center align-middle">Size</th>
-                                    <th class="text-center align-middle">SKU</th>
-                                    <th class="text-center align-middle">Cost</th>
-                                    <th class="text-center align-middle">Price</th>
-                                    <th class="text-center align-middle">Quantity</th>
-                                    <th class="text-center align-middle">Purchased</th>
-                                    <th class="text-center align-middle">Balance</th>
-                                    <th class="text-center align-middle">Reorder?</th>
-                                    <!-- <th class="text-center align-middle">Created</th> -->
-                                    <!-- <th class="text-center align-middle">Modified</th> -->
+                                    <th class="align-middle text-center">Order ID</th>
+                                    <th class="align-middle">Customer Name</th>
+                                    <th class="align-middle text-center">Total Amount</th>
+                                    <th class="align-middle text-center">Payment Type</th>
+                                    <th class="align-middle text-center">Order Status</th>
+                                    <th class="align-middle text-center">Order Date</th>
+                                    <th class="align-middle text-center">Created by</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($row = mysqli_fetch_array($result)) :
-                                    $quantity = (int)$row['quantity'];
-                                    $purchased = (int)$row['purchased'];
-                                ?>
+                                <?php while ($rowOrder = mysqli_fetch_array($resultinvoice)) : ?>
                                     <tr>
-                                        <td class="text-center align-middle">
-                                            <?= $row['orderNo']; ?>
-                                        </td>
-                                        <td class="align-middle">
-                                            <a href="/project/templates/homedecor/product/view?id=<?= $row['id']; ?>" target="_blank" rel="noopener noreferrer">
-                                                <?= $row['name']; ?>
+                                        <td class="align-middle text-center">
+                                            <a href="view?id=<?= $rowOrder['orderID']; ?>" class="btn btn-primary btn-sm">
+                                                <?= $rowOrder['orderID']; ?>
                                             </a>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['category']; ?>
+                                        <td class="align-middle">
+                                            <?= $rowOrder['customerName']; ?>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['supplierCode']; ?>
+                                        <td class="align-middle text-center">
+                                            <?php
+                                            $total = explode(',', $rowOrder['price']);
+                                            echo "RM" . array_sum($total);
+                                            ?>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['size']; ?>
+                                        <td class="align-middle text-center">
+                                            <?php if ($rowOrder['paymentType'] != '') : echo $rowOrder['paymentType'];
+                                            else : echo "None";
+                                            endif; ?>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['sku']; ?>
+                                        <td class="align-middle text-center">
+                                            <h5>
+                                                <?php if ($rowOrder['status'] == 'Pending') : ?>
+                                                    <span class="badge badge-warning"><?= $rowOrder['status'] ?></span>
+                                                <?php else : ?>
+                                                    <span class="badge badge-info"><?= $rowOrder['status'] ?></span>
+                                                <?php endif; ?>
+                                            </h5>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['cost']; ?>
+                                        <td class="align-middle text-center">
+                                            <?= $rowOrder['created']; ?>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <?php $price = $row['cost'] * 2.5;
-                                            echo round($price); ?>
+                                        <td class="align-middle text-center">
+                                            <?= $rowOrder['staffName']; ?>
                                         </td>
-                                        <td class="text-center align-middle">
-                                            <?= $quantity; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?php if ($row['purchased'] == 0) : ?>
-                                                0
-                                            <?php else : ?>
-                                                <?= $row['purchased']; ?>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?php if ($quantity != 0) : $balance = $quantity - $purchased; ?>
-                                                <?= $balance; ?>
-                                            <?php else : ?>
-                                                0
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?php if ($row['quantity'] == 0) : ?>
-                                                <span class="badge badge-danger">
-                                                    Yes
-                                                </span>
-                                            <?php elseif ((($quantity - $purchased) / $quantity) < 0.5) : ?>
-                                                <span class="badge badge-warning">
-                                                    Yes
-                                                </span>
-                                            <?php else : ?>
-                                                <span class="badge badge-success">
-                                                    No
-                                                </span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <!-- <td class="text-center align-middle">
-                                            <?= $row['created']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['modified']; ?>
-                                        </td> -->
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
@@ -234,15 +221,16 @@ $result = mysqli_query($conn, $sql);
     </div>
 </div>
 
-<!-- footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
-
 <script>
     $(document).ready(function() {
         $('#myTable').DataTable({
             "order": [
-                [0, "asc"]
+                [0, "desc"]
             ]
         });
     });
 </script>
+
+
+<!-- Footer -->
+<?php include('../../elements/admin/dashboard/footer.php') ?>

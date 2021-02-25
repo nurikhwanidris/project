@@ -10,31 +10,36 @@
 <?php
 // Fetch customer
 $invoice = "SELECT
-homedecor_customer.customerName as customerName,
-homedecor_customer.staffName as staffName,
-homedecor_order.status as status,
-homedecor_invoice.id as orderID,
-homedecor_invoice.product_name as productName,
-homedecor_invoice.cost as cost,
-homedecor_invoice.quantity as quantity,
-homedecor_invoice.total as total,
-homedecor_invoice.payment_type as paymentType,
-homedecor_invoice.created as created,
-homedecor_invoice.modified as modified
-FROM homedecor_invoice
+homedecor_customer.id AS customerId,
+homedecor_customer.customerName AS customerName,
+homedecor_customer.staffName AS staffName,
+homedecor_purchase_order.id AS id,
+homedecor_purchase_order.product_id AS productID,
+homedecor_purchase_order.quantity AS quantity,
+homedecor_purchase_order.price AS price,
+homedecor_purchase_order.discount_all AS discountAll,
+homedecor_purchase_order.discount_items AS discountItems,
+homedecor_purchase_order.status AS status,
+homedecor_purchase_order.created AS created,
+homedecor_purchase_order.modified AS modified
+FROM homedecor_purchase_order
 JOIN homedecor_customer
-ON homedecor_invoice.customer_id = homedecor_customer.id
-JOIN homedecor_order
-ON homedecor_invoice.customer_id = homedecor_order.customer_id";
+ON homedecor_purchase_order.customer_id = homedecor_customer.id";
 
 $resultinvoice = mysqli_query($conn, $invoice);
 
 // Fetch Package based on customer ID
-$enquiry = "SELECT * FROM homedecor_order ORDER BY customer_ID";
-$resultEnquiries = mysqli_query($conn, $enquiry);
+// $enquiry = "SELECT * FROM homedecor_order_product ORDER BY customer_ID";
+// $resultEnquiries = mysqli_query($conn, $enquiry);
 
 // Count rows
+// $rowCountEnq = mysqli_num_rows($resultEnquiries);
+
+$fetchEnquiries = "SELECT id FROM homedecor_purchase_order";
+$resultEnquiries = mysqli_query($conn, $fetchEnquiries);
+
 $rowCountEnq = mysqli_num_rows($resultEnquiries);
+
 
 // Special case
 $selectCustomer = "SELECT customerName FROM homedecor_customer GROUP BY customerName";
@@ -42,7 +47,7 @@ $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
 
 // Count Pending
-$pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
+$pending = "SELECT status FROM homedecor_purchase_order WHERE status = 'Pending'";
 $resultPending = mysqli_query($conn, $pending);
 $rowCountPending = mysqli_num_rows($resultPending);
 ?>
@@ -127,7 +132,9 @@ $rowCountPending = mysqli_num_rows($resultPending);
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Pending Assigned Requests</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCountPending; ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <?= $rowCountPending; ?>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -167,8 +174,7 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                     <th class="align-middle text-center">Order ID</th>
                                     <th class="align-middle">Customer Name</th>
                                     <th class="align-middle text-center">Total Amount</th>
-                                    <th class="align-middle text-center">Payment Type</th>
-                                    <th class="align-middle text-center">Order Status</th>
+                                    <th class="align-middle text-center">Status</th>
                                     <th class="align-middle text-center">Order Date</th>
                                     <th class="align-middle text-center">Created by</th>
                                 </tr>
@@ -177,28 +183,25 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                 <?php while ($rowOrder = mysqli_fetch_array($resultinvoice)) : ?>
                                     <tr>
                                         <td class="align-middle text-center">
-                                            <a href="view?id=<?= $rowOrder['orderID']; ?>" class="btn btn-primary btn-sm">
-                                                <?= $rowOrder['orderID']; ?>
+                                            <a href="view?id=<?= $rowOrder['id']; ?>" class="btn btn-primary btn-sm">
+                                                <?= $rowOrder['id']; ?>
                                             </a>
                                         </td>
                                         <td class="align-middle">
-                                            <?= $rowOrder['customerName']; ?>
+                                            <a href="/project/templates/homedecor/crm/view?customerID=<?= $rowOrder['customerId']; ?>" target="_blank"><?= $rowOrder['customerName']; ?></a>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?php
-                                            $total = explode(',', $rowOrder['total']);
-                                            echo "RM" . array_sum($total);
+                                            $total = explode(',', $rowOrder['price']);
+                                            echo "RM" . number_format(array_sum($total), 2, '.', '');
                                             ?>
                                         </td>
                                         <td class="align-middle text-center">
-                                            <?= $rowOrder['paymentType']; ?>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <h5>
-                                                <?php if ($rowOrder['status'] == 'Pending') : ?>
-                                                    <span class="badge badge-warning"><?= $rowOrder['status'] ?></span>
-                                                <?php endif; ?>
-                                            </h5>
+                                            <?php if ($rowOrder['status'] == 'Pending') : ?>
+                                                <h5><span class="badge badge-warning"><?= $rowOrder['status']; ?></span></h5>
+                                            <?php else : ?>
+                                                <h5><span class="badge badge-info"><?= $rowOrder['status']; ?></span></h5>
+                                            <?php endif; ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?= $rowOrder['created']; ?>

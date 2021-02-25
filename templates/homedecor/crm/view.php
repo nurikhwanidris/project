@@ -23,7 +23,7 @@ $resultproduct = mysqli_query($conn, $product);
 
 <!-- Get enquiries data -->
 <?php
-$enquiry = "SELECT * FROM homedecor_order WHERE customer_id = '$customerID'";
+$enquiry = "SELECT * FROM homedecor_purchase_order WHERE customer_id = '$customerID'";
 $resultEnquiry = mysqli_query($conn, $enquiry);
 $rowEnquiry = mysqli_fetch_array($resultEnquiry);
 ?>
@@ -141,6 +141,7 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
                                                     <th class="align-middle" style="width: 60%;">Product Name</th>
                                                     <th class="align-middle text-center">Quantity</th>
                                                     <th class="text-center align-middle">Price/Unit</th>
+                                                    <th class="text-center align-middle">Discount %</th>
                                                     <th class="text-center align-middle">Total</th>
                                                 </tr>
                                             </thead>
@@ -163,7 +164,10 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
                                                                 <input type="text" name="productCost[]" id="" class="text-center form-control border-0" value="<?= $ppu; ?>">
                                                             </td>
                                                             <td class="text-center align-middle">
-                                                                <input type="text" name="productTotal[]" id="" class="text-center form-control border-0" value="<?= round($ppu * $explodeQuantity, 2); ?>">
+                                                                <input type="text" name="discountItems[]" id="" class="form-control text-center border-0" value="">
+                                                            </td>
+                                                            <td class="text-center align-middle">
+                                                                <input type="text" name="productPrice[]" id="" class="text-center form-control border-0" value="<?= round($ppu * $explodeQuantity, 2); ?>">
                                                             </td>
                                                         </tr>
                                                 <?php endwhile;
