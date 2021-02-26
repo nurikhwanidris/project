@@ -17,11 +17,12 @@ $select = "SELECT * FROM homedecor_purchase_order WHERE id = '$id'";
 $result = mysqli_query($conn, $select);
 $rowInvoice = mysqli_fetch_array($result);
 
-
 // Explode everything boom!
 $products = explode(',', $rowInvoice['product_id']);
 $quantities = explode(',', $rowInvoice['quantity']);
 $prices = explode(',', $rowInvoice['price']);
+$discountItems = explode(',', $rowInvoice['discount_items']);
+$discountAll = explode(',', $rowInvoice['discount_all']);
 ?>
 
 <!-- Get customer info -->
@@ -61,7 +62,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                     </p>
                                 </div>
                                 <div class="col-4 float-right text-right">
-                                    <h4 class="font-weight-bold">Profoma Invoice</h4>
+                                    <h4 class="font-weight-bold">Invoice</h4>
                                     <img src="/project/upload/img/invoice-logo-1.png" alt="" srcset="" style="height: auto; width: 70%;">
                                 </div>
                             </div>
@@ -91,13 +92,16 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                         </div>
                         <div class="row mt-4">
                             <div class="col-lg-12 col-xl-12">
-                                <table class="table table-bordered table-striped">
+                                <table class="table table-bordered">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th class="align-middle">Description</th>
                                             <th class="align-middle text-center">Product ID</th>
                                             <th class="align-middle text-center">Quantity</th>
                                             <th class="align-middle text-center">Price/Unit</th>
+                                            <?php if ($rowInvoice['discount_items'] != '') : ?>
+                                                <th class="align-middle text-center">Discount</th>
+                                            <?php endif; ?>
                                             <th class="align-middle text-center">Amount</th>
                                         </tr>
                                     </thead>
@@ -107,6 +111,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                             $product = $products[$i];
                                             $quantity = $quantities[$i];
                                             $price = $prices[$i];
+                                            $discount = $discountItems[$i];
                                             $selectProduct = "SELECT * FROM homedecor_product WHERE id = '$product'";
                                             $resultProduct = mysqli_query($conn, $selectProduct);
                                             $rowProduct = mysqli_fetch_array($resultProduct);
@@ -125,19 +130,46 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                                     <!-- Selling Price -->
                                                     RM<?= $sellingPrice = number_format(round(($rowProduct['cost'] * 2.5) + 6), 2, '.', ''); ?>
                                                 </td>
+                                                <?php if ($rowInvoice['discount_items'] != '' || $rowInvoice['discount_all'] != '') : ?>
+                                                    <td class="align-middle text-center">
+                                                        <?php
+                                                        $differences = $price - $discount;
+                                                        $percent = ($differences / $price) * 100;
+                                                        echo $percent;
+                                                        ?>%
+                                                    </td>
+                                                <?php endif; ?>
                                                 <td class="align-middle text-center">
                                                     <!-- Amount -->
-                                                    RM<?= number_format($price, 2, '.', ''); ?>
+                                                    RM<?= $amount = number_format($discount, 2, '.', ''); ?>
                                                 </td>
                                             </tr>
                                         <?php endfor; ?>
+                                        <tr class="">
+                                            <td colspan="5" class="align-middle font-weight-light text-right ">Subtotal</td>
+                                            <td class="align-middle text-center ">
+                                                RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
+                                            </td>
+                                        </tr>
+                                        <?php if ($rowInvoice['discount_all'] != 0) : ?>
+                                            <tr>
+                                                <td colspan="5" class="text-right font-weight-bold ">Discount</td>
+                                                <td class="align-middle text-center "><?= $rowInvoice['discount_all']; ?>%</td>
+                                            </tr>
+                                        <?php endif; ?>
                                         <tr>
-                                            <td colspan="4" class="align-middle text-right">
+                                            <td colspan="5" class="align-middle text-right ">
                                                 <h3 class="align-middle font-weight-bold">Total</h3>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td class="align-middle text-center ">
                                                 <h3 class="align-middle font-weight-bold">
-                                                    RM<?= number_format(round(array_sum($prices)), 2, '.', '') ?>
+                                                    <?php if ($rowInvoice['discount_items'] != 0) : ?>
+                                                        RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
+                                                    <?php elseif ($rowInvoice['discount_all'] != 0) : ?>
+                                                        RM<?= number_format(round(array_sum($discountAll), 2), 2, '.', ''); ?>
+                                                    <?php else : ?>
+                                                        RM<?= number_format(round(array_sum($prices), 2), 2, '.', '') ?>
+                                                    <?php endif; ?>
                                                 </h3>
                                                 <input type="text" name="totalAmount" id="totalAmount" class="form-control d-none" value="<?= number_format(round(array_sum($prices)), 2, '.', '') ?>">
                                             </td>
@@ -157,11 +189,11 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                     <span>Terms and Conditions</span>
                                     <ul>
                                         <li>
+                                            Price will be rounded up to the nearest point.
+                                        </li>
+                                        <li>
                                             Please include the payment slips after the payment was made.
                                         </li>
-                                        <!-- <li>
-                                            30% of deposit from the actual amount.
-                                        </li> -->
                                         <li>
                                             Balance payment must be made within 2 days after the invoice billed to you.
                                         </li>
@@ -187,7 +219,9 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                 <label for="">Invoice Status</label>
                                 <select name="invoiceStatus" id="" class="form-control" required>
                                     <option value="">Select</option>
-                                    <option value="Pending">Pending</option>
+                                    <option value="Pending" <?php if ($rowInvoice['status'] == 'Pending') {
+                                                                echo "Selected";
+                                                            } ?>>Pending</option>
                                     <option value="Full">Full</option>
                                     <option value="Remaining">Remaining</option>
                                     <option value="Deposit">Deposit</option>

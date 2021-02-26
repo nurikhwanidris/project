@@ -134,28 +134,20 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-1">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Quantity</span>
+                                                <span class="input-group-text" id="basic-addon1">Qty</span>
                                             </div>
-                                            <input type="number" name="" id="quantity" class="form-control" placeholder="Quantity">
+                                            <input type="number" name="" id="quantity" class="form-control text-center" min="1" value="1">
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 d-none">
+                                    <div class="col-lg-1">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Discount for Single Item</span>
+                                                <span class="input-group-text" id="basic-addon1">Disc</span>
                                             </div>
-                                            <input type="number" name="" id="discountItem" class="form-control" placeholder="Discount" value="0">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Discount for All Items</span>
-                                            </div>
-                                            <input type="number" name="" id="discountAll" class="form-control" placeholder="Discount" value="0">
+                                            <input type="number" name="" id="discountItem" class="form-control text-center" placeholder="Discount" value="0">
                                         </div>
                                     </div>
                                     <div class="col-lg-2 d-none">
@@ -177,7 +169,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                                     <th class="align-middle" style="width: 60%;">Product Name</th>
                                                     <th class="align-middle text-center">Quantity</th>
                                                     <th class="align-middle text-center">Price</th>
-                                                    <th class="align-middle text-center">Discount %</th>
+                                                    <th class="align-middle text-center">Discount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -186,6 +178,16 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     </div>
                                     <div class="col-lg-2">
                                         <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i> Delete Item</button>
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-2">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Disc for All</span>
+                                            </div>
+                                            <input type="number" name="discountAll" id="discountAll" class="form-control text-center" placeholder="Discount" value="0">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row my-3">
@@ -260,8 +262,13 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             var productCost = parseFloat($("#productCost").val());
             var productPrice = Math.round((productCost * 2.5) + 6) * quantity;
 
+            // Calculate discount
+            var percentToDecimal = discountItem / 100;
+            var percent = percentToDecimal * productPrice;
+            var discount = productPrice - percent;
+
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center border-0 form-control' value='" + discountItem + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center border-0 form-control' value='" + discount + "'></td></tr>";
             $("table tbody").append(markup);
         });
 
