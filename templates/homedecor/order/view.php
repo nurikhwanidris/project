@@ -1,270 +1,183 @@
-<!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
-
-<!-- Title -->
-<?php $title = "Invoice" ?>
-
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
+
+<!-- Get DB conn -->
+<?php include('../../../src/model/dbconn.php') ?>
 
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-<!-- Get data from invoice table -->
+<!-- Get Package ID -->
 <?php
-$id = $_GET['id'];
-$select = "SELECT * FROM homedecor_purchase_order WHERE id = '$id'";
-$result = mysqli_query($conn, $select);
-$rowInvoice = mysqli_fetch_array($result);
-
-// Explode everything boom!
-$products = explode(',', $rowInvoice['product_id']);
-$quantities = explode(',', $rowInvoice['quantity']);
-$prices = explode(',', $rowInvoice['price']);
-$discountItems = explode(',', $rowInvoice['discount_items']);
-$discountAll = explode(',', $rowInvoice['discount_all']);
+$customerID = $_GET['customerID'];
+$sql = "SELECT * FROM homedecor_customer WHERE id = '$customerID'";
+$resultSql = mysqli_query($conn, $sql);
+$rowCustomer = mysqli_fetch_assoc($resultSql);
 ?>
 
-<!-- Get customer info -->
+<!-- Get Package -->
 <?php
-$customer = "SELECT * FROM homedecor_customer where id = '" . $rowInvoice['customer_id'] . "'";
-$resultCustomer = mysqli_query($conn, $customer);
-$rowCustomer = mysqli_fetch_array($resultCustomer);
+$product = "SELECT * FROM homedecor_product WHERE quantity != 0 ";
+$resultproduct = mysqli_query($conn, $product);
 ?>
 
-<!-- Body -->
+<!-- Get enquiries data -->
+<?php
+$enquiry = "SELECT * FROM homedecor_purchase_order WHERE customer_id = '$customerID'";
+$resultEnquiry = mysqli_query($conn, $enquiry);
+$rowEnquiry = mysqli_fetch_array($resultEnquiry);
+?>
+
+<!-- Get the Source -->
+<?php
+$source = "SELECT * FROM source";
+$resultSource = mysqli_query($conn, $source);
+date_default_timezone_set("Asia/Kuala_Lumpur");
+?>
+
+<!-- Explode everything -->
+<?php
+$explodeProduct = explode(',', $rowEnquiry['product_id']);
+$explodeQuantity = explode(',', $rowEnquiry['quantity']);
+?>
 <div class="container-fluid">
-    <form action="save-invoice.php" method="POST" enctype="multipart/form-data">
-        <input type="text" name="poID" id="" class="form-control d-none" value="<?= $id; ?>">
-        <?php if (isset($_GET['msg']) == 'success') : ?>
-            <div class="row">
-                <div class="col-lg-12 col-xl-12">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        Succesfully update the invoice.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Customers Management</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    </div>
+    <form action="save-po.php" method="POST">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Add Customers - <?= $customerID; ?></h6>
+                        <input type="text" name="customerID" id="" class="d-none" value="<?= $customerID; ?>">
                     </div>
-                </div>
-            </div>
-        <?php endif; ?>
-        <div class="row mt-4">
-            <div class="col-lg-9 col-xl-9">
-                <div class="card mb-4">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-12 col-xl-12">
-                                <div class="col-4 float-left text-left">
-                                    <h4 class="font-weight-bold">Arzu Home & Living</h4>
-                                    <p>
-                                        243B, Jalan Bandar 13 <br>
-                                        Taman Melawati <br>
-                                        53100, Kuala Lumpur
-                                    </p>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="General" role="tabpanel" aria-labelledby="General-tab">
+                                <h6 class="font-weight-bold text-info"><u>Staff Details</u></h6>
+                                <div class="row my-2">
+                                    <div class="col-lg-4">
+                                        <label for="staffName">Staff Name</label>
+                                        <input type="text" name="staffName" id="" class="form-control" value="<?= $rowCustomer['staffName']; ?>" readonly>
+
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="tourDate">Insert Date</label>
+                                        <input type="text" name="insertDate" id="" class="form-control" value="<?= $rowCustomer['created'] ?>" readonly>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="source">Source</label>
+                                        <select name="source" id="" class="form-control" disabled>
+                                            <option value="<?= $rowCustomer['source']; ?>"><?= $rowCustomer['source']; ?></option>
+                                            <?php while ($rowSource = mysqli_fetch_assoc($resultSource)) : ?>
+                                                <option value="<?= $rowSource['sourceName']; ?>"><?= $rowSource['sourceName']; ?></option>
+                                            <?php endwhile; ?>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-4 float-right text-right">
-                                    <h4 class="font-weight-bold">Invoice</h4>
-                                    <img src="/project/upload/img/invoice-logo-1.png" alt="" srcset="" style="height: auto; width: 70%;">
+                                <hr>
+                                <h6 class="font-weight-bold text-info"><u>Customer Details</u></h6>
+                                <div class="row my-2">
+                                    <div class="col-lg-4 form-group">
+                                        <label for="">Client Name</label>
+                                        <input type="text" name="customerName" id="" class="form-control" value="<?= $rowCustomer['customerName']; ?>">
+                                    </div>
+                                    <div class="col-lg-4 form-group">
+                                        <label for="">Client Phone</label>
+                                        <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1" value="<?= $rowCustomer['customerPhone']; ?>">
+                                    </div>
+                                    <div class="col-lg-4 form-group">
+                                        <label for="">Client Email</label>
+                                        <input type="email" name="customerEmail" id="" class="form-control" value="<?= $rowCustomer['customerEmail']; ?>">
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12 col-xl-12">
-                                <div class="col-4 float-left text-left">
-                                    <p>Invoice to:</p>
-                                    <p>
-                                        <input type="text" name="customerID" id="" class="form-control d-none" value="<?= $rowCustomer['id']; ?>">
-                                        <span class="font-weight-bold"><?= $rowCustomer['customerName']; ?></span> <br>
-                                        <?= $rowCustomer['address1']; ?> <br>
-                                        <?= $rowCustomer['city'] . ", " . $rowCustomer['postcode'] . ", " . $rowCustomer['state'] ?>
-                                    </p>
-                                    <p>
-                                        Contact Number : <span class="font-weight-bold"><?= $rowCustomer['customerPhone']; ?></span>
-                                    </p>
+                                <div class="row my-2">
+                                    <div class="col-lg-6">
+                                        <label for="address1">Address</label>
+                                        <input type="text" name="address1" id="" class="form-control" value="<?= $rowCustomer['address1']; ?>">
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="address1">City</label>
+                                        <input type="text" name="city" id="" class="form-control" value="<?= $rowCustomer['city']; ?>">
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="address1">Postcode</label>
+                                        <input type="text" name="postcode" id="" class="form-control" value="<?= $rowCustomer['postcode']; ?>">
+                                    </div>
+                                    <div class="col-lg-2   ">
+                                        <label for="address1">State</label>
+                                        <select name="state" id="" class="form-control">
+                                            <option value="<?= $rowCustomer['state']; ?>"><?= $rowCustomer['state']; ?></option>
+                                            <option value="Johor">Johor</option>
+                                            <option value="Kedah">Kedah</option>
+                                            <option value="Kelantan">Kelantan</option>
+                                            <option value="Kuala Lumpur">Kuala Lumpur</option>
+                                            <option value="Labuan">Labuan</option>
+                                            <option value="Malacca">Malacca</option>
+                                            <option value="Negeri Sembilan">Negeri Sembilan</option>
+                                            <option value="Pahang">Pahang</option>
+                                            <option value="Perak">Perak</option>
+                                            <option value="Perlis">Perlis</option>
+                                            <option value="Penang">Penang</option>
+                                            <option value="Sabah">Sabah</option>
+                                            <option value="Sarawak">Sarawak</option>
+                                            <option value="Selangor">Selangor</option>
+                                            <option value="Terengganu">Terengganu</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-3 float-right text-right">
-                                    <p>
-                                        Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
-                                        <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
-                                        Invoice Date : <span class="font-weight-bold"><?= date("d/m/Y"); ?><input type="text" name="invoiceDate" id="" class="form-control d-none" value="<?= date("Y-m-d"); ?>"></span>
-                                    </p>
+                                <hr>
+                                <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
+                                <div class="row my-2">
+                                    <div class="col-lg-12">
+                                        <table class="table table-stripped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="align-middle text-center" style="width: 5%;">Select</th>
+                                                    <th class="align-middle" style="width: 60%;">Product Name</th>
+                                                    <th class="align-middle text-center">Quantity</th>
+                                                    <th class="text-center align-middle">Price/Unit</th>
+                                                    <th class="text-center align-middle">Discount %</th>
+                                                    <th class="text-center align-middle">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach (array_combine($explodeProduct, $explodeQuantity) as $explodeProduct => $explodeQuantity) :
+                                                    $display = "SELECT * FROM homedecor_product WHERE id = '$explodeProduct'";
+                                                    $res = mysqli_query($conn, $display);
+                                                    while ($rowDisplay = mysqli_fetch_array($res)) : $ppu = round(($rowDisplay['cost'] * 2.5) + 6, 3); ?>
+                                                        <tr>
+                                                            <td class="text-center align-middle">
+                                                                <input type='checkbox' name='record'>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <input type="text" name="productName[]" id="" class="border-0 form-control" value="<?= $rowDisplay['name']; ?>">
+                                                            </td>
+                                                            <td class="text-center align-middle">
+                                                                <input type="text" name="productQuantity[]" id="" class="text-center form-control border-0" value="<?= $explodeQuantity; ?>">
+                                                            </td>
+                                                            <td class="text-center align-middle">
+                                                                <input type="text" name="productCost[]" id="" class="text-center form-control border-0" value="<?= $ppu; ?>">
+                                                            </td>
+                                                            <td class="text-center align-middle">
+                                                                <input type="text" name="discountItems[]" id="" class="form-control text-center border-0" value="">
+                                                            </td>
+                                                            <td class="text-center align-middle">
+                                                                <input type="text" name="productPrice[]" id="" class="text-center form-control border-0" value="<?= round($ppu * $explodeQuantity, 2); ?>">
+                                                            </td>
+                                                        </tr>
+                                                <?php endwhile;
+                                                endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                        <button type="button" class="btn btn-danger delete-row">Delete Row</button>
+                                        <button class="btn btn-primary float-right">Create PO</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12 col-xl-12">
-                                <table class="table table-bordered">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th class="align-middle">Description</th>
-                                            <th class="align-middle text-center">Product ID</th>
-                                            <th class="align-middle text-center">Quantity</th>
-                                            <th class="align-middle text-center">Price/Unit</th>
-                                            <?php if ($rowInvoice['discount_items'] != '') : ?>
-                                                <th class="align-middle text-center">Discount</th>
-                                            <?php endif; ?>
-                                            <th class="align-middle text-center">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        for ($i = 0; $i < count($products); $i++) :
-                                            $product = $products[$i];
-                                            $quantity = $quantities[$i];
-                                            $price = $prices[$i];
-                                            $discount = $discountItems[$i];
-                                            $selectProduct = "SELECT * FROM homedecor_product WHERE id = '$product'";
-                                            $resultProduct = mysqli_query($conn, $selectProduct);
-                                            $rowProduct = mysqli_fetch_array($resultProduct);
-                                        ?>
-                                            <tr>
-                                                <td class="align-middle">
-                                                    <?= $rowProduct['name']; ?><input type="text" name="productID[]" id="" class="form-control d-none" value="<?= $product; ?>">
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <?= $rowProduct['orderNo']; ?>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <?= $quantity; ?><input type="text" name="quantity[]" id="" class="form-control d-none" value="<?= $quantity; ?>">
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <!-- Selling Price -->
-                                                    RM<?= $sellingPrice = number_format(round(($rowProduct['cost'] * 2.5) + 6), 2, '.', ''); ?>
-                                                </td>
-                                                <?php if ($rowInvoice['discount_items'] != '' || $rowInvoice['discount_all'] != '') : ?>
-                                                    <td class="align-middle text-center">
-                                                        <?php
-                                                        $differences = $price - $discount;
-                                                        $percent = ($differences / $price) * 100;
-                                                        echo $percent;
-                                                        ?>%
-                                                    </td>
-                                                <?php endif; ?>
-                                                <td class="align-middle text-center">
-                                                    <!-- Amount -->
-                                                    RM<?= $amount = number_format($discount, 2, '.', ''); ?>
-                                                </td>
-                                            </tr>
-                                        <?php endfor; ?>
-                                        <tr class="">
-                                            <td colspan="5" class="align-middle font-weight-light text-right ">Subtotal</td>
-                                            <td class="align-middle text-center ">
-                                                RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
-                                            </td>
-                                        </tr>
-                                        <?php if ($rowInvoice['discount_all'] != 0) : ?>
-                                            <tr>
-                                                <td colspan="5" class="text-right font-weight-bold ">Discount</td>
-                                                <td class="align-middle text-center "><?= $rowInvoice['discount_all']; ?>%</td>
-                                            </tr>
-                                        <?php endif; ?>
-                                        <tr>
-                                            <td colspan="5" class="align-middle text-right ">
-                                                <h3 class="align-middle font-weight-bold">Total</h3>
-                                            </td>
-                                            <td class="align-middle text-center ">
-                                                <h3 class="align-middle font-weight-bold">
-                                                    <?php if ($rowInvoice['discount_items'] != 0 && $rowInvoice['price'] != $rowInvoice['discount_items']) : ?>
-                                                        RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
-                                                    <?php elseif ($rowInvoice['discount_all'] != 0) : ?>
-                                                        <?php
-                                                        $total = explode(',', $rowInvoice['price']);
-                                                        $totalSum = array_sum($total);
-                                                        $percent = $rowInvoice['discount_all'] / 100;
-                                                        $discount = $totalSum - ($totalSum * $percent);
-                                                        echo "RM" . number_format($discount, 2, '.', '');
-                                                        ?>
-                                                    <?php else : ?>
-                                                        RM<?= number_format(round(array_sum($prices), 2), 2, '.', '') ?>
-                                                    <?php endif; ?>
-                                                </h3>
-                                                <input type="text" name="totalAmount" id="totalAmount" class="form-control d-none" value="<?= number_format(round(array_sum($prices)), 2, '.', '') ?>">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
-                            <div class="col-lg-12 col-xl-12">
-                                <div class="col-lg-12">
-                                    <p>
-                                        Pay to : <br>
-                                        <span class="font-weight-bold">Azuwarridah Abdullah</span> <br>
-                                        <span class="font-weight-bold">Maybank - 5148 1555 1083</span>
-                                    </p>
-                                    <span>Terms and Conditions</span>
-                                    <ul>
-                                        <li>
-                                            Price will be rounded up to the nearest point.
-                                        </li>
-                                        <li>
-                                            Please include the payment slips after the payment was made.
-                                        </li>
-                                        <li>
-                                            Balance payment must be made within 2 days after the invoice billed to you.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4 d-print-none">
-                            <div class="col-lg-12 col-xl-12">
-                                <div class="col-lg-4 float-right text-right">
-                                    <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-xl-3 d-print-none">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-lg-12">
-                                <label for="">Invoice Status</label>
-                                <select name="invoiceStatus" id="" class="form-control" required>
-                                    <option value="">Select</option>
-                                    <option value="Pending" <?php if ($rowInvoice['status'] == 'Pending') {
-                                                                echo "Selected";
-                                                            } ?>>Pending</option>
-                                    <option value="Full">Full</option>
-                                    <option value="Remaining">Remaining</option>
-                                    <option value="Deposit">Deposit</option>
-                                    <option value="Installment">Installment</option>
-                                    <option value="Refund">Refund</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row my-3">
-                            <div class="col-lg-12">
-                                <label for="">Amount Paid</label>
-                                <input type="text" name="amountPaid" id="" class="form-control" placeholder="Insert amount paid if exist">
-                            </div>
-                        </div>
-                        <div class="row my-3">
-                            <div class="col-lg-12">
-                                <label for="">Payment Type</label>
-                                <select name="paymentType" id="" class="form-control">
-                                    <option value="">Select</option>
-                                    <option value="Online Banking">Online Banking</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="Checks">Checks</option>
-                                    <option value="Credit Cards">Credit Cards</option>
-                                    <option value="Debit Cards">Debit Cards</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row my-3">
-                            <div class="col-lg-12">
-                                <label for="">Upload Payment Receipt</label>
-                                <input type="file" name="paymentReceipt" id="" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-lg-12">
-                                <button type="submit" name="saveInvoice" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
                             </div>
                         </div>
                     </div>
@@ -276,3 +189,36 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
 
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>
+
+<script>
+    $("#customerPhone").keyup(function() {
+        var prefix = "+60"
+
+        if (this.value.indexOf(prefix) !== 0) {
+            this.value = prefix + this.value;
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $(".add-row").click(function() {
+            // var e = document.getElementById("ddlViewBy");
+            // var name = e.value;
+            var e = document.getElementById("name");
+            var getID = e.value;
+            var name = e.options[e.selectedIndex].text;
+            var quantity = parseInt($("#quantity").val());
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='product[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td></tr>";
+            $("table tbody").append(markup);
+        });
+
+        // Find and remove selected table rows
+        $(".delete-row").click(function() {
+            $("table tbody").find('input[name="record"]').each(function() {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+    });
+</script>

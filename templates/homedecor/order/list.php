@@ -186,8 +186,8 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                 <?php while ($rowOrder = mysqli_fetch_array($resultinvoice)) : ?>
                                     <tr>
                                         <td class="align-middle text-center">
-                                            <a href="view?id=<?= $rowOrder['id']; ?>" class="btn btn-primary btn-sm">
-                                                <?= $rowOrder['id']; ?>
+                                            <a href="view?customerID=<?= $rowOrder['customerId']; ?>" class="btn btn-primary btn-sm">
+                                                <?= $rowOrder['customerId']; ?>
                                             </a>
                                         </td>
                                         <td class="align-middle">
