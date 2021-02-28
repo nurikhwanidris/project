@@ -26,7 +26,7 @@ $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
 
 // Insert to database
-$insert = "INSERT INTO product (name, category, sku, size, orderNo, cost, price, quantity, img, created, modified) VALUE ('$name', '$category', '$sku', '$size', '$orderNo', '$cost', '$price', '$quantity','$trimmedImage', '$created', '$modified')";
+$insert = "INSERT INTO homedecor_product (name, category, sku, size, orderNo, cost, quantity, img, created, modified) VALUE ('$name', '$category', '$sku', '$size', '$orderNo', '$cost', '$quantity','$trimmedImage', '$created', '$modified')";
 
 if ($result = mysqli_query($conn, $insert)) {
     move_uploaded_file($_FILES['imgSave']['tmp_name'], $target);
@@ -38,3 +38,4 @@ if ($result = mysqli_query($conn, $insert)) {
     $msg = "Error occured." . mysqli_error($conn);
     $alert = "danger";
 }
+echo $msg;

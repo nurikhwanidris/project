@@ -15,7 +15,7 @@ $invoiceNum = $_POST['invoiceNum'];
 $invoiceDate = $_POST['invoiceDate'];
 $totalAmount = $_POST['totalAmount'];
 $amountPaid = $_POST['amountPaid'];
-$paymentReceipt = $_FILES['paymentReceipt']['name'];
+$poID = $_POST['poID'];
 
 // // Date created and modified
 date_default_timezone_set("Asia/Kuala_Lumpur");
@@ -23,28 +23,31 @@ $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
 
 // Renamed and find a target
-$newName = $invoiceNum . '-' . $invoiceDate;
-$target = "../../../upload/img/receipt/" . basename($newName);
+$paymentReceipt = $_FILES['paymentReceipt']['name'];
+$newName = "INV" . $invoiceNum . '-' . $invoiceDate . ".pdf";
+$target = "../../../upload/invoice/" . basename($newName);
 
 // Update inventory 1st
-if ($invoiceStatus == 'Pending') {
+if ($invoiceStatus == 'Deposit') {
     // Insert into invoice table
-    $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, total_amount, remaining_amount, created, modified) VALUES ('$customerID','$invoiceNum','$invoiceDate','$invoiceStatus','$totalAmount','$totalAmount','$created','$modified')";
+    $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newName', '$paymentType', '$totalAmount', '$amountPaid', '$totalAmount'-'$amountPaid', '$created','$modified','$poID')";
     $resultInsert = mysqli_query($conn, $insert);
 
+    move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+
     if ($resultInsert) {
-        $msg = "Invoice status is pending";
+        $msg = "Deposit made for invoice #" . $invoiceNum;
         $alert = "success";
         //header("Location: /project/templates/homedecor/order/view?msg=success");
     } else {
         $msg = "Error occcured" . mysqli_error($conn);
         $alert = "danger";
     }
-    echo $msg;
 } elseif ($invoiceStatus == 'Full') {
     // Update invoice table if full payment made
-    $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', payment_receipt = '$newName', payment_type = '$paymentType', amount_paid  = '$amountPaid', modified = '$modified' WHERE customer_id = '$customerID'";
+    $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', payment_receipt = '$newName', payment_type = '$paymentType', amount_paid  = '$amountPaid', modified = '$modified' WHERE po_id = '$poID'";
     $resultUpdate = mysqli_query($conn, $update);
+    move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
 
     // Update product table
     for ($i = 0; $i < count($productID); $i++) {
@@ -55,8 +58,8 @@ if ($invoiceStatus == 'Pending') {
         $result = mysqli_query($conn, $update);
     }
     if ($result) {
-        move_uploaded_file($_FILES['paymentReceipt']['name'], $target);
-        $msg = "Successfull updated the invoice";
+        move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+        $msg = "Successfull updated the invoice #" . $invoiceNum;
         $alert = "success";
         //header("Location: /project/templates/homedecor/order/view?msg=success");
     } else {
@@ -65,11 +68,11 @@ if ($invoiceStatus == 'Pending') {
     }
 } else {
     // Update invoice table if deposit is made
-    $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = (remaining_amount-'$amountPaid'), payment_receipt = '$newName', payment_type = '$paymentType' WHERE customer_id = '$customerID'";
+    $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = (remaining_amount-'$amountPaid'), payment_receipt = '$newName', payment_type = '$paymentType' WHERE po_id = '$poID'";
     $result = mysqli_query($conn, $update);
 
     if ($result) {
-        move_uploaded_file($_FILES['paymentReceipt']['name'], $target);
+        move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
         $msg = "Successfull updated the invoice status to " . $invoiceStatus . " made";
         $alert = "success";
         //header("Location: /project/templates/homedecor/order/list");
@@ -162,7 +165,7 @@ $customer = mysqli_fetch_array($resultCustomer);
                     <div class="row my-2 d-print-none">
                         <div class="col-lg-12">
                             <div class="col-2 float-right text-right">
-                                <a class="btn btn-secondary" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
+                                <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
                             </div>
                         </div>
                     </div>

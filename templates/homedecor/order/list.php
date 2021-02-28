@@ -1,3 +1,6 @@
+<!-- Title -->
+<?php $title = "Purchase Order List"; ?>
+
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 
@@ -190,10 +193,22 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                         <td class="align-middle">
                                             <a href="/project/templates/homedecor/crm/view?customerID=<?= $rowOrder['customerId']; ?>" target="_blank"><?= $rowOrder['customerName']; ?></a>
                                         </td>
+                                        <!-- Amount -->
                                         <td class="align-middle text-center">
                                             <?php
-                                            $total = explode(',', $rowOrder['price']);
-                                            echo "RM" . number_format(array_sum($total), 2, '.', '');
+                                            if ($rowOrder['discountItems'] != 0 && $rowOrder['discountItems'] != $rowOrder['price']) {
+                                                $total = explode(',', $rowOrder['discountItems']);
+                                                echo "RM" . number_format(array_sum($total), 2, '.', '');
+                                            } elseif ($rowOrder['discountAll'] != 0 && $rowOrder['discountItems'] == $rowOrder['price']) {
+                                                $total = explode(',', $rowOrder['price']);
+                                                $totalSum = array_sum($total);
+                                                $percent = $rowOrder['discountAll'] / 100;
+                                                $discount = $totalSum - ($totalSum * $percent);
+                                                echo "RM" . number_format($discount, 2, '.', '');
+                                            } else {
+                                                $total = explode(',', $rowOrder['price']);
+                                                echo "RM" . number_format(array_sum($total), 2, '.', '');
+                                            }
                                             ?>
                                         </td>
                                         <td class="align-middle text-center">

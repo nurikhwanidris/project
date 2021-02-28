@@ -70,15 +70,6 @@ $resultCategory = mysqli_query($conn, $category);
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
-                                        <label for="">Fixed Price</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">RM</span>
-                                            </div>
-                                            <input type="text" class="form-control" name="price">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
                                         <label for="">Quantity</label>
                                         <input type="text" name="quantity" id="" class="form-control">
                                     </div>

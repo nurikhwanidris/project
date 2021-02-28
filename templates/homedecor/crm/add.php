@@ -9,10 +9,10 @@
 
 <!-- Get Package ID -->
 <?php
-$sql = "SELECT id FROM homedecor_customer ORDER BY id DESC";
-$resultSql = mysqli_query($conn, $sql);
-if ($resultSql) {
-    $rowCustomer = mysqli_fetch_assoc($resultSql);
+$sql = "SELECT id, customerName FROM homedecor_customer ORDER BY id DESC";
+$resultCustomer = mysqli_query($conn, $sql);
+if ($resultCustomer) {
+    $rowCustomer = mysqli_fetch_assoc($resultCustomer);
     $customerID = $rowCustomer['id'] + 1;
 } else {
     echo mysqli_error($conn);
@@ -78,34 +78,43 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <div class="row my-2">
                                     <div class="col-lg-4 form-group">
                                         <label for="">Client Name</label>
-                                        <input type="text" name="customerName" id="" class="form-control">
+                                        <input type="text" name="customerName" id="customerName" class="form-control" list="nameList">
+                                        <datalist id="nameList">
+                                            <?php while ($rowName = mysqli_fetch_assoc($resultCustomer)) : ?>
+                                                <option value="<?= $rowName['customerName']; ?>"></option>
+                                            <?php endwhile; ?>
+                                        </datalist>
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-2 form-group">
+                                        <label for="">Birthday</label>
+                                        <input type="date" name="dob" id="" class="form-control">
+                                    </div>
+                                    <div class="col-lg-3 form-group">
                                         <label for="">Client Phone</label>
                                         <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1">
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
                                         <label for="">Client Email</label>
-                                        <input type="email" name="customerEmail" id="" class="form-control">
+                                        <input type="email" name="customerEmail" id="customerEmail" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-lg-6">
                                         <label for="address1">Address</label>
-                                        <input type="text" name="address1" id="" class="form-control">
+                                        <input type="text" name="address1" id="customerAddress" class="form-control">
                                     </div>
                                     <div class="col-lg-2">
                                         <label for="address1">City</label>
-                                        <input type="text" name="city" id="" class="form-control">
+                                        <input type="text" name="city" id="customerCity" class="form-control">
                                     </div>
                                     <div class="col-lg-2">
                                         <label for="address1">Postcode</label>
-                                        <input type="text" name="postcode" id="" class="form-control">
+                                        <input type="text" name="postcode" id="customerPostcode" class="form-control">
                                     </div>
                                     <div class="col-lg-2   ">
                                         <label for="address1">State</label>
-                                        <select name="state" id="" class="form-control">
-                                            <option value="">Select</option>
+                                        <input type="text" name="state" id="customerState" class="form-control" list="stateList">
+                                        <datalist id="stateList">
                                             <option value="Johor">Johor</option>
                                             <option value="Kedah">Kedah</option>
                                             <option value="Kelantan">Kelantan</option>
@@ -121,13 +130,14 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                             <option value="Sarawak">Sarawak</option>
                                             <option value="Selangor">Selangor</option>
                                             <option value="Terengganu">Terengganu</option>
-                                        </select>
+                                        </datalist>
                                     </div>
                                 </div>
                                 <hr>
                                 <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
                                 <div class="row my-4">
                                     <div class="col-lg-4">
+                                        <label for="">Product</label>
                                         <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
                                             <?php foreach ($productSelectOptions as $val => $text) : ?>
                                                 <option value="<?= $val; ?>"><?= $text; ?></option>
@@ -135,6 +145,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                         </select>
                                     </div>
                                     <div class="col-lg-1">
+                                        <label for="">Quantity</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">Qty</span>
@@ -143,20 +154,26 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                         </div>
                                     </div>
                                     <div class="col-lg-1">
+                                        <label for="">Discount</label>
                                         <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Disc</span>
-                                            </div>
                                             <input type="number" name="" id="discountItem" class="form-control text-center" placeholder="Discount" value="0">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 d-none">
+                                    <div class="d-none">
                                         <input type="text" name="id_text" id="productOrderNo" />
                                         <input type="text" name="id_text" id="productName" />
                                         <input type="text" name="id_text" id="productCost" />
                                     </div>
                                     <div class="col-lg-2">
-                                        <input type="button" class="btn btn-info add-row" value="Add Item">
+                                        <div class="row">
+                                            <label for="">&nbsp;</label>
+                                        </div>
+                                        <div class="row">
+                                            <input type="button" class="btn btn-info add-row" value="Add Item">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row my-2">
@@ -207,6 +224,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>
 
+<!-- Insert phone number country code-->
 <script>
     $("#customerPhone").keyup(function() {
         var prefix = "+60"
@@ -217,6 +235,44 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     });
 </script>
 
+<!-- Get existing customer info -->
+<script>
+    $customerName = $('#customerName');
+    $customerPhone = $('#customerPhone');
+    $customerEmail = $('#customerEmail');
+    $customerAddress = $('#customerAddress');
+    $customerCity = $('#customerCity');
+    $customerPostcode = $('#customerPostcode');
+    $customerState = $('#customerState');
+
+    // Fetch from the API
+    var url = 'getCustomerInfo.php';
+
+    function refreshInputForCustomer(customer) {
+        $.post(url, {
+            customer: customer
+        }, function(r) {
+            /**
+             * Assuming your PHP API responds with a JSON encoded array, with the ID available.
+             */
+            $customerName.val(r.customerName);
+            $customerPhone.val(r.customerPhone);
+            $customerEmail.val(r.customerEmail);
+            $customerAddress.val(r.customerAddress);
+            $customerCity.val(r.customerCity);
+            $customerPostcode.val(r.customerPostcode);
+            $customerState.val(r.customerState);
+        });
+    }
+
+    // Listen for when a customer is selected
+    $customerName.change(function() {
+        var customer = $(this).val();
+        refreshInputForCustomer(customer);
+    });
+</script>
+
+<!-- Get Product Info -->
 <script>
     var $productSelect = $('#product');
     var $productOrderNo = $('#productOrderNo');

@@ -35,6 +35,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
 <!-- Body -->
 <div class="container-fluid">
     <form action="save-invoice.php" method="POST" enctype="multipart/form-data">
+        <input type="text" name="poID" id="" class="form-control d-none" value="<?= $id; ?>">
         <?php if (isset($_GET['msg']) == 'success') : ?>
             <div class="row">
                 <div class="col-lg-12 col-xl-12">
@@ -163,10 +164,16 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                             </td>
                                             <td class="align-middle text-center ">
                                                 <h3 class="align-middle font-weight-bold">
-                                                    <?php if ($rowInvoice['discount_items'] != 0) : ?>
+                                                    <?php if ($rowInvoice['discount_items'] != 0 && $rowInvoice['price'] != $rowInvoice['discount_items']) : ?>
                                                         RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
                                                     <?php elseif ($rowInvoice['discount_all'] != 0) : ?>
-                                                        RM<?= number_format(round(array_sum($discountAll), 2), 2, '.', ''); ?>
+                                                        <?php
+                                                        $total = explode(',', $rowInvoice['price']);
+                                                        $totalSum = array_sum($total);
+                                                        $percent = $rowInvoice['discount_all'] / 100;
+                                                        $discount = $totalSum - ($totalSum * $percent);
+                                                        echo "RM" . number_format($discount, 2, '.', '');
+                                                        ?>
                                                     <?php else : ?>
                                                         RM<?= number_format(round(array_sum($prices), 2), 2, '.', '') ?>
                                                     <?php endif; ?>
@@ -204,7 +211,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                         <div class="row mt-4 d-print-none">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="col-lg-4 float-right text-right">
-                                    <a class="btn btn-secondary" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
+                                    <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
                                 </div>
                             </div>
                         </div>
