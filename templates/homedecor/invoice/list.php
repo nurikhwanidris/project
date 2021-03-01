@@ -14,6 +14,7 @@
 // Fetch customer
 $invoice = "SELECT 
 homedecor_customer.customerName AS customerName,
+homedecor_invoice.id AS id,
 homedecor_invoice.customer_id AS customerID,
 homedecor_invoice.invoice_num AS invoiceNum,
 homedecor_invoice.invoice_date AS invoiceDate,
@@ -34,7 +35,7 @@ $resultinvoice = mysqli_query($conn, $invoice);
 // Count rows
 // $rowCountEnq = mysqli_num_rows($resultEnquiries);
 
-$fetchEnquiries = "SELECT id FROM homedecor_purchase_order";
+$fetchEnquiries = "SELECT id FROM homedecor_order";
 $resultEnquiries = mysqli_query($conn, $fetchEnquiries);
 
 $rowCountEnq = mysqli_num_rows($resultEnquiries);
@@ -46,7 +47,7 @@ $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
 
 // Count Pending
-$pending = "SELECT status FROM homedecor_purchase_order WHERE status = 'Pending'";
+$pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
 $resultPending = mysqli_query($conn, $pending);
 $rowCountPending = mysqli_num_rows($resultPending);
 ?>
@@ -183,11 +184,11 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                 <?php while ($rowInvoice = mysqli_fetch_array($resultinvoice)) : ?>
                                     <tr>
                                         <td class="align-middle text-center">
-                                            <a href="/project/templates/homedecor/invoice/view?id=<?= $rowInvoice['invoiceNum']; ?>" target="_blank">
+                                            <a href="/project/templates/homedecor/invoice/view?id=<?= $rowInvoice['id']; ?>" target="_blank">
                                                 INV<?= $rowInvoice['invoiceNum']; ?>
                                             </a>
                                         </td>
-                                        <td class="align-middle text-center">
+                                        <td class="align-middle">
                                             <?= $rowInvoice['customerName']; ?>
                                         </td>
                                         <td class="align-middle text-center">
@@ -197,7 +198,7 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                             RM<?= $rowInvoice['invoiceTotal']; ?>
                                         </td>
                                         <td class="align-middle text-center">
-                                            RM<?= $rowInvoice['balanceDue']; ?>
+                                            RM<?= number_format($rowInvoice['balanceDue'], 2, '.', ''); ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?php

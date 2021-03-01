@@ -16,18 +16,18 @@ $invoice = "SELECT
 homedecor_customer.id AS customerId,
 homedecor_customer.customerName AS customerName,
 homedecor_customer.staffName AS staffName,
-homedecor_purchase_order.id AS id,
-homedecor_purchase_order.product_id AS productID,
-homedecor_purchase_order.quantity AS quantity,
-homedecor_purchase_order.price AS price,
-homedecor_purchase_order.discount_all AS discountAll,
-homedecor_purchase_order.discount_items AS discountItems,
-homedecor_purchase_order.status AS status,
-homedecor_purchase_order.created AS created,
-homedecor_purchase_order.modified AS modified
-FROM homedecor_purchase_order
+homedecor_order.id AS id,
+homedecor_order.product_id AS productID,
+homedecor_order.quantity AS quantity,
+homedecor_order.price AS price,
+homedecor_order.discount_all AS discountAll,
+homedecor_order.discount_items AS discountItems,
+homedecor_order.status AS status,
+homedecor_order.created AS created,
+homedecor_order.modified AS modified
+FROM homedecor_order
 JOIN homedecor_customer
-ON homedecor_purchase_order.customer_id = homedecor_customer.id";
+ON homedecor_order.customer_id = homedecor_customer.id";
 
 $resultinvoice = mysqli_query($conn, $invoice);
 
@@ -38,7 +38,7 @@ $resultinvoice = mysqli_query($conn, $invoice);
 // Count rows
 // $rowCountEnq = mysqli_num_rows($resultEnquiries);
 
-$fetchEnquiries = "SELECT id FROM homedecor_purchase_order";
+$fetchEnquiries = "SELECT id FROM homedecor_order";
 $resultEnquiries = mysqli_query($conn, $fetchEnquiries);
 
 $rowCountEnq = mysqli_num_rows($resultEnquiries);
@@ -50,7 +50,7 @@ $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
 
 // Count Pending
-$pending = "SELECT status FROM homedecor_purchase_order WHERE status = 'Pending'";
+$pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
 $resultPending = mysqli_query($conn, $pending);
 $rowCountPending = mysqli_num_rows($resultPending);
 ?>
@@ -186,8 +186,8 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                 <?php while ($rowOrder = mysqli_fetch_array($resultinvoice)) : ?>
                                     <tr>
                                         <td class="align-middle text-center">
-                                            <a href="view?customerID=<?= $rowOrder['customerId']; ?>" class="btn btn-primary btn-sm">
-                                                <?= $rowOrder['customerId']; ?>
+                                            <a href="view?id=<?= $rowOrder['id']; ?>" class="btn btn-primary btn-sm">
+                                                <?= $rowOrder['id']; ?>
                                             </a>
                                         </td>
                                         <td class="align-middle">

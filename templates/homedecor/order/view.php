@@ -1,3 +1,6 @@
+<!-- Title -->
+<?php $title = "Order Details" ?>
+
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 
@@ -7,53 +10,52 @@
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-<!-- Get Package ID -->
 <?php
-$customerID = $_GET['customerID'];
-$sql = "SELECT * FROM homedecor_customer WHERE id = '$customerID'";
-$resultSql = mysqli_query($conn, $sql);
-$rowCustomer = mysqli_fetch_assoc($resultSql);
-?>
-
-<!-- Get Package -->
-<?php
-$product = "SELECT * FROM homedecor_product WHERE quantity != 0 ";
-$resultproduct = mysqli_query($conn, $product);
-?>
-
-<!-- Get enquiries data -->
-<?php
-$enquiry = "SELECT * FROM homedecor_purchase_order WHERE customer_id = '$customerID'";
-$resultEnquiry = mysqli_query($conn, $enquiry);
-$rowEnquiry = mysqli_fetch_array($resultEnquiry);
-?>
-
-<!-- Get the Source -->
-<?php
+// Get source
 $source = "SELECT * FROM source";
 $resultSource = mysqli_query($conn, $source);
 date_default_timezone_set("Asia/Kuala_Lumpur");
-?>
 
-<!-- Explode everything -->
-<?php
-$explodeProduct = explode(',', $rowEnquiry['product_id']);
-$explodeQuantity = explode(',', $rowEnquiry['quantity']);
+// Get order details
+$id = $_GET['id'];
+$order = "SELECT * FROM homedecor_order WHERE id = '$id'";
+$resultOrder = mysqli_query($conn, $order);
+$rowOrder = mysqli_fetch_assoc($resultOrder);
+
+// Get customer Details
+$customer = "SELECT * FROM homedecor_customer WHERE id = '" . $rowOrder['customer_id'] . "'";
+$resultCustomer = mysqli_query($conn, $customer);
+$rowCustomer = mysqli_fetch_assoc($resultCustomer);
+
+// Get product details
+$product = "SELECT * FROM homedecor_product WHERE quantity != 0 ";
+$resultproduct = mysqli_query($conn, $product);
+$productSelectOptions = array();
+while ($rowProduct = $resultproduct->fetch_assoc()) {
+    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'];
+}
+
+// Explode everything boom!
+$products = explode(',', $rowOrder['product_id']);
+$quantities = explode(',', $rowOrder['quantity']);
+$prices = explode(',', $rowOrder['price']);
+$discountItems = explode(',', $rowOrder['discount_items']);
+$discountAll = explode(',', $rowOrder['discount_all']);
 ?>
 <div class="container-fluid">
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Customers Management</h1>
+        <h1 class="h3 mb-0 text-gray-800">Order Management</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    <form action="save-po.php" method="POST">
+    <form action="/project/templates/homedecor/crm/save-customer.php" method="POST">
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Add Customers - <?= $customerID; ?></h6>
-                        <input type="text" name="customerID" id="" class="d-none" value="<?= $customerID; ?>">
+                        <h6 class="m-0 font-weight-bold text-primary">Order ID - <?= $id; ?></h6>
+                        <input type="text" name="id" id="" class="d-none" value="<?= $id; ?>"><input type="text" name="customerID" id="" class="form-control d-none" value="<?= $rowOrder['customer_id']; ?>">
                     </div>
                     <div class="card-body">
                         <div class="tab-content" id="myTabContent">
@@ -63,15 +65,14 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
                                     <div class="col-lg-4">
                                         <label for="staffName">Staff Name</label>
                                         <input type="text" name="staffName" id="" class="form-control" value="<?= $rowCustomer['staffName']; ?>" readonly>
-
                                     </div>
                                     <div class="col-lg-4">
-                                        <label for="tourDate">Insert Date</label>
-                                        <input type="text" name="insertDate" id="" class="form-control" value="<?= $rowCustomer['created'] ?>" readonly>
+                                        <label for="tourDate">Created Date</label>
+                                        <input type="text" name="insertDate" id="" class="form-control" value="<?= $rowOrder['created'] ?>" readonly>
                                     </div>
                                     <div class="col-lg-4">
                                         <label for="source">Source</label>
-                                        <select name="source" id="" class="form-control" disabled>
+                                        <select name="source" id="" class="form-control" readonly>
                                             <option value="<?= $rowCustomer['source']; ?>"><?= $rowCustomer['source']; ?></option>
                                             <?php while ($rowSource = mysqli_fetch_assoc($resultSource)) : ?>
                                                 <option value="<?= $rowSource['sourceName']; ?>"><?= $rowSource['sourceName']; ?></option>
@@ -84,34 +85,38 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
                                 <div class="row my-2">
                                     <div class="col-lg-4 form-group">
                                         <label for="">Client Name</label>
-                                        <input type="text" name="customerName" id="" class="form-control" value="<?= $rowCustomer['customerName']; ?>">
+                                        <input type="text" name="customerName" id="customerName" class="form-control" value="<?= $rowCustomer['customerName']; ?>">
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-2 form-group">
+                                        <label for="">Birthday</label>
+                                        <input type="date" name="dob" id="" class="form-control">
+                                    </div>
+                                    <div class="col-lg-3 form-group">
                                         <label for="">Client Phone</label>
                                         <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1" value="<?= $rowCustomer['customerPhone']; ?>">
                                     </div>
-                                    <div class="col-lg-4 form-group">
+                                    <div class="col-lg-3 form-group">
                                         <label for="">Client Email</label>
-                                        <input type="email" name="customerEmail" id="" class="form-control" value="<?= $rowCustomer['customerEmail']; ?>">
+                                        <input type="email" name="customerEmail" id="customerEmail" class="form-control" value="<?= $rowCustomer['customerEmail']; ?>">
                                     </div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-lg-6">
                                         <label for="address1">Address</label>
-                                        <input type="text" name="address1" id="" class="form-control" value="<?= $rowCustomer['address1']; ?>">
+                                        <input type="text" name="address1" id="customerAddress" class="form-control" value="<?= $rowCustomer['address1']; ?>">
                                     </div>
                                     <div class="col-lg-2">
                                         <label for="address1">City</label>
-                                        <input type="text" name="city" id="" class="form-control" value="<?= $rowCustomer['city']; ?>">
+                                        <input type="text" name="city" id="customerCity" class="form-control" value="<?= $rowCustomer['city']; ?>">
                                     </div>
                                     <div class="col-lg-2">
                                         <label for="address1">Postcode</label>
-                                        <input type="text" name="postcode" id="" class="form-control" value="<?= $rowCustomer['postcode']; ?>">
+                                        <input type="text" name="postcode" id="customerPostcode" class="form-control" value="<?= $rowCustomer['postcode']; ?>">
                                     </div>
                                     <div class="col-lg-2   ">
                                         <label for="address1">State</label>
-                                        <select name="state" id="" class="form-control">
-                                            <option value="<?= $rowCustomer['state']; ?>"><?= $rowCustomer['state']; ?></option>
+                                        <input type="text" name="state" id="customerState" class="form-control" list="stateList" value="<?= $rowCustomer['state']; ?>">
+                                        <datalist id="stateList">
                                             <option value="Johor">Johor</option>
                                             <option value="Kedah">Kedah</option>
                                             <option value="Kelantan">Kelantan</option>
@@ -127,55 +132,110 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
                                             <option value="Sarawak">Sarawak</option>
                                             <option value="Selangor">Selangor</option>
                                             <option value="Terengganu">Terengganu</option>
-                                        </select>
+                                        </datalist>
                                     </div>
                                 </div>
                                 <hr>
                                 <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
+                                <div class="row my-4">
+                                    <div class="col-lg-4">
+                                        <label for="">Product</label>
+                                        <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
+                                            <?php foreach ($productSelectOptions as $val => $text) : ?>
+                                                <option value="<?= $val; ?>"><?= $text; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label for="">Quantity</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Qty</span>
+                                            </div>
+                                            <input type="number" name="" id="quantity" class="form-control text-center" min="1" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <label for="">Discount</label>
+                                        <div class="input-group mb-3">
+                                            <input type="number" name="" id="discountItem" class="form-control text-center" placeholder="Discount" value="0">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-none">
+                                        <input type="text" name="id_text" id="productOrderNo" />
+                                        <input type="text" name="id_text" id="productName" />
+                                        <input type="text" name="id_text" id="productCost" />
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="row">
+                                            <label for="">&nbsp;</label>
+                                        </div>
+                                        <div class="row">
+                                            <input type="button" class="btn btn-info add-row" value="Add Item">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row my-2">
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-10">
                                         <table class="table table-stripped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th class="align-middle text-center" style="width: 5%;">Select</th>
+                                                    <th class="align-middle text-center">/</th>
+                                                    <th class="align-middle text-center">Product ID</th>
                                                     <th class="align-middle" style="width: 60%;">Product Name</th>
                                                     <th class="align-middle text-center">Quantity</th>
-                                                    <th class="text-center align-middle">Price/Unit</th>
-                                                    <th class="text-center align-middle">Discount %</th>
-                                                    <th class="text-center align-middle">Total</th>
+                                                    <th class="align-middle text-center">Price</th>
+                                                    <th class="align-middle text-center">Discount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php foreach (array_combine($explodeProduct, $explodeQuantity) as $explodeProduct => $explodeQuantity) :
-                                                    $display = "SELECT * FROM homedecor_product WHERE id = '$explodeProduct'";
-                                                    $res = mysqli_query($conn, $display);
-                                                    while ($rowDisplay = mysqli_fetch_array($res)) : $ppu = round(($rowDisplay['cost'] * 2.5) + 6, 3); ?>
-                                                        <tr>
-                                                            <td class="text-center align-middle">
-                                                                <input type='checkbox' name='record'>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <input type="text" name="productName[]" id="" class="border-0 form-control" value="<?= $rowDisplay['name']; ?>">
-                                                            </td>
-                                                            <td class="text-center align-middle">
-                                                                <input type="text" name="productQuantity[]" id="" class="text-center form-control border-0" value="<?= $explodeQuantity; ?>">
-                                                            </td>
-                                                            <td class="text-center align-middle">
-                                                                <input type="text" name="productCost[]" id="" class="text-center form-control border-0" value="<?= $ppu; ?>">
-                                                            </td>
-                                                            <td class="text-center align-middle">
-                                                                <input type="text" name="discountItems[]" id="" class="form-control text-center border-0" value="">
-                                                            </td>
-                                                            <td class="text-center align-middle">
-                                                                <input type="text" name="productPrice[]" id="" class="text-center form-control border-0" value="<?= round($ppu * $explodeQuantity, 2); ?>">
-                                                            </td>
-                                                        </tr>
-                                                <?php endwhile;
-                                                endforeach; ?>
+                                                <?php
+                                                for ($i = 0; $i < count($products); $i++) :
+                                                    $product = $products[$i];
+                                                    $quantity = $quantities[$i];
+                                                    $price = $prices[$i];
+                                                    $discount = $discountItems[$i];
+                                                    $selectProduct = "SELECT * FROM homedecor_product WHERE id = '$product'";
+                                                    $resultProduct = mysqli_query($conn, $selectProduct);
+                                                    $rowProduct = mysqli_fetch_array($resultProduct);
+                                                ?>
+                                                    <tr>
+                                                        <td class="align-middle text-center">
+                                                            <input type='checkbox' name='record'>
+                                                        </td>
+                                                        <td class="align-middle text-center"><?= $product; ?></td>
+                                                        <td class="align-middle "><input type='text' class='border-0 form-control' value='<?= $rowProduct['name']; ?>'><input type='text' name='productId[]' value='<?= $rowProduct['id']; ?>' class='d-none'></td>
+                                                        <td class="align-middle text-center">
+                                                            <input type="text" name="quantity[]" id="" class="form-control text-center border-0 form-control-sm" value="<?= $quantity; ?>">
+                                                        </td>
+                                                        <td class="align-middle text-center"><input type="text" name="productPrice[]" id="" class="form-control form-control-sm text-center border-0" value="<?= $price; ?>">
+                                                        </td>
+                                                        <td class="align-middle text-center"><input type="text" name="discountItem[]" id="" class="form-control text-center form-control-sm border-0" value="<?= $discount; ?>"></td>
+                                                    </tr>
+                                                <?php endfor; ?>
                                             </tbody>
                                         </table>
-                                        <button type="button" class="btn btn-danger delete-row">Delete Row</button>
-                                        <button class="btn btn-primary float-right">Create PO</button>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i> Delete Item</button>
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-2">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Disc for All</span>
+                                            </div>
+                                            <input type="number" name="discountAll" id="discountAll" class="form-control text-center" placeholder="Discount" value="<?= $rowOrder['discount_all']; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary" name="update-order">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -190,6 +250,7 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>
 
+<!-- Insert phone number country code-->
 <script>
     $("#customerPhone").keyup(function() {
         var prefix = "+60"
@@ -199,16 +260,63 @@ $explodeQuantity = explode(',', $rowEnquiry['quantity']);
         }
     });
 </script>
+
+<!-- Get existing customer info -->
+
+
+<!-- Get Product Info -->
+<script>
+    var $productSelect = $('#product');
+    var $productOrderNo = $('#productOrderNo');
+    var $productName = $('#productName');
+    var $productCost = $('#productCost');
+
+    // This should be the path to a PHP script set up to receive $_POST['product']
+    // and return the product info in a JSON encoded array.
+    // You should also set the Content-Type of the response to application/json so as our javascript parses it automatically.
+    var apiUrl = '/project/templates/homedecor/crm/getProductInfo.php';
+
+    function refreshInputsForProduct(product) {
+        $.post(apiUrl, {
+            product: product
+        }, function(r) {
+            /**
+             * Assuming your PHP API responds with a JSON encoded array, with the ID available.
+             */
+            $productOrderNo.val(r.orderNo);
+            $productName.val(r.name);
+            $productCost.val(r.cost);
+        });
+    }
+
+    // Listen for when a new product is selected.
+    $productSelect.change(function() {
+        var product = $(this).val();
+        refreshInputsForProduct(product);
+    });
+</script>
+
 <script>
     $(document).ready(function() {
         $(".add-row").click(function() {
-            // var e = document.getElementById("ddlViewBy");
-            // var name = e.value;
-            var e = document.getElementById("name");
+            var e = document.getElementById("product");
             var getID = e.value;
             var name = e.options[e.selectedIndex].text;
+            var productOrderNo = parseInt($("#productOrderNo").val());
             var quantity = parseInt($("#quantity").val());
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='product[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td></tr>";
+            var discountItem = parseInt($("#discountItem").val());
+
+            // Calculate price based on cost
+            var productCost = parseFloat($("#productCost").val());
+            var productPrice = Math.round((productCost * 2.5) + 6) * quantity;
+
+            // Calculate discount
+            var percentToDecimal = discountItem / 100;
+            var percent = percentToDecimal * productPrice;
+            var discount = productPrice - percent;
+
+            // Create tabel rows
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'>" + name + "<input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center border-0 form-control' value='" + discount + "'></td></tr>";
             $("table tbody").append(markup);
         });
 

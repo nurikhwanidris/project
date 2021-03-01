@@ -13,7 +13,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
 
-$insert = "INSERT INTO homedecor_purchase_order (customer_id, product_id, quantity, cost, price, created, modified) VALUES ('$customerID','$productName','$productQuantity','$productCost','$productPrice','$created','$modified')";
+$insert = "INSERT INTO homedecor_order (customer_id, product_id, quantity, cost, price, created, modified) VALUES ('$customerID','$productName','$productQuantity','$productCost','$productPrice','$created','$modified')";
 
 $result = mysqli_query($conn, $insert);
 

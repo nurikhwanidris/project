@@ -13,7 +13,7 @@
 <!-- Get data from invoice table -->
 <?php
 $id = $_GET['id'];
-$select = "SELECT * FROM homedecor_purchase_order WHERE id = '$id'";
+$select = "SELECT * FROM homedecor_order WHERE id = '$id'";
 $result = mysqli_query($conn, $select);
 $rowInvoice = mysqli_fetch_array($result);
 
@@ -166,7 +166,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                                 <h3 class="align-middle font-weight-bold">
                                                     <?php if ($rowInvoice['discount_items'] != 0 && $rowInvoice['price'] != $rowInvoice['discount_items']) : ?>
                                                         RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
-                                                        <input type="text" name="totalAmount" id="totalAmount" class="form-control d-none" value="<?= number_format($discount, 2, '.', ''); ?>">
+                                                        <input type="text" name="totalAmount" id="totalAmount" class="form-control d-none" value="<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>">
                                                     <?php elseif ($rowInvoice['discount_all'] != 0) : ?>
                                                         <?php
                                                         $total = explode(',', $rowInvoice['price']);
