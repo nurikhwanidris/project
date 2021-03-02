@@ -25,26 +25,23 @@ homedecor_invoice.modified AS modified
 FROM homedecor_invoice
 JOIN homedecor_customer
 ON homedecor_invoice.customer_id = homedecor_customer.id";
-
 $resultinvoice = mysqli_query($conn, $invoice);
 
-// Fetch Package based on customer ID
-// $enquiry = "SELECT * FROM homedecor_order_product ORDER BY customer_ID";
-// $resultEnquiries = mysqli_query($conn, $enquiry);
-
-// Count rows
-// $rowCountEnq = mysqli_num_rows($resultEnquiries);
-
-$fetchEnquiries = "SELECT id FROM homedecor_order";
-$resultEnquiries = mysqli_query($conn, $fetchEnquiries);
-
-$rowCountEnq = mysqli_num_rows($resultEnquiries);
-
+// Count invoice created
+$fetchInvoice = "SELECT id FROM homedecor_invoice";
+$resultInv = mysqli_query($conn, $fetchInvoice);
+$countInv = mysqli_num_rows($resultInv);
 
 // Special case
 $selectCustomer = "SELECT customerName FROM homedecor_customer GROUP BY customerName";
 $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
+
+// Calculate sales generated monthly
+$sales = "SELECT SUM(total_amount) AS totalSales FROM homedecor_invoice WHERE remaining_amount = 0";
+$resSales = mysqli_query($conn, $sales);
+$rowSales = mysqli_fetch_assoc($resSales);
+$sumSales = $rowSales['totalSales'];
 
 // Count Pending
 $pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
@@ -68,8 +65,8 @@ $rowCountPending = mysqli_num_rows($resultPending);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Order Inserted</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCountEnq; ?></div>
+                                Invoice Created</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $countInv; ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-id-card fa-2x text-gray-300"></i>
@@ -99,25 +96,16 @@ $rowCountPending = mysqli_num_rows($resultPending);
 
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+            <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Earnings</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM<?= round($sumSales, 2); ?></div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -210,8 +198,24 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                         <td class="align-middle text-center">
                                             <?php if ($rowInvoice['invoiceStatus'] == 'Deposit') : ?>
                                                 <h5><span class="badge badge-info"><?= $rowInvoice['invoiceStatus']; ?></span></h5>
-                                            <?php elseif ($rowInvoice['invoiceStatus'] == 'Full' || $rowInvoice['balanceDue'] == 0) : ?>
-                                                <h5><span class="badge badge-success"><?= $rowInvoice['invoiceStatus']; ?></span></h5>
+                                            <?php elseif ($rowInvoice['balanceDue'] == 0) : ?>
+                                                <h5>
+                                                    <span class="badge badge-success">
+                                                        Paid
+                                                    </span>
+                                                </h5>
+                                            <?php elseif ($rowInvoice['balanceDue'] > 0) : ?>
+                                                <h5>
+                                                    <span class="badge badge-warning">
+                                                        Open
+                                                    </span>
+                                                </h5>
+                                            <?php elseif ($rowInvoice['invoiceStatus'] == 'Refund') : ?>
+                                                <h5>
+                                                    <span class="badge badge-danger">
+                                                        Canceled
+                                                    </span>
+                                                </h5>
                                             <?php endif; ?>
                                         </td>
                                     <?php endwhile; ?>

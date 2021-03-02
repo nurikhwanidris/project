@@ -32,28 +32,18 @@ $modified = date('Y-m-d H:i:s');
 // Update database
 if (isset($_POST['update-order'])) {
     // Update customer details
-    $updateCustomer = "UPDATE homedecor_customer SET customerName = '$customerName', customerEmail = '$customerEmail', customerPhone = '$strippedSpace', address1 = '$address1', city = '$city', postcode = '$postcode', state = '$state' modified = '$modified' WHERE id = '$customerID'";
+    $updateCustomer = "UPDATE homedecor_customer SET customerName = '$customerName', customerEmail = '$customerEmail', customerPhone = '$strippedSpace', address1 = '$address1', city = '$city', postcode = '$postcode', state = '$state', modified = '$modified' WHERE id = '$customerID'";
     $resUpdateCustomer = mysqli_query($conn, $updateCustomer);
 
     // Update order details
     $updateProduct = "UPDATE homedecor_order SET product_id = '$productId', quantity = '$quantity', price = '$productPrice', discount_all ='$discountAll',discount_items = '$discountItem', modified = '$modified' WHERE id = '$id'";
     $resUpdateProduct = mysqli_query($conn, $updateProduct);
 
-    if ($resUpdateCustomer) {
+    if ($resUpdateCustomer && $resUpdateProduct) {
         $msg = "Succesfully updated the customer details";
         $alert = "success";
-    } else {
-        $msg = mysqli_error($conn);
-        $alert = "danger";
+        header('Location:/project/templates/homedecor/order/list');
     }
-    if ($resUpdateProduct) {
-        $msg = "Succesfully update the product details";
-        $alert = "success";
-    } else {
-        $msg = mysqli_error($conn);
-        $alert = "danger";
-    }
-    echo $msg;
 } else {
 
     // Insert into customer table
@@ -67,14 +57,14 @@ if (isset($_POST['update-order'])) {
     if ($resultInsert) {
         $msg = "Successfully inserted <br>";
         $alert = "success";
-        //header('Location:/project/template/homedecor/purchase/list');
+        header('Location:/project/templates/homedecor/order/list');
     } else {
         $msg = "Error occured. " . mysqli_error($conn);
     }
     if ($resultPurchase) {
         $msg = "Successfully inserted <br>";
         $alert = "success";
-        //header('Location:/project/template/homedecor/purchase/list');
+        header('Location:/project/templates/homedecor/order/list');
     } else {
         $msg = "Error occured. " . mysqli_error($conn);
     }

@@ -176,10 +176,9 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                 <tr>
                                     <th class="align-middle text-center">Order ID</th>
                                     <th class="align-middle">Customer Name</th>
-                                    <th class="align-middle text-center">Total Amount</th>
-                                    <th class="align-middle text-center">Status</th>
                                     <th class="align-middle text-center">Order Date</th>
                                     <th class="align-middle text-center">Created by</th>
+                                    <th class="align-middle text-center">Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -192,6 +191,12 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                         </td>
                                         <td class="align-middle">
                                             <a href="/project/templates/homedecor/crm/view?customerID=<?= $rowOrder['customerId']; ?>" target="_blank"><?= $rowOrder['customerName']; ?></a>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <?= $rowOrder['created']; ?>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <?= $rowOrder['staffName']; ?>
                                         </td>
                                         <!-- Amount -->
                                         <td class="align-middle text-center">
@@ -210,19 +215,6 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                                 echo "RM" . number_format(array_sum($total), 2, '.', '');
                                             }
                                             ?>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <?php if ($rowOrder['status'] == 'Pending') : ?>
-                                                <h5><span class="badge badge-warning"><?= $rowOrder['status']; ?></span></h5>
-                                            <?php else : ?>
-                                                <h5><span class="badge badge-info"><?= $rowOrder['status']; ?></span></h5>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <?= $rowOrder['created']; ?>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <?= $rowOrder['staffName']; ?>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

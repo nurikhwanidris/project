@@ -206,7 +206,7 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                                         <td class="align-middle text-center">
                                                             <input type='checkbox' name='record'>
                                                         </td>
-                                                        <td class="align-middle text-center"><?= $product; ?></td>
+                                                        <td class="align-middle text-center"><?= $rowProduct['orderNo']; ?></td>
                                                         <td class="align-middle "><input type='text' class='border-0 form-control' value='<?= $rowProduct['name']; ?>'><input type='text' name='productId[]' value='<?= $rowProduct['id']; ?>' class='d-none'></td>
                                                         <td class="align-middle text-center">
                                                             <input type="text" name="quantity[]" id="" class="form-control text-center border-0 form-control-sm" value="<?= $quantity; ?>">
@@ -235,7 +235,10 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                 </div>
                                 <div class="row my-3">
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary" name="update-order">Submit</button>
+                                        <button type="submit" class="float-left btn btn-primary" name="update-order">Submit</button>
+                                    </div>
+                                    <div class="col">
+                                        <a href="/project/templates/homedecor/invoice/view?id=<?= $rowOrder['id']; ?>" class="btn btn-warning float-right"><i class="fas fa-file-invoice"></i> Create Invoice</a>
                                     </div>
                                 </div>
                             </div>
