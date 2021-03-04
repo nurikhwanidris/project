@@ -1,4 +1,4 @@
-<!-- Start session -->
+<?php error_reporting(1); ?>
 <?php session_start();
 ?>
 

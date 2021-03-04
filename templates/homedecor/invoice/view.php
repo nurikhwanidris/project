@@ -59,7 +59,9 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                     <p>
                                         243B, Jalan Bandar 13 <br>
                                         Taman Melawati <br>
-                                        53100, Kuala Lumpur
+                                        53100, Kuala Lumpur<br>
+                                        Office : <b>03-4162 8179</b> <br>
+                                        Mobile : <b>011-1675 8179</b>
                                     </p>
                                 </div>
                                 <div class="col-4 float-right text-right">
@@ -79,7 +81,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                         <?= $rowCustomer['city'] . ", " . $rowCustomer['postcode'] . ", " . $rowCustomer['state'] ?>
                                     </p>
                                     <p>
-                                        Contact Number : <span class="font-weight-bold"><?= $rowCustomer['customerPhone']; ?></span>
+                                        Contact : <span class="font-weight-bold"><?= $rowCustomer['customerPhone']; ?></span>
                                     </p>
                                 </div>
                                 <div class="col-3 float-right text-right">
@@ -136,7 +138,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                                         <?php
                                                         $differences = $price - $discount;
                                                         $percent = ($differences / $price) * 100;
-                                                        echo $percent;
+                                                        echo round($percent, 2);
                                                         ?>%
                                                     </td>
                                                 <?php endif; ?>
@@ -229,9 +231,9 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                                 <label for="">Invoice Status</label>
                                 <select name="invoiceStatus" id="" class="form-control" required>
                                     <option value="">Select</option>
+                                    <option value="Full">Full</option>
                                     <option value="Remaining">Remaining</option>
                                     <option value="Deposit">Deposit</option>
-                                    <option value="Installment">Installment</option>
                                     <option value="Refund">Refund</option>
                                 </select>
                             </div>

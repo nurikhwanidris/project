@@ -35,9 +35,9 @@ $rowCheck = mysqli_fetch_assoc($resultCheck);
 
 if ($resultCheck) {
     if (mysqli_num_rows($resultCheck) > 0) {
-        if ($rowCheck['remaining_amount'] < 0) {
+        if ($rowCheck['remaining_amount'] = 0 || $invoiceStatus == 'Full') {
             // Update invoice table if full payment made
-            $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', payment_receipt = '$newName', payment_type = '$paymentType', amount_paid  = '$amountPaid', modified = '$modified' WHERE po_id = '$poID'";
+            $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', payment_receipt = '$newName', payment_type = '$paymentType', amount_paid  = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), modified = '$modified' WHERE po_id = '$poID'";
             $resultUpdate = mysqli_query($conn, $update);
             move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
 

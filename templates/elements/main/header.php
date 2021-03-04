@@ -1,3 +1,4 @@
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/project/src/model/dbconn.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
