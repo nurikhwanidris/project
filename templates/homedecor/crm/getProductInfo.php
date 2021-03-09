@@ -20,6 +20,7 @@ if (array_key_exists('product', $_POST)) {
     $response['orderNo'] = $row['orderNo'];
     $response['name'] = $row['name'];
     $response['cost'] = $row['cost'];
+    $response['thb'] = $row['thb'];
 }
 
 echo json_encode($response);
