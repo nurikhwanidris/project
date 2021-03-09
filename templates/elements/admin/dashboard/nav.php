@@ -238,9 +238,24 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     </div>
                 </div>
             </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplier" aria-expanded="true" aria-controls="collapseSupplier">
+                    <i class="fas fa-meteor"></i>
+                    <span>Supplier</span>
+                </a>
+                <div id="collapseSupplier" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Supplier Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/supplier/add">Add Supplier</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/supplier/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/supplier/order">Create New Order</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/supplier/report">Report</a>
+                    </div>
+                </div>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
-
             <!-- Heading -->
             <div class="sidebar-heading">
                 Addons

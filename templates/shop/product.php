@@ -4,6 +4,14 @@
 <!-- Nav -->
 <?php include('../elements/main/nav.php') ?>
 
+<?php
+// Get product details
+$id = $_GET['id'];
+$product = "SELECT * FROM homedecor_product WHERE id = '$id'";
+$res = mysqli_query($conn, $product);
+$row = mysqli_fetch_assoc($res);
+?>
+
 <!--Main layout-->
 <main class="mt-5 pt-4">
   <div class="container dark-grey-text mt-5">
@@ -12,9 +20,9 @@
     <div class="row wow fadeIn">
 
       <!--Grid column-->
-      <div class="col-md-6 mb-4">
+      <div class="col-md-6 mb-4 text-center align-middle">
 
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid" alt="">
+        <img src="/project/upload/img/product/<?php if (!$row['img']) : ?>default.jpg <?php else : ?><?= $row['img']; ?><?php endif; ?>" class="rounded img-fluid" alt="" style="width:100%">
 
       </div>
       <!--Grid column-->
@@ -27,10 +35,10 @@
 
           <div class="mb-3">
             <a href="">
-              <span class="badge purple mr-1">Category 2</span>
+              <span class="badge purple mr-1"><?= $row['category']; ?></span>
             </a>
             <a href="">
-              <span class="badge blue mr-1">New</span>
+              <span class="badge blue mr-1">New Arrival</span>
             </a>
             <a href="">
               <span class="badge red mr-1">Bestseller</span>
@@ -39,12 +47,12 @@
 
           <p class="lead">
             <span class="mr-1">
-              <del>$200</del>
+              <del>RM<?= number_format(round((($row['cost'] * 2.6) + 6) * 1.5), 2, '.', ''); ?></del>
             </span>
-            <span>$100</span>
+            <span>RM<?= number_format(round(($row['cost'] * 2.6) + 6), 2, '.', ''); ?></span>
           </p>
 
-          <p class="lead font-weight-bold">Description</p>
+          <p class="lead font-weight-bold"><?= $row['name']; ?></p>
 
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia ipsa
             sint voluptatibus!
@@ -76,7 +84,7 @@
       <!--Grid column-->
       <div class="col-md-6 text-center">
 
-        <h4 class="my-4 h4">Additional information</h4>
+        <h4 class="my-4 h4">Other Bestseller</h4>
 
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
           voluptates,
@@ -90,29 +98,25 @@
 
     <!--Grid row-->
     <div class="row wow fadeIn">
-
+      <?php
+      // Pick 3 random products
+      $randProd = "SELECT * FROM homedecor_product ORDER BY RAND() LIMIT 3";
+      $resRandProd = mysqli_query($conn, $randProd);
+      ?>
       <!--Grid column-->
-      <div class="col-lg-4 col-md-12 mb-4">
+      <?php while ($rowRandProd = mysqli_fetch_array($resRandProd)) : ?>
+        <div class="col-lg-4 col-md-12 mb-4 text-center">
 
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">
+          <img src="/project/upload/img/product/<?php if (!$rowRandProd['img']) : ?>default.jpg <?php else : ?><?= $rowRandProd['img']; ?><?php endif; ?>" class="img-fluid rounded" alt="">
 
-      </div>
-      <!--Grid column-->
+          <p class="lead font-weight-normal"><?= $rowRandProd['name']; ?></p>
+          <span class="mr-1">
+            <del>RM<?= number_format(round((($rowRandProd['cost'] * 2.6) + 6) * 1.5), 2, '.', ''); ?></del>
+          </span>
+          <span>RM<?= number_format(round(($rowRandProd['cost'] * 2.6) + 6), 2, '.', ''); ?></span>
 
-      <!--Grid column-->
-      <div class="col-lg-4 col-md-6 mb-4">
-
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="">
-
-      </div>
-      <!--Grid column-->
-
-      <!--Grid column-->
-      <div class="col-lg-4 col-md-6 mb-4">
-
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="">
-
-      </div>
+        </div>
+      <?php endwhile; ?>
       <!--Grid column-->
 
     </div>

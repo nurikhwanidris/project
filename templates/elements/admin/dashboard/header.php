@@ -1,6 +1,5 @@
+<?php session_start(); ?>
 <?php error_reporting(1); ?>
-<?php session_start();
-?>
 
 <!-- DB Conn -->
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/project/src/model/dbconn.php'); ?>

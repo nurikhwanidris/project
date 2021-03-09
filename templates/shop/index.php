@@ -8,13 +8,13 @@
 // find out the number of results stored in database
 $sql = "SELECT * FROM homedecor_product";
 $result = mysqli_query($conn, $sql);
-$number_of_results = mysqli_num_rows($result);
+$numberOfResult = mysqli_num_rows($result);
 
 // define how many results you want per page
-$results_per_page = 12;
+$resultPerPage = 12;
 
 // determine number of total pages available
-$number_of_pages = ceil($number_of_results / $results_per_page);
+$numberOfPage = ceil($numberOfResult / $resultPerPage);
 
 // determine which page number visitor is currently on
 if (!isset($_GET['page'])) {
@@ -24,11 +24,23 @@ if (!isset($_GET['page'])) {
 }
 
 // determine the sql LIMIT starting number for the results on the displaying page
-$this_page_first_result = ($page - 1) * $results_per_page;
+$firstPageResult = ($page - 1) * $resultPerPage;
 
-// retrieve selected results from database and display them on page
-$sql = "SELECT * FROM homedecor_product LIMIT " . $this_page_first_result . "," .  $results_per_page;
+if (isset($_GET['category'])) {
+  // Set the category first
+  $category = $_GET['category'];
+  // retrieve the category
+  $sql = "SELECT * FROM homedecor_product WHERE category LIKE '%" . $category . "%' LIMIT " . $firstPageResult . "," .  $resultPerPage;
+  // if other category is selected
+  if ($category == 'others') {
+    $sql = "SELECT * FROM homedecor_product WHERE ((NOT(homedecor_product.category) = 'trays' AND NOT(homedecor_product.category) = 'bowls' AND NOT(homedecor_product.category) = 'plates' AND NOT(homedecor_product.category) = 'benjarong' )) LIMIT " . $firstPageResult . "," .  $resultPerPage;
+  }
+} else {
+  // retrieve selected results from database and display them on page
+  $sql = "SELECT * FROM homedecor_product LIMIT " . $firstPageResult . "," .  $resultPerPage;
+}
 $result = mysqli_query($conn, $sql);
+
 ?>
 
 <!--Carousel Wrapper-->
@@ -193,21 +205,37 @@ $result = mysqli_query($conn, $sql);
 
         <!-- Links -->
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">All
+          <li class="nav-item <?php if (!isset($_GET['category'])) : echo "active";
+                              endif; ?>">
+            <a class=" nav-link" href="?page=1">All
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Shirts</a>
+          <li class="nav-item <?php if (isset($_GET['category'])) : if ($_GET['category'] == 'plates') : echo "active";
+                                endif;
+                              endif; ?>">
+            <a class="nav-link" href="?page=<?= $page ?>&category=plates">Plates</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sport wears</a>
+          <li class="nav-item <?php if (isset($_GET['category'])) : if ($_GET['category'] == 'bowls') : echo "active";
+                                endif;
+                              endif; ?>">
+            <a class=" nav-link" href="?page=<?= $page ?>&category=bowls">Bowls</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Outwears</a>
+          <li class="nav-item <?php if (isset($_GET['category'])) : if ($_GET['category'] == 'trays') : echo "active";
+                                endif;
+                              endif; ?>">
+            <a class=" nav-link" href="?page=<?= $page ?>&category=trays">Trays</a>
           </li>
-
+          <li class="nav-item <?php if (isset($_GET['category'])) : if ($_GET['category'] == 'benjarong') : echo "active";
+                                endif;
+                              endif; ?>">
+            <a class="nav-link" href="?page=<?= $page ?>&category=benjarong">Benjarongs</a>
+          </li>
+          <li class="nav-item <?php if (isset($_GET['category'])) : if ($_GET['category'] == 'others') : echo "active";
+                                endif;
+                              endif; ?>">
+            <a class=" nav-link" href="?page=<?= $page ?>&category=others">Others</a>
+          </li>
         </ul>
         <!-- Links -->
 
@@ -238,7 +266,7 @@ $result = mysqli_query($conn, $sql);
               <!--Card image-->
               <div class="view overlay">
                 <img src="/project/upload/img/product/<?php if (!$rowProduct['img']) : ?>default.jpg <?php else : ?><?= $rowProduct['img']; ?><?php endif; ?>" class="card-img-top" alt="" style="height:255px;">
-                <a>
+                <a href="/project/templates/shop/product?id=<?= $rowProduct['id']; ?>">
                   <div class="mask rgba-white-slight"></div>
                 </a>
               </div>
@@ -249,7 +277,7 @@ $result = mysqli_query($conn, $sql);
                 <!--Category & Title-->
                 <a href="" class="grey-text">
                   <!-- Category -->
-                  <h5>Shirt</h5>
+                  <h5><?= $rowProduct['category']; ?></h5>
                 </a>
                 <h5>
                   <!-- Title -->
@@ -261,8 +289,13 @@ $result = mysqli_query($conn, $sql);
                   </strong>
                 </h5>
 
-                <h4 class="font-weight-bold blue-text">
-                  <strong>120$</strong>
+                <h4 class="font-weight-bold text-info">
+                  <strong>
+                    <?php
+                    $price = round(($rowProduct['cost'] + 6) * 2);
+                    echo "RM" . number_format($price, 2, '.', '');
+                    ?>
+                  </strong>
                 </h4>
 
               </div>
@@ -286,22 +319,34 @@ $result = mysqli_query($conn, $sql);
       <ul class="pagination pg-blue">
 
         <!--Arrow left-->
-        <li class="page-item disabled">
-          <a class="page-link" href="#" aria-label="Previous">
+        <li class="page-item">
+          <a class="page-link" href="?page=<?= $_GET['page'] - 1; ?>" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
             <span class="sr-only">Previous</span>
           </a>
         </li>
-        <?php for ($page = 1; $page <= $number_of_pages; $page++) : ?>
-          <li class="page-item <?php if ($page == $_GET['page']) : echo 'active';
-                                endif; ?>">
-            <a class="page-link" href="index.php?page=<?= $page; ?>">
-              <?= $page; ?>
-            </a>
-          </li>
+        <?php for ($page = 1; $page <= $numberOfPage; $page++) : ?>
+          <?php if ($page == $_GET['page']) : ?>
+            <li class="page-item active">
+              <a class="page-link" href="?page=<?= $page;
+                                                if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                endif; ?>">
+                <?= $page;
+                ?>
+              </a>
+            </li>
+          <?php else : ?>
+            <li class="page-item">
+              <a class="page-link" href="?page=<?= $page;
+                                                if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                endif; ?>">
+                <?= $page; ?>
+              </a>
+            </li>
+          <?php endif; ?>
         <?php endfor; ?>
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
+          <a class="page-link" href="?page=<?= $_GET['page'] + 1; ?>" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
             <span class="sr-only">Next</span>
           </a>

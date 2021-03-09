@@ -1,3 +1,6 @@
+<!-- Title -->
+<?php $title = "Product Details"; ?>
+
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 

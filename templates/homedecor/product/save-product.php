@@ -20,7 +20,7 @@ $target = "../../../upload/img/products/" . basename($trimmedImage);
 $cutName = substr(str_replace(' ', '', strtoupper($name)), 0, 6);
 $sku = $cutName . '-' . $size . '-' . $orderNo;
 
-// // Date created and modified
+// Date created and modified
 date_default_timezone_set("Asia/Kuala_Lumpur");
 $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');

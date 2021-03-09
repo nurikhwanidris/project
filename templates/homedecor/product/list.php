@@ -9,9 +9,17 @@
 
 <!-- Get item from database -->
 <?php
+// Fetch number of products
 $sql = "SELECT * FROM homedecor_product";
 $result = mysqli_query($conn, $sql);
+$numOfProd = mysqli_num_rows($result);
+$product = mysqli_fetch_assoc($result);
 
+
+// Fetch number of active items
+$active = "SELECT id FROM homedecor_product WHERE quantity != 0";
+$resultActive = mysqli_query($conn, $active);
+$numOfActive = mysqli_num_rows($resultActive);
 ?>
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -29,9 +37,9 @@ $result = mysqli_query($conn, $sql);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Enquiries Inserted</div>
+                                Product Inserted</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?//= $rowCountEnq; ?>
+                                <?= $numOfProd; ?>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -49,9 +57,9 @@ $result = mysqli_query($conn, $sql);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Total Clients</div>
+                                Active Products</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?//= $rowCountCust; ?>
+                                <?= $numOfActive; ?>
                             </div>
                         </div>
                         <div class="col-auto">
