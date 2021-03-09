@@ -9,7 +9,11 @@ $category = $_POST['category'];
 $size = $_POST['size'];
 $orderNo = $_POST['orderNo'];
 $cost = $_POST['cost'];
+$thb = $_POST['thb'];
 $quantity = $_POST['quantity'];
+$supplierCode = $_POST['supplierCode'];
+$sellingPriceRM = $_POST['sellingPriceRM'];
+$sellingPriceTHB = $_POST['sellingPriceTHB'];
 
 // Upload image
 $image = $_FILES['imgSave']['name'];
@@ -26,7 +30,7 @@ $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
 
 // Insert to database
-$insert = "INSERT INTO homedecor_product (name, category, sku, size, orderNo, cost, quantity, img, created, modified) VALUE ('$name', '$category', '$sku', '$size', '$orderNo', '$cost', '$quantity','$trimmedImage', '$created', '$modified')";
+$insert = "INSERT INTO homedecor_product (name, category, supplierCode, thb, sku, size, orderNo, cost, fixedPrice, fixedPriceTHB, quantity, img, created, modified) VALUE ('$name', '$category', '$supplierCode', '$thb', '$sku', '$size', '$orderNo', '$cost', '$sellingPriceRM', '$sellingPriceTHB', '$quantity','$trimmedImage', '$created', '$modified')";
 
 if ($result = mysqli_query($conn, $insert)) {
     move_uploaded_file($_FILES['imgSave']['tmp_name'], $target);

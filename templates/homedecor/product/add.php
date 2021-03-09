@@ -50,6 +50,18 @@ $resultCategory = mysqli_query($conn, $category);
                                             <?php endwhile; ?>
                                         </datalist>
                                     </div>
+                                    <div class="col-lg-2">
+                                        <label for="">Supplier Discount</label>
+                                        <select name="supplierCode" id="" class="form-control">
+                                            <option value="">Select</option>
+                                            <option value="KL3">3</option>
+                                            <option value="KL5">5</option>
+                                            <option value="KL10">10</option>
+                                            <option value="KL15">15</option>
+                                            <option value="KL20">20</option>
+                                            <option value="KL30">30</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-lg-2">
@@ -61,7 +73,22 @@ $resultCategory = mysqli_query($conn, $category);
                                         <input type="text" name="orderNo" id="" class="form-control">
                                     </div>
                                     <div class="col-lg-2">
-                                        <label for="">Cost</label>
+                                        <label for="">Quantity</label>
+                                        <input type="text" name="quantity" id="" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-2">
+                                        <label for="">Cost in THB</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">thb</span>
+                                            </div>
+                                            <input type="text" class="form-control" name="thb">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="">Cost in RM</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">RM</span>
@@ -70,8 +97,22 @@ $resultCategory = mysqli_query($conn, $category);
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
-                                        <label for="">Quantity</label>
-                                        <input type="text" name="quantity" id="" class="form-control">
+                                        <label for="">Selling Price in THB</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">THB</span>
+                                            </div>
+                                            <input type="text" class="form-control" name="sellingPriceTHB">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="">Selling Price in RM</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">RM</span>
+                                            </div>
+                                            <input type="text" class="form-control" name="sellingPriceRM">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

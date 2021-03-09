@@ -27,6 +27,11 @@ $row = mysqli_fetch_array($result);
     $orderNo = $_POST['orderNo'];
     $cost = $_POST['cost'];
     $quantity = $_POST['quantity'];
+    $sellingPriceRM = $_POST['sellingPriceRM'];
+    $sellingPriceTHB = $_POST['sellingPriceTHB'];
+    $supplierCode = $_POST['supplierCode'];
+    $thb = $_POST['thb'];
+
 
     // Upload image
     if (empty($row['img'])) {
@@ -47,7 +52,7 @@ $row = mysqli_fetch_array($result);
     $modified = date('Y-m-d H:i:s');
 
     // Insert to database
-    $update = "UPDATE homedecor_product SET name  = '$name', category = '$category', supplierCode = '$supplier', orderNo = '$orderNo', cost = '$cost', quantity = '$quantity', sku = '$sku', modified = '$modified', img = '$image' WHERE id = '$id'";
+    $update = "UPDATE homedecor_product SET name  = '$name', category = '$category', supplierCode = '$supplierCode', orderNo = '$orderNo', cost = '$cost', thb = '$thb', quantity = '$quantity', sku = '$sku', modified = '$modified', img = '$image', fixedPriceTHB = '$sellingPriceTHB', fixedPrice = '$sellingPriceRM' WHERE id = '$id'";
 
     if ($result = mysqli_query($conn, $update)) {
         move_uploaded_file($_FILES['imgSave']['tmp_name'], $target);
@@ -103,6 +108,18 @@ $row = mysqli_fetch_array($result);
                                         <label for="">Category</label>
                                         <input type="text" name="category" id="" class="form-control" value="<?= $row['category']; ?>">
                                     </div>
+                                    <div class="col-lg-2">
+                                        <label for="">Supplier Discount</label>
+                                        <select name="supplierCode" id="" class="form-control">
+                                            <option value="">Select</option>
+                                            <option value="KL3">3</option>
+                                            <option value="KL5">5</option>
+                                            <option value="KL10">10</option>
+                                            <option value="KL15">15</option>
+                                            <option value="KL20">20</option>
+                                            <option value="KL30">30</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-lg-2">
@@ -114,7 +131,22 @@ $row = mysqli_fetch_array($result);
                                         <input type="text" name="orderNo" id="" class="form-control" value="<?= $row['orderNo']; ?>">
                                     </div>
                                     <div class="col-lg-2">
-                                        <label for="">Cost</label>
+                                        <label for="">Quantity</label>
+                                        <input type="text" name="quantity" id="" class="form-control" value="<?= $row['quantity']; ?>">
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-2">
+                                        <label for="">Cost in THB</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">THB</span>
+                                            </div>
+                                            <input type="text" class="form-control" name="thb" value="<?= $row['thb']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="">Cost in RM</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">RM</span>
@@ -123,17 +155,22 @@ $row = mysqli_fetch_array($result);
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
-                                        <label for="">Fixed Price</label>
+                                        <label for="">Selling Price in THB</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">RM</span>
                                             </div>
-                                            <input type="text" class="form-control" name="price">
+                                            <input type="text" class="form-control" name="sellingPriceTHB" value="<?= $row['fixedPriceTHB']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
-                                        <label for="">Quantity</label>
-                                        <input type="text" name="quantity" id="" class="form-control" value="<?= $row['quantity']; ?>">
+                                        <label for="">Selling Price in RM</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">RM</span>
+                                            </div>
+                                            <input type="text" class="form-control" name="sellingPriceRM">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
