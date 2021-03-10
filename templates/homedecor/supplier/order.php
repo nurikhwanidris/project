@@ -30,7 +30,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Create Purchase Order</h6>
                 </div>
-                <form action="<?php $_SERVER['PHP_SELF']; ?>" class="form-group" method="POST">
+                <form action="createpo.php" class="form-group" method="POST">
                     <div class="card-body">
                         <div class="row my-2">
                             <div class="col-lg-4">
@@ -67,6 +67,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                                 <input type="text" name="id_text" id="productOrderNo" />
                                 <input type="text" name="id_text" id="productName" />
                                 <input type="text" name="id_text" id="thb" />
+                                <input type="text" name="id_text" id="img" />
                             </div>
                             <div class="col-lg-2">
                                 <div class="row">
@@ -85,9 +86,10 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                                             <th class="align-middle text-center">/</th>
                                             <th class="align-middle text-center">Product ID</th>
                                             <th class="align-middle" style="width: 50%;">Product Name</th>
-                                            <th class="align-middle text-center">Cost in THB</th>
+                                            <th class="align-middle text-center">Cost ฿</th>
                                             <th class="align-middle text-center">Quantity</th>
-                                            <th class="align-middle text-center">Price in THB</th>
+                                            <th class="align-middle text-center">Price ฿</th>
+                                            <th class="align-middle text-center">Image</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -119,6 +121,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     var $productOrderNo = $('#productOrderNo');
     var $productName = $('#productName');
     var $thb = $('#thb');
+    var $img = $('#img');
 
     // This should be the path to a PHP script set up to receive $_POST['product']
     // and return the product info in a JSON encoded array.
@@ -135,6 +138,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
             $productOrderNo.val(r.orderNo);
             $productName.val(r.name);
             $thb.val(r.thb);
+            $img.val(r.img);
         });
     }
 
@@ -154,12 +158,13 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
             var productOrderNo = parseInt($("#productOrderNo").val());
             var quantity = parseInt($("#quantity").val());
             var thb = parseFloat($("#thb").val());
+            var img = $("#img").val();
 
             // Calculate the prices
             var total = thb * quantity;
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' class='text-center border-0 form-control' name='productCost[]' value='" + thb + "'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + total + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' class='text-center border-0 form-control' name='productCost[]' value='" + thb + "'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + total + "'></td><td class='text-center align-middle'><img src='/project/upload/img/product/" + img + "' style='width:124px; height: 124px;'><input type='text' name='img[]' class='d-none' value='" + img + "'></td></tr>";
             $("table tbody").append(markup);
         });
 

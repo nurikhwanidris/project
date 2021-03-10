@@ -112,12 +112,13 @@ $row = mysqli_fetch_array($result);
                                         <label for="">Supplier Discount</label>
                                         <select name="supplierCode" id="" class="form-control">
                                             <option value="">Select</option>
-                                            <option value="KL3">3</option>
-                                            <option value="KL5">5</option>
-                                            <option value="KL10">10</option>
-                                            <option value="KL15">15</option>
-                                            <option value="KL20">20</option>
-                                            <option value="KL30">30</option>
+                                            <option value="KL3" <?= ($row['supplierCode'] == 'KL3' ? 'selected' : '') ?>>3</option>
+                                            <option value="KL5" <?= ($row['supplierCode'] == 'KL5' ? 'selected' : '') ?>>5</option>
+                                            <option value="KL10" <?= ($row['supplierCode'] == 'KL10' ? 'selected' : '') ?>>10</option>
+                                            <option value="KL15" <?= ($row['supplierCode'] == 'KL15' ? 'selected' : '') ?>>15</option>
+                                            <option value="KL20" <?= ($row['supplierCode'] == 'KL20' ? 'selected' : '') ?>>20</option>
+                                            <option value="KL30" <?= ($row['supplierCode'] == 'KL30' ? 'selected' : '') ?>>30</option>
+
                                         </select>
                                     </div>
                                 </div>
@@ -195,8 +196,8 @@ $row = mysqli_fetch_array($result);
                                     <input type='file' id="imgInp" name="imgSave" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="<?= $row['img']; ?>">
                                 </div>
                             </div>
-                            <div class="row form-group my-2">
-                                <div class="col float-right">
+                            <div class="row form-group mt-4 mb-0">
+                                <div class="col-lg-12">
                                     <button type="submit" name="submit" class="btn btn-info float-right">Submit</button>
                                 </div>
                             </div>
