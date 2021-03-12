@@ -30,7 +30,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Create Purchase Order</h6>
                 </div>
-                <form action="createpo.php" class="form-group" method="POST">
+                <form action="po.php" class="form-group" method="POST">
                     <div class="card-body">
                         <div class="row my-2">
                             <div class="col-lg-4">

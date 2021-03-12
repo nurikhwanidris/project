@@ -214,7 +214,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="true" aria-controls="collapseOrder">
                     <i class="fas fa-meteor"></i>
-                    <span>Order</span>
+                    <span>Customer Order</span>
                 </a>
                 <div id="collapseOrder" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -248,9 +248,15 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Supplier Management</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/supplier/add">Add Supplier</a>
-                        <a class="collapse-item" href="/project/templates/homedecor/supplier/list">List</a>
-                        <a class="collapse-item" href="/project/templates/homedecor/supplier/order">Create New Order</a>
-                        <a class="collapse-item" href="/project/templates/homedecor/supplier/report">Report</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/supplier/list">Supplier List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/supplier/order">New Order</a>
+                        <a class="collapse-item" href="#">Supplier Report</a>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Purchase Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/supplier/polist">Purchase Order List</a>
+                        <a class="collapse-item" href="#">Purchase Order Report</a>
                     </div>
                 </div>
             </li>
