@@ -36,154 +36,42 @@ if (isset($_GET['category'])) {
     $sql = "SELECT * FROM homedecor_product WHERE ((NOT(homedecor_product.category) = 'trays' AND NOT(homedecor_product.category) = 'bowls' AND NOT(homedecor_product.category) = 'plates' AND NOT(homedecor_product.category) = 'benjarong' )) LIMIT " . $firstPageResult . "," .  $resultPerPage;
   }
 } else {
-  // retrieve selected results from database and display them on page
+  // If no category is selected
   $sql = "SELECT * FROM homedecor_product LIMIT " . $firstPageResult . "," .  $resultPerPage;
 }
+
 $result = mysqli_query($conn, $sql);
 
 ?>
 
-<!--Carousel Wrapper-->
-<div id="carousel-example-1z" class="carousel slide carousel-fade pt-4" data-ride="carousel">
-
-  <!--Indicators-->
-  <ol class="carousel-indicators">
-    <li data-target="#carousel-example-1z" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-example-1z" data-slide-to="1"></li>
-    <li data-target="#carousel-example-1z" data-slide-to="2"></li>
-  </ol>
-  <!--/.Indicators-->
-
-  <!--Slides-->
-  <div class="carousel-inner" role="listbox">
-
-    <!--First slide-->
-    <div class="carousel-item active">
-      <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%282%29.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-        <!-- Mask & flexbox options-->
-        <div class="mask rgba-black-strong d-flex justify-content-center align-items-center">
-
-          <!-- Content -->
-          <div class="text-center white-text mx-5 wow fadeIn">
-            <h1 class="mb-4">
-              <strong>Learn Bootstrap 4 with MDB</strong>
-            </h1>
-
-            <p>
-              <strong>Best & free guide of responsive web design</strong>
-            </p>
-
-            <p class="mb-4 d-none d-md-block">
-              <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and
-                written versions
-                available. Create your own, stunning website.</strong>
-            </p>
-
-            <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/" class="btn btn-outline-white btn-lg">Start
-              free tutorial
-              <i class="fas fa-graduation-cap ml-2"></i>
-            </a>
-          </div>
-          <!-- Content -->
-
-        </div>
-        <!-- Mask & flexbox options-->
-
+<div class="container-fluid mt-4 px-0">
+  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+      <!-- <li data-target="#carouselExampleIndicators" data-slide-to="2"></li> -->
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="d-block w-100" src="/project/upload/img/carousel/1.jpg" alt="First slide">
       </div>
-    </div>
-    <!--/First slide-->
-
-    <!--Second slide-->
-    <div class="carousel-item">
-      <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%283%29.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-        <!-- Mask & flexbox options-->
-        <div class="mask rgba-black-strong d-flex justify-content-center align-items-center">
-
-          <!-- Content -->
-          <div class="text-center white-text mx-5 wow fadeIn">
-            <h1 class="mb-4">
-              <strong>Learn Bootstrap 4 with MDB</strong>
-            </h1>
-
-            <p>
-              <strong>Best & free guide of responsive web design</strong>
-            </p>
-
-            <p class="mb-4 d-none d-md-block">
-              <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and
-                written versions
-                available. Create your own, stunning website.</strong>
-            </p>
-
-            <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/" class="btn btn-outline-white btn-lg">Start
-              free tutorial
-              <i class="fas fa-graduation-cap ml-2"></i>
-            </a>
-          </div>
-          <!-- Content -->
-
-        </div>
-        <!-- Mask & flexbox options-->
-
+      <div class="carousel-item">
+        <img class="d-block w-100" src="/project/upload/img/carousel/2.jpg" alt="Second slide">
       </div>
+      <!-- <div class="carousel-item">
+      <img class="d-block w-100" src="..." alt="Third slide">
+    </div> -->
     </div>
-    <!--/Second slide-->
-
-    <!--Third slide-->
-    <div class="carousel-item">
-      <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg'); background-repeat: no-repeat; background-size: cover;">
-
-        <!-- Mask & flexbox options-->
-        <div class="mask rgba-black-strong d-flex justify-content-center align-items-center">
-
-          <!-- Content -->
-          <div class="text-center white-text mx-5 wow fadeIn">
-            <h1 class="mb-4">
-              <strong>Learn Bootstrap 4 with MDB</strong>
-            </h1>
-
-            <p>
-              <strong>Best & free guide of responsive web design</strong>
-            </p>
-
-            <p class="mb-4 d-none d-md-block">
-              <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and
-                written versions
-                available. Create your own, stunning website.</strong>
-            </p>
-
-            <a target="_blank" href="https://mdbootstrap.com/education/bootstrap/" class="btn btn-outline-white btn-lg">Start
-              free tutorial
-              <i class="fas fa-graduation-cap ml-2"></i>
-            </a>
-          </div>
-          <!-- Content -->
-
-        </div>
-        <!-- Mask & flexbox options-->
-
-      </div>
-    </div>
-    <!--/Third slide-->
-
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
   </div>
-  <!--/.Slides-->
-
-  <!--Controls-->
-  <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-  <!--/.Controls-->
-
 </div>
-<!--/.Carousel Wrapper-->
 
 <!--Main layout-->
 <main>
@@ -316,47 +204,41 @@ $result = mysqli_query($conn, $sql);
 
     <!--Pagination-->
     <nav class="d-flex justify-content-center wow fadeIn">
-      <ul class="pagination pg-blue">
-
-        <!--Arrow left-->
-        <li class="page-item">
-          <a class="page-link" href="?page=<?= $_GET['page'] - 1; ?>" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
-          </a>
-        </li>
-        <?php for ($page = 1; $page <= $numberOfPage; $page++) : ?>
-          <?php if ($page == $_GET['page']) : ?>
-            <li class="page-item active">
-              <a class="page-link" href="?page=<?= $page;
-                                                if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
-                                                endif; ?>">
-                <?= $page;
-                ?>
-              </a>
-            </li>
-          <?php else : ?>
-            <li class="page-item">
-              <a class="page-link" href="?page=<?= $page;
-                                                if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
-                                                endif; ?>">
-                <?= $page; ?>
-              </a>
-            </li>
+      <?php if (ceil($numberOfResult / $resultPerPage)) : ?>
+        <ul class="pagination">
+          <?php if ($page > 1) : ?>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?>">Prev</a></li>
           <?php endif; ?>
-        <?php endfor; ?>
-        <li class="page-item">
-          <a class="page-link" href="?page=<?= $_GET['page'] + 1; ?>" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-      </ul>
+
+          <?php if ($page > 5) : ?>
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            <li class="page-item">...</li>
+          <?php endif; ?>
+
+          <?php if ($page - 2 > 0) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page - 2 ?>"><?php echo $page - 2 ?></a></li><?php endif; ?>
+          <?php if ($page - 1 > 0) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li><?php endif; ?>
+
+          <li class="page-item active"><a class="page-link" href="?page=<?php echo $page ?>"><?php echo $page ?></a></li>
+
+          <?php if ($page + 1 < ceil($numberOfResult / $resultPerPage) + 1) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li><?php endif; ?>
+          <?php if ($page + 2 < ceil($numberOfResult / $resultPerPage) + 1) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li><?php endif; ?>
+
+          <?php if ($page < ceil($numberOfResult / $resultPerPage) - 2) : ?>
+            <li class="page-item">...</li>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo ceil($numberOfResult / $resultPerPage) ?>"><?php echo ceil($numberOfResult / $resultPerPage) ?></a></li>
+          <?php endif; ?>
+
+          <?php if ($page < ceil($numberOfResult / $resultPerPage)) : ?>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1 ?>">Next</a></li>
+          <?php endif; ?>
+        </ul>
+      <?php endif; ?>
     </nav>
     <!--Pagination-->
 
   </div>
 </main>
 <!--Main layout-->
+
 <!-- Footer -->
 <?php include('../elements/main/footer.php') ?>

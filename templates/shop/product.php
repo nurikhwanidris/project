@@ -10,6 +10,7 @@ $id = $_GET['id'];
 $product = "SELECT * FROM homedecor_product WHERE id = '$id'";
 $res = mysqli_query($conn, $product);
 $row = mysqli_fetch_assoc($res);
+
 ?>
 
 <!--Main layout-->
@@ -52,16 +53,20 @@ $row = mysqli_fetch_assoc($res);
             <span>RM<?= number_format(round(($row['cost'] * 2.6) + 6), 2, '.', ''); ?></span>
           </p>
 
-          <p class="lead font-weight-bold"><?= $row['name']; ?></p>
+          <p class="lead font-weight-bold"><?= $row['name']; ?> <br><small><?= $row['quantity']; ?> items left</small></p>
+
 
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia ipsa
             sint voluptatibus!
             Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.</p>
 
-          <form class="d-flex justify-content-left">
+          <form class="d-flex justify-content-left" method="POST" accept="<?php $_SERVER['PHP_SELF']; ?>">
             <!-- Default input -->
-            <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
-            <button class="btn btn-primary btn-md my-0 p" type="submit">Add to cart
+            <input type="text" name="productID" id="id" value="<?= $row['id']; ?>" class="d-none">
+            <input type="text" name="productName" id="name" value="<?= $row['name']; ?>" class="d-none">
+            <input type="text" name="productPrice" id="cost" value="<?= $row['cost']; ?>" class="d-none">
+            <input type="number" value="1" aria-label="Search" name="item" id="quantity" class="form-control" style="width: 100px" min="1" max="<?= $row['quantity']; ?>">
+            <button class="btn btn-primary btn-md my-0 p" name="addToCart" type="submit">Add to cart
               <i class="fas fa-shopping-cart ml-1"></i>
             </button>
 
@@ -86,9 +91,9 @@ $row = mysqli_fetch_assoc($res);
 
         <h4 class="my-4 h4">Other Bestseller</h4>
 
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
+        <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
           voluptates,
-          quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
+          quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p> -->
 
       </div>
       <!--Grid column-->
@@ -100,14 +105,16 @@ $row = mysqli_fetch_assoc($res);
     <div class="row wow fadeIn">
       <?php
       // Pick 3 random products
-      $randProd = "SELECT * FROM homedecor_product ORDER BY RAND() LIMIT 3";
+      $randProd = "SELECT * FROM homedecor_product WHERE quantity != 0 ORDER BY RAND() LIMIT 3";
       $resRandProd = mysqli_query($conn, $randProd);
       ?>
       <!--Grid column-->
       <?php while ($rowRandProd = mysqli_fetch_array($resRandProd)) : ?>
         <div class="col-lg-4 col-md-12 mb-4 text-center">
 
-          <img src="/project/upload/img/product/<?php if (!$rowRandProd['img']) : ?>default.jpg <?php else : ?><?= $rowRandProd['img']; ?><?php endif; ?>" class="img-fluid rounded" alt="">
+          <a href="product?id=<?= $rowRandProd['id']; ?>">
+            <img src="/project/upload/img/product/<?php if (!$rowRandProd['img']) : ?>default.jpg <?php else : ?><?= $rowRandProd['img']; ?><?php endif; ?>" class="img-fluid rounded" alt="" style="height: 80%; width:auto;">
+          </a>
 
           <p class="lead font-weight-normal"><?= $rowRandProd['name']; ?></p>
           <span class="mr-1">

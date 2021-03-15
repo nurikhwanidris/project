@@ -8,7 +8,7 @@
             <div class="container">
 
                 <!-- Brand -->
-                <a class="navbar-brand waves-effect" href="#" target="_blank">
+                <a class="navbar-brand waves-effect" href="/project/templates/shop/index.php?page=1" target="_blank">
                     <strong class="blue-text">AHL</strong>
                 </a>
 
@@ -23,7 +23,7 @@
                     <!-- Left -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link waves-effect" href="#">Home
+                            <a class="nav-link waves-effect" href="/project/templates/shop/index.php?page=1">Home
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -51,15 +51,15 @@
                             </a>
                         </li> -->
                         <li class="nav-item">
-                            <a href="/project/templates/shop/checkout" class="nav-link waves-effect" target="_blank">
-                                <i class="fas fa-shopping-cart"></i><span class="badge badge-danger ml-2">2</span>
+                            <a href="/templates/shop/cart" class="nav-link waves-effect" target="_blank">Cart
+                                <i class="fas fa-shopping-cart"></i><span class="badge badge-secondary badge-counter">7</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="/project/user/login" class="nav-link border border-light rounded waves-effect" target="_blank">
                                 <i class="fas fa-sign-in-alt mr-2"></i>Sign In
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
 
                 </div>
@@ -67,6 +67,22 @@
             </div>
         </nav>
         <!-- Navbar -->
+        <div id="popover_content_wrapper" style="display: none">
+            <span id="cart_details"></span>
+            <div align="right">
+                <a href="#" class="btn btn-primary" id="check_out_cart">
+                    <span class="glyphicon glyphicon-shopping-cart"></span> Check out
+                </a>
+                <a href="#" class="btn btn-default" id="clear_cart">
+                    <span class="glyphicon glyphicon-trash"></span> Clear
+                </a>
+            </div>
+        </div>
+
+        <div id="display_item">
+
+
+        </div>
 
     </header>
     <!--Main Navigation-->
