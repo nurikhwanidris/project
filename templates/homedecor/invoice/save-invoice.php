@@ -89,10 +89,25 @@ if ($resultCheck) {
     echo "Error " . mysqli_error($conn);
 }
 
+// Create receipt
+$createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified')";
+$resultReceipt = mysqli_query($conn, $createReceipt);
+
+// if ($resultReceipt) {
+//     echo 'It worked';
+// } else {
+//     echo 'Error occured. ' . mysqli_errno($conn);
+// }
+
+// Create customer
 $selectCustomer = "SELECT * FROM homedecor_customer WHERE id = '$customerID'";
 $resultCustomer = mysqli_query($conn, $selectCustomer);
 $customer = mysqli_fetch_array($resultCustomer);
 
+// Return receipt data
+$receipt = "SELECT * FROM homedecor_receipt ORDER BY id DESC";
+$resultReceipt = mysqli_query($conn, $receipt);
+$rowReceipt = mysqli_fetch_assoc($resultReceipt);
 ?>
 
 <!-- Header -->
@@ -125,7 +140,7 @@ $customer = mysqli_fetch_array($resultCustomer);
                                 <img src="/project/upload/img/invoice-logo-1.png" alt="" srcset="" style="height: auto; width: 40%;">
                             </div>
                             <div class="col-4 float-right text-right">
-                                <h5 class=""><span class="font-weight-bold">No :</span> <u>100</u></h5>
+                                <h5 class=""><span class="font-weight-bold">No :</span> <u><?= str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT); ?></u></h5>
                                 <h5 class=""><span class="font-weight-bold">Date :</span> <u><?= date("d/m/Y"); ?></u></h5>
                                 <h5 class=""><span class="font-weight-bold">Payment Method :</span><u>
                                         <?= $paymentType; ?>

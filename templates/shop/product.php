@@ -41,9 +41,15 @@ $row = mysqli_fetch_assoc($res);
             <a href="">
               <span class="badge blue mr-1">New Arrival</span>
             </a>
-            <a href="">
-              <span class="badge red mr-1">Bestseller</span>
-            </a>
+            <?php if ($row['quantity'] == 0) : ?>
+              <a href="">
+                <span class="badge red mr-1">Sold out</span>
+              </a>
+            <?php else : ?>
+              <a href="">
+                <span class="badge green mr-1">Bestseller</span>
+              </a>
+            <?php endif; ?>
           </div>
 
           <p class="lead">
@@ -53,12 +59,18 @@ $row = mysqli_fetch_assoc($res);
             <span>RM<?= number_format(round(($row['cost'] * 2.6) + 6), 2, '.', ''); ?></span>
           </p>
 
-          <p class="lead font-weight-bold"><?= $row['name']; ?> <br><small><?= $row['quantity']; ?> items left</small></p>
+          <p class="lead font-weight-bold">
+            <?= $row['name']; ?>
+            <br>
+            <?php if ($row['quantity'] != 0) : ?>
+              <small><?= $row['quantity']; ?> items left</small>
+            <?php else : ?>
+              <del><small>Sold out</small></del>
+            <?php endif; ?>
+          </p>
 
 
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia ipsa
-            sint voluptatibus!
-            Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.</p>
+          <p>Handcrafted with passion by the skillful artisan from Thailand. This product is the result of years of practice by them. Once a prized item in Chatuchak because of the experience needed to craft this product.</p>
 
           <form class="d-flex justify-content-left" method="POST" accept="<?php $_SERVER['PHP_SELF']; ?>">
             <!-- Default input -->
@@ -66,9 +78,16 @@ $row = mysqli_fetch_assoc($res);
             <input type="text" name="productName" id="name" value="<?= $row['name']; ?>" class="d-none">
             <input type="text" name="productPrice" id="cost" value="<?= $row['cost']; ?>" class="d-none">
             <input type="number" value="1" aria-label="Search" name="item" id="quantity" class="form-control" style="width: 100px" min="1" max="<?= $row['quantity']; ?>">
-            <button class="btn btn-primary btn-md my-0 p" name="addToCart" type="submit">Add to cart
-              <i class="fas fa-shopping-cart ml-1"></i>
-            </button>
+            <?php if ($row['quantity'] != 0) : ?>
+              <!-- <button class="btn btn-primary btn-md my-0 p" name="addToCart" type="submit">Add to cart
+                <i class="fas fa-shopping-cart ml-1"></i>
+              </button> -->
+              <a href="https://api.whatsapp.com/send?phone=601116758179&text=Hi%2C+I%27m+interested+in+this+item.%20<?= $row['name']; ?>" class="btn btn-success btn-md my-0 p">Chat with us <i class="fab fa-whatsapp"></i>
+              </a>
+            <?php else : ?>
+              <a href="https://api.whatsapp.com/send?phone=601116758179&text=Hi%2C+I%27m+interested+in+this+item.%20<?= $row['name']; ?>" class="btn btn-success btn-md my-0 p">Chat with us <i class="fab fa-whatsapp"></i>
+              </a>
+            <?php endif; ?>
 
           </form>
 

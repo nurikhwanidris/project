@@ -32,10 +32,17 @@ $resultCustomer = mysqli_query($conn, $customer);
 $rowCustomer = mysqli_fetch_array($resultCustomer);
 ?>
 
+<!-- Get receipt info if exist -->
+<?php
+$selectReceipt = "SELECT * FROM homedecor_receipt WHERE invoiceNum LIKE '%" . $id . "%'";
+$resultReceipt = mysqli_query($conn, $selectReceipt);
+?>
+
 <!-- Body -->
 <div class="container-fluid">
     <form action="save-invoice.php" method="POST" enctype="multipart/form-data">
         <input type="text" name="poID" id="" class="form-control d-none" value="<?= $id; ?>">
+        <input type="text" name="invoiceID" id="" class="form-control d-none" value="<?= $id; ?>">
         <?php if (isset($_GET['msg']) == 'success') : ?>
             <div class="row">
                 <div class="col-lg-12 col-xl-12">
@@ -192,24 +199,29 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                         </div>
                         <div class="row mt-4">
                             <div class="col-lg-12 col-xl-12">
-                                <div class="col-lg-12">
-                                    <p>
-                                        Pay to : <br>
-                                        <span class="font-weight-bold">Azuwarridah Abdullah</span> <br>
-                                        <span class="font-weight-bold">Maybank - 5148 1555 1083</span>
-                                    </p>
-                                    <span>Terms and Conditions</span>
-                                    <ul>
-                                        <li>
-                                            Price will be rounded up to the nearest point.
-                                        </li>
-                                        <li>
-                                            Please include the payment slips after the payment was made.
-                                        </li>
-                                        <li>
-                                            Balance payment must be made within 2 days after the invoice billed to you.
-                                        </li>
-                                    </ul>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <p>
+                                            Pay to : <br>
+                                            <span class="font-weight-bold">Azuwarridah Abdullah</span> <br>
+                                            <span class="font-weight-bold">Maybank - 5148 1555 1083</span>
+                                        </p>
+                                        <span>Terms and Conditions</span>
+                                        <ul>
+                                            <li>
+                                                Price will be rounded up to the nearest point.
+                                            </li>
+                                            <li>
+                                                Please include the payment slips after the payment was made.
+                                            </li>
+                                            <li>
+                                                Balance payment must be made within 2 days after the invoice billed to you.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-6 text-right">
+                                        <p>This is a computer generated. No signature is required.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -267,6 +279,39 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
                             <div class="col-lg-12">
                                 <button type="submit" name="saveInvoice" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6 class="">Receipt Info</h6>
+                        <div class="table table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="align-middle text-center">Receipt</th>
+                                        <th class="align-middle text-center">Paid</th>
+                                        <th class="align-middle text-center">Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($rowReceipt = mysqli_fetch_array($resultReceipt)) : ?>
+                                        <tr>
+                                            <td class="align-middle text-center">
+                                                <a href="receipt.php?id=<?= $rowReceipt['id']; ?>" target="_blank"><?= str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT); ?></a>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                RM<?= $rowReceipt['amountPaid']; ?>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <?php $s = $rowReceipt['created'];
+                                                $dt = new DateTime($s);
+                                                echo $date = $dt->format('d/m/Y'); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

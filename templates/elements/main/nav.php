@@ -8,7 +8,7 @@
             <div class="container">
 
                 <!-- Brand -->
-                <a class="navbar-brand waves-effect" href="/project/templates/shop/index.php?page=1" target="_blank">
+                <a class="navbar-brand waves-effect" href="/project/templates/shop/index.php?page=1" target="_self">
                     <strong class="blue-text">AHL</strong>
                 </a>
 
@@ -50,11 +50,11 @@
                                 <i class="fab fa-instagram"></i>
                             </a>
                         </li> -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="/templates/shop/cart" class="nav-link waves-effect" target="_blank">Cart
                                 <i class="fas fa-shopping-cart"></i><span class="badge badge-secondary badge-counter">7</span>
                             </a>
-                        </li>
+                        </li> -->
                         <!-- <li class="nav-item">
                             <a href="/project/user/login" class="nav-link border border-light rounded waves-effect" target="_blank">
                                 <i class="fas fa-sign-in-alt mr-2"></i>Sign In
