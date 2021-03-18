@@ -34,30 +34,30 @@ $rowCheck = mysqli_fetch_assoc($resultCheck);
 //$checkRow = mysqli_num_rows($resultCheck);
 
 if ($resultCheck) {
-    if (mysqli_num_rows($resultCheck) > 0) {
-        if ($rowCheck['remaining_amount'] = 0 || $invoiceStatus == 'Full') {
-            // Update invoice table if full payment made
-            $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', payment_receipt = '$newName', payment_type = '$paymentType', amount_paid  = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), modified = '$modified' WHERE po_id = '$poID'";
-            $resultUpdate = mysqli_query($conn, $update);
-            move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+    if (mysqli_num_rows($resultCheck) == 0) {
+        if ($totalAmount == $amountPaid) {
+            // Insert if a lucky client paid the full amount without deposit
+            $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newName', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
+            $resultInsert = mysqli_query($conn, $insert);
+
+            // move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
 
             // Update product table
             for ($i = 0; $i < count($productID); $i++) {
                 $id = $productID[$i];
                 $quantities = $quantity[$i];
-                $update = "UPDATE homedecor_product SET quantity = (quantity - '$quantities'), purchased = '$quantities' WHERE id = '$id'";
+                $update = "UPDATE homedecor_product SET purchased = (purchased + '$quantities') WHERE id = '$id'";
                 $result = mysqli_query($conn, $update);
             }
             if ($result) {
                 move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
-                $msg = "Successfull updated the invoice #" . $invoiceNum;
+                $msg = "Successfull inserted the invoice #" . $invoiceNum;
                 $alert = "success";
             } else {
                 $msg = "Error occcured" . mysqli_error($conn);
                 $alert = "danger";
             }
         } else {
-            // Update invoice table if deposit is made
             $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newName', payment_type = '$paymentType' WHERE po_id = '$poID'";
             $result = mysqli_query($conn, $update);
 
@@ -71,6 +71,7 @@ if ($resultCheck) {
             }
         }
     } else {
+        // Update invoice table if deposit is made
         $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newName', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
         $resultInsert = mysqli_query($conn, $insert);
 

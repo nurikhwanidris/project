@@ -36,14 +36,14 @@ $row = mysqli_fetch_assoc($res);
 
           <div class="mb-3">
             <a href="">
-              <span class="badge purple mr-1"><?= $row['category']; ?></span>
+              <span class="badge badge-info mr-1"><?= $row['category']; ?></span>
             </a>
             <a href="">
-              <span class="badge blue mr-1">New Arrival</span>
+              <span class="badge purple mr-1">New Arrival</span>
             </a>
             <?php if ($row['quantity'] == 0) : ?>
               <a href="">
-                <span class="badge red mr-1">Sold out</span>
+                <span class="badge badge-warning mr-1">Pre-Order</span>
               </a>
             <?php else : ?>
               <a href="">
@@ -53,10 +53,17 @@ $row = mysqli_fetch_assoc($res);
           </div>
 
           <p class="lead">
-            <span class="mr-1">
-              <del>RM<?= number_format(round((($row['cost'] * 2.6) + 6) * 1.5), 2, '.', ''); ?></del>
-            </span>
-            <span>RM<?= number_format(round(($row['cost'] * 2.6) + 6), 2, '.', ''); ?></span>
+            <?php if ($row['fixedPrice'] == 0) : ?>
+              <span class="mr-1">
+                <del>RM<?= number_format(round((($row['cost'] * 2.6) + 6) * 1.5), 2, '.', ''); ?></del>
+              </span>
+              <span>RM<?= number_format(round(($row['cost'] * 2.6) + 6), 2, '.', ''); ?></span>
+            <?php else : ?>
+              <span class="mr-1">
+                <del>RM<?= number_format(($row['fixedPrice'] * 1.3), 2, '.', ''); ?></del>
+              </span>
+              <span>RM<?= number_format($row['fixedPrice'], 2, '.', ''); ?></span>
+            <?php endif; ?>
           </p>
 
           <p class="lead font-weight-bold">
@@ -65,7 +72,7 @@ $row = mysqli_fetch_assoc($res);
             <?php if ($row['quantity'] != 0) : ?>
               <small><?= $row['quantity']; ?> items left</small>
             <?php else : ?>
-              <del><small>Sold out</small></del>
+              <small>Sold out</small>
             <?php endif; ?>
           </p>
 

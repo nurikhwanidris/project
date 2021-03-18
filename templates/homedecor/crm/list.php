@@ -9,15 +9,8 @@
 
 <?php
 // Fetch customer
-$customer = "SELECT * FROM homedecor_customer ORDER BY id";
+$customer = "SELECT * FROM homedecor_customer GROUP BY customerName ORDER BY id";
 $resultCustomer = mysqli_query($conn, $customer);
-
-// Fetch Package based on customer ID
-$enquiry = "SELECT * FROM enquiries ORDER BY customerID";
-$resultEnquiries = mysqli_query($conn, $enquiry);
-
-// Count rows
-$rowCountEnq = mysqli_num_rows($resultEnquiries);
 
 // Special case
 $selectCustomer = "SELECT customerName FROM homedecor_customer GROUP BY customerName";
@@ -41,24 +34,6 @@ $rowCountPending = mysqli_num_rows($resultPending);
 
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Enquiries Inserted</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCountEnq; ?></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-id-card fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -69,51 +44,6 @@ $rowCountPending = mysqli_num_rows($resultPending);
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-users fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Assigned Requests</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $rowCountPending; ?></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-comments fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -160,11 +90,12 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($row = mysqli_fetch_assoc($resultCustomer) and $rowPackage = mysqli_fetch_assoc($resultEnquiries)) : ?>
+                                <?php $i = 1;
+                                while ($row = mysqli_fetch_assoc($resultCustomer)) : ?>
                                     <tr>
                                         <td class="text-center align-middle">
                                             <a href="view?customerID=<?= $row['id']; ?>" class=" btn btn-sm btn-info">
-                                                <i class="fas fa-eye"></i> <?= $row['id']; ?>
+                                                <i class="fas fa-eye"></i> <?= $i++; ?>
                                             </a>
                                         </td>
                                         <td class="align-middle">
