@@ -34,7 +34,7 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
 
 <!-- Get receipt info if exist -->
 <?php
-$selectReceipt = "SELECT * FROM homedecor_receipt WHERE invoiceNum LIKE '%" . $id . "%'";
+$selectReceipt = "SELECT * FROM homedecor_receipt WHERE customerID = '" . $rowOrder['customer_id'] . "'";
 $resultReceipt = mysqli_query($conn, $selectReceipt);
 ?>
 
@@ -127,30 +127,47 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                             $rowProduct = mysqli_fetch_array($resultProduct);
                                         ?>
                                             <tr>
+                                                <!-- Item description -->
                                                 <td class="align-middle">
-                                                    <?= $rowProduct['name']; ?><input type="text" name="productID[]" id="" class="form-control d-none" value="<?= $product; ?>">
+                                                    <?= $rowProduct['name']; ?>
+                                                    <input type="text" name="productID[]" id="" class="form-control d-none" value="<?= $product; ?>">
                                                 </td>
+                                                <!-- Product ID -->
                                                 <td class="align-middle text-center">
                                                     <?= $rowProduct['orderNo']; ?>
                                                 </td>
+                                                <!-- Product Quantity -->
                                                 <td class="align-middle text-center">
-                                                    <?= $quantity; ?><input type="text" name="quantity[]" id="" class="form-control d-none" value="<?= $quantity; ?>">
+                                                    <?= $quantity; ?>
+                                                    <input type="text" name="quantity[]" id="" class="form-control d-none" value="<?= $quantity; ?>">
                                                 </td>
+                                                <!-- Selling Price -->
                                                 <td class="align-middle text-center">
-                                                    <!-- Selling Price -->
-                                                    RM<?= $sellingPrice = number_format(round(($rowProduct['cost'] * 2.5) + 6), 2, '.', ''); ?>
+                                                    RM
+                                                    <?php
+                                                    if (!empty($rowProduct['fixedPrice'])) :
+                                                        echo $rowProduct['fixedPrice'];
+                                                    else :
+                                                        echo $sellingPrice = number_format(round(($rowProduct['cost'] * 2.5) + 6), 2, '.', '');
+                                                    endif;
+                                                    ?>
                                                 </td>
+                                                <!-- Discount -->
                                                 <?php if ($rowOrder['discount_items'] != '' || $rowOrder['discount_all'] != '') : ?>
                                                     <td class="align-middle text-center">
                                                         <?php
-                                                        $differences = $price - $discount;
-                                                        $percent = ($differences / $price) * 100;
-                                                        echo round($percent, 2);
+                                                        if ($price == 0) :
+                                                            echo 0;
+                                                        else :
+                                                            $differences = $price - $discount;
+                                                            $percent = ($differences / $price) * 100;
+                                                            echo round($percent, 2);
+                                                        endif;
                                                         ?>%
                                                     </td>
                                                 <?php endif; ?>
+                                                <!-- Amount -->
                                                 <td class="align-middle text-center">
-                                                    <!-- Amount -->
                                                     RM<?= $amount = number_format($discount, 2, '.', ''); ?>
                                                 </td>
                                             </tr>
@@ -190,7 +207,6 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                                         <input type="text" name="totalAmount" id="totalAmount" class="form-control d-none" value="<?= number_format(round(array_sum($prices)), 2, '.', '') ?>">
                                                     <?php endif; ?>
                                                 </h3>
-
                                             </td>
                                         </tr>
                                     </tbody>
@@ -220,7 +236,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                         </ul>
                                     </div>
                                     <div class="col-lg-6 text-right">
-                                        <p>This is a computer generated. No signature is required.</p>
+                                        <p class="">This is a computer generated document. No signature is required.</p>
                                     </div>
                                 </div>
                             </div>

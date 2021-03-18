@@ -172,7 +172,11 @@ $result = mysqli_query($conn, $sql);
                   <strong>
                     <a href="" class="dark-grey-text"><?= $rowProduct['name']; ?>
                       <br>
-                      <span class="badge badge-pill danger-color">NEW</span>
+                      <?php if ($rowProduct['quantity'] == 0) : ?>
+                        <span class="badge badge-pill warning-color">Pre-Order</span>
+                      <?php else : ?>
+                        <span class="badge badge-pill secondary-color">New</span>
+                      <?php endif; ?>
                     </a>
                   </strong>
                 </h5>
@@ -180,8 +184,12 @@ $result = mysqli_query($conn, $sql);
                 <h4 class="font-weight-bold text-info">
                   <strong>
                     <?php
-                    $price = round(($rowProduct['cost'] + 6) * 2);
-                    echo "RM" . number_format($price, 2, '.', '');
+                    if (!empty($rowProduct['fixedPrice'])) :
+                      echo "RM" . number_format($rowProduct['fixedPrice'], 2, '.', '');
+                    else :
+                      $price = round(($rowProduct['cost'] * 2.5) + 6);
+                      echo "RM" . number_format($price, 2, '.', '');
+                    endif;
                     ?>
                   </strong>
                 </h4>

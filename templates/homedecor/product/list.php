@@ -1,3 +1,6 @@
+<!-- Title -->
+<?php $title = 'Product Listing'; ?>
+
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 
@@ -17,7 +20,7 @@ $product = mysqli_fetch_assoc($result);
 
 
 // Fetch number of active items
-$active = "SELECT id FROM homedecor_product WHERE quantity != 0";
+$active = "SELECT id FROM homedecor_product";
 $resultActive = mysqli_query($conn, $active);
 $numOfActive = mysqli_num_rows($resultActive);
 ?>
@@ -190,8 +193,14 @@ $numOfActive = mysqli_num_rows($resultActive);
                                             <?= $row['cost']; ?>
                                         </td>
                                         <td class="text-center align-middle">
-                                            <?php $price = $row['cost'] * 2.5;
-                                            echo round($price); ?>
+                                            <?php
+                                            if (!empty($row['fixedPrice'])) :
+                                                echo $row['fixedPrice'];
+                                            else :
+                                                $price = $row['cost'] * 2.5;
+                                                echo round($price);
+                                            endif;
+                                            ?>
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $quantity; ?>

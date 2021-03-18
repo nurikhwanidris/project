@@ -21,7 +21,7 @@ if ($resultCustomer) {
 
 <!-- Get Product -->
 <?php
-$product = "SELECT * FROM homedecor_product WHERE quantity != 0 ";
+$product = "SELECT * FROM homedecor_product";
 $resultproduct = mysqli_query($conn, $product);
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
@@ -76,6 +76,10 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <hr>
                                 <h6 class="font-weight-bold text-info"><u>Customer Details</u></h6>
                                 <div class="row my-2">
+                                    <div class="col-lg-3 form-group">
+                                        <label for="">Client Phone</label>
+                                        <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1">
+                                    </div>
                                     <div class="col-lg-4 form-group">
                                         <label for="">Client Name</label>
                                         <input type="text" name="customerName" id="customerName" class="form-control" list="nameList">
@@ -88,10 +92,6 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     <div class="col-lg-2 form-group">
                                         <label for="">Birthday</label>
                                         <input type="date" name="dob" id="" class="form-control">
-                                    </div>
-                                    <div class="col-lg-3 form-group">
-                                        <label for="">Client Phone</label>
-                                        <input type="text" name="customerPhone" id="customerPhone" class="form-control" tabindex="0" data-toggle="tooltip" title="Start with 1">
                                     </div>
                                     <div class="col-lg-3 form-group">
                                         <label for="">Client Email</label>
@@ -139,6 +139,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     <div class="col-lg-4">
                                         <label for="">Product</label>
                                         <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
+                                            <option value=""></option>
                                             <?php foreach ($productSelectOptions as $val => $text) : ?>
                                                 <option value="<?= $val; ?>"><?= $text; ?></option>
                                             <?php endforeach; ?>
@@ -166,6 +167,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                         <input type="text" name="id_text" id="productOrderNo" />
                                         <input type="text" name="id_text" id="productName" />
                                         <input type="text" name="id_text" id="productCost" />
+                                        <input type="text" name="id_text" id="productFixedPrice" />
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="row">
@@ -266,7 +268,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     }
 
     // Listen for when a customer is selected
-    $customerName.change(function() {
+    $customerPhone.change(function() {
         var customer = $(this).val();
         refreshInputForCustomer(customer);
     });
@@ -278,6 +280,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     var $productOrderNo = $('#productOrderNo');
     var $productName = $('#productName');
     var $productCost = $('#productCost');
+    var $productFixedPrice = $('#productFixedPrice');
 
     // This should be the path to a PHP script set up to receive $_POST['product']
     // and return the product info in a JSON encoded array.
@@ -294,6 +297,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             $productOrderNo.val(r.orderNo);
             $productName.val(r.name);
             $productCost.val(r.cost);
+            $productFixedPrice.val(r.price);
         });
     }
 
@@ -316,7 +320,12 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
             // Calculate price based on cost
             var productCost = parseFloat($("#productCost").val());
-            var productPrice = Math.round((productCost * 2.5) + 6) * quantity;
+            var productFixedPrice = parseFloat($("#productFixedPrice").val());
+            if (productFixedPrice === 0) {
+                var productPrice = Math.round((productCost * 2.5) + 6) * quantity;
+            } else {
+                var productPrice = parseFloat($("#productFixedPrice").val()) * quantity
+            }
 
             // Calculate discount
             var percentToDecimal = discountItem / 100;

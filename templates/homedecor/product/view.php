@@ -170,7 +170,7 @@ $row = mysqli_fetch_array($result);
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">RM</span>
                                             </div>
-                                            <input type="text" class="form-control" name="sellingPriceRM">
+                                            <input type="text" class="form-control" name="sellingPriceRM" value="<?= $row['fixedPrice']; ?>">
                                         </div>
                                     </div>
                                 </div>

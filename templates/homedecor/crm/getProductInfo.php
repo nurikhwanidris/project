@@ -20,6 +20,11 @@ if (array_key_exists('product', $_POST)) {
     $response['orderNo'] = $row['orderNo'];
     $response['name'] = $row['name'];
     $response['cost'] = $row['cost'];
+    if (!empty($row['fixedPrice'])) {
+        $response['price'] = $row['fixedPrice'];
+    } else {
+        $response['price'] = 0;
+    }
     $response['thb'] = $row['thb'];
     $response['img'] = $row['img'];
 }
