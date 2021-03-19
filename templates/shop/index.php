@@ -29,11 +29,8 @@ $firstPageResult = ($page - 1) * $resultPerPage;
 if (isset($_GET['category'])) {
   // Set the category first
   $category = $_GET['category'];
-  // retrieve the category
-  $sql = "SELECT * FROM homedecor_product WHERE category LIKE '%" . $category . "%' LIMIT " . $firstPageResult . "," .  $resultPerPage;
-  // if other category is selected
-  if ($category == 'others') {
-    $sql = "SELECT * FROM homedecor_product WHERE ((NOT(homedecor_product.category) = 'trays' AND NOT(homedecor_product.category) = 'bowls' AND NOT(homedecor_product.category) = 'plates' AND NOT(homedecor_product.category) = 'benjarong' )) LIMIT " . $firstPageResult . "," .  $resultPerPage;
+  if ($category) {
+    $sql = "SELECT * FROM homedecor_product WHERE category LIKE '%" . $category . "%' LIMIT " . $firstPageResult . "," .  $resultPerPage;
   }
 } else {
   // If no category is selected
@@ -58,9 +55,11 @@ $result = mysqli_query($conn, $sql);
       <div class="carousel-item">
         <img class="d-block w-100" src="/project/upload/img/carousel/2.jpg" alt="Second slide">
       </div>
-      <!-- <div class="carousel-item">
-      <img class="d-block w-100" src="..." alt="Third slide">
-    </div> -->
+      <div class="carousel-item">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+        </div>
+      </div>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -114,15 +113,16 @@ $result = mysqli_query($conn, $sql);
                               endif; ?>">
             <a class=" nav-link" href="?page=<?= $page ?>&category=trays">Trays</a>
           </li>
-          <li class="nav-item <?php if (isset($_GET['category'])) : if ($_GET['category'] == 'benjarong') : echo "active";
-                                endif;
-                              endif; ?>">
-            <a class="nav-link" href="?page=<?= $page ?>&category=benjarong">Benjarongs</a>
-          </li>
-          <li class="nav-item <?php if (isset($_GET['category'])) : if ($_GET['category'] == 'others') : echo "active";
-                                endif;
-                              endif; ?>">
-            <a class=" nav-link" href="?page=<?= $page ?>&category=others">Others</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Others</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="?page=<?= $page ?>&category=benjarong">Benjarongs</a>
+              <a class="dropdown-item" href="?page=<?= $page ?>&category=basket">Baskets</a>
+              <a class="dropdown-item" href="?page=<?= $page ?>&category=Condiment">Condiment Sets</a>
+              <a class="dropdown-item" href="?page=<?= $page ?>&category=sauce">Saucers</a>
+              <a class="dropdown-item" href="?page=<?= $page ?>&category=spoon">Spoon</a>
+              <a class="dropdown-item" href="?page=<?= $page ?>&category=tiffin">Tiffins</a>
+            </div>
           </li>
         </ul>
         <!-- Links -->
@@ -215,29 +215,44 @@ $result = mysqli_query($conn, $sql);
       <?php if (ceil($numberOfResult / $resultPerPage)) : ?>
         <ul class="pagination">
           <?php if ($page > 1) : ?>
-            <li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?>">Prev</a></li>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1;
+                                                                    if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                    endif; ?>">Prev</a></li>
           <?php endif; ?>
 
           <?php if ($page > 5) : ?>
-            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            <li class="page-item"><a class="page-link" href="?page=1<?php if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                    endif; ?>">1</a></li>
             <li class="page-item">...</li>
           <?php endif; ?>
 
-          <?php if ($page - 2 > 0) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page - 2 ?>"><?php echo $page - 2 ?></a></li><?php endif; ?>
-          <?php if ($page - 1 > 0) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?>"><?php echo $page - 1 ?></a></li><?php endif; ?>
+          <?php if ($page - 2 > 0) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page - 2 ?><?php if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                                                                      endif; ?>"><?php echo $page - 2 ?></a></li><?php endif; ?>
+          <?php if ($page - 1 > 0) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1 ?><?php if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                                                                      endif; ?>"><?php echo $page - 1 ?></a></li><?php endif; ?>
 
-          <li class="page-item active"><a class="page-link" href="?page=<?php echo $page ?>"><?php echo $page ?></a></li>
+          <li class="page-item active"><a class="page-link" href="?page=<?php echo $page;
+                                                                        if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                        endif; ?>"><?php echo $page ?></a></li>
 
-          <?php if ($page + 1 < ceil($numberOfResult / $resultPerPage) + 1) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1 ?>"><?php echo $page + 1 ?></a></li><?php endif; ?>
-          <?php if ($page + 2 < ceil($numberOfResult / $resultPerPage) + 1) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page + 2 ?>"><?php echo $page + 2 ?></a></li><?php endif; ?>
+          <?php if ($page + 1 < ceil($numberOfResult / $resultPerPage) + 1) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1;
+                                                                                                                                        if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                                                                                        endif; ?>"><?php echo $page + 1 ?></a></li><?php endif; ?>
+          <?php if ($page + 2 < ceil($numberOfResult / $resultPerPage) + 1) : ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page + 2;
+                                                                                                                                        if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                                                                                        endif; ?>"><?php echo $page + 2 ?></a></li><?php endif; ?>
 
           <?php if ($page < ceil($numberOfResult / $resultPerPage) - 2) : ?>
             <li class="page-item">...</li>
-            <li class="page-item"><a class="page-link" href="?page=<?php echo ceil($numberOfResult / $resultPerPage) ?>"><?php echo ceil($numberOfResult / $resultPerPage) ?></a></li>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo ceil($numberOfResult / $resultPerPage);
+                                                                    if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                    endif; ?>"><?php echo ceil($numberOfResult / $resultPerPage) ?></a></li>
           <?php endif; ?>
 
           <?php if ($page < ceil($numberOfResult / $resultPerPage)) : ?>
-            <li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1 ?>">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1;
+                                                                    if (isset($_GET['category'])) : echo '&category=' . $_GET['category'];
+                                                                    endif; ?>">Next</a></li>
           <?php endif; ?>
         </ul>
       <?php endif; ?>

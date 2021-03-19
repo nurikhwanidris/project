@@ -18,7 +18,6 @@ $result = mysqli_query($conn, $sql);
 $numOfProd = mysqli_num_rows($result);
 $product = mysqli_fetch_assoc($result);
 
-
 // Fetch number of active items
 $active = "SELECT id FROM homedecor_product";
 $resultActive = mysqli_query($conn, $active);
@@ -194,12 +193,16 @@ $numOfActive = mysqli_num_rows($resultActive);
                                         </td>
                                         <td class="text-center align-middle">
                                             <?php
-                                            if (!empty($row['fixedPrice'])) :
+                                            if (empty($row['supplierCode'])) {
+                                                echo 0;
+                                            } elseif ($row['fixedPrice'] != 0) {
                                                 echo $row['fixedPrice'];
-                                            else :
-                                                $price = $row['cost'] * 2.5;
-                                                echo round($price);
-                                            endif;
+                                            } else {
+                                                $stripped = (int)preg_replace("/[^0-9]/", "", $row['supplierCode']);
+                                                $thbDiscount = $row['thb'] * (1 - ($stripped / 100));
+                                                $costMYR = ($thbDiscount / 100) * 15;
+                                                echo $price = ($costMYR * 2.5) + 6;
+                                            }
                                             ?>
                                         </td>
                                         <td class="text-center align-middle">

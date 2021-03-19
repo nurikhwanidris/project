@@ -16,19 +16,19 @@
     <!-- Social icons -->
     <div class="pb-4">
         <a href="https://www.facebook.com/arzuhomeliving" target="_blank">
-            <i class="fab fa-facebook-f mr-3"></i>
+            <i class="fab fa-facebook-f mx-3"></i>
         </a>
 
         <a href="https://twitter.com/arzuhomeliving" target="_blank">
-            <i class="fab fa-twitter mr-3"></i>
+            <i class="fab fa-twitter mx-3"></i>
         </a>
 
         <a href="https://instagram.com/arzu.homeliving" target="_blank">
-            <i class="fab fa-instagram mr-3"></i>
+            <i class="fab fa-instagram mx-3"></i>
         </a>
 
         <a href="/project/user/login" target="_blank">
-            <i class="fas fa-sign-in-alt mr-3"></i>
+            <i class="fas fa-sign-in-alt mx-3"></i>
         </a>
 
     </div>

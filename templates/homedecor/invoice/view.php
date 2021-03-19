@@ -23,6 +23,9 @@ $quantities = explode(',', $rowOrder['quantity']);
 $prices = explode(',', $rowOrder['price']);
 $discountItems = explode(',', $rowOrder['discount_items']);
 $discountAll = explode(',', $rowOrder['discount_all']);
+
+// Generate invoice number
+$invoiceNum = date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT);
 ?>
 
 <!-- Get customer info -->
@@ -30,6 +33,15 @@ $discountAll = explode(',', $rowOrder['discount_all']);
 $customer = "SELECT * FROM homedecor_customer where id = '" . $rowOrder['customer_id'] . "'";
 $resultCustomer = mysqli_query($conn, $customer);
 $rowCustomer = mysqli_fetch_array($resultCustomer);
+?>
+
+<!-- Get invoice info if exist -->
+<?php
+$selectInvoice = "SELECT * FROM homedecor_invoice WHERE invoice_num = '$invoiceNum'";
+$resultInvoice = mysqli_query($conn, $selectInvoice);
+if (mysqli_num_rows($resultInvoice) < 0) {
+    $rowInvoice = mysqli_fetch_assoc($resultInvoice);
+}
 ?>
 
 <!-- Get receipt info if exist -->
@@ -93,8 +105,8 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                 </div>
                                 <div class="col-3 float-right text-right">
                                     <p>
-                                        Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
-                                        <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
+                                        Invoice # : <span class="font-weight-bold"><?= $invoiceNum; ?></span>
+                                        <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= $invoiceNum; ?>"><br>
                                         Invoice Date : <span class="font-weight-bold"><?= date("d/m/Y"); ?><input type="text" name="invoiceDate" id="" class="form-control d-none" value="<?= date("Y-m-d"); ?>"></span>
                                     </p>
                                 </div>
@@ -293,7 +305,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                         </div>
                         <div class="row mt-3">
                             <div class="col-lg-12">
-                                <button type="submit" name="saveInvoice" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
+                                <button type="submit" name="saveInvoice" class="btn btn-primary float-right "><i class="fas fa-save"></i> Save</button>
                             </div>
                         </div>
                     </div>
