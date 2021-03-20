@@ -51,16 +51,28 @@ if ($resultCheck) {
             }
             if ($result) {
                 move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
-                $msg = "Successfull inserted the invoice #" . $invoiceNum;
+                $msg = "Successfully inserted the invoice #" . $invoiceNum;
+                $alert = "success";
+            } else {
+                $msg = "Error occcured" . mysqli_error($conn);
+                $alert = "danger";
+            }
+        } elseif ($invoiceStatus == 'Deposit') {
+            // If some1 made a deposit first, do this
+            $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newName', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
+            $resultInsert = mysqli_query($conn, $insert);
+            if ($resultInsert) {
+                move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+                $msg = "Successfully created the invoice #" . $invoiceNum;
                 $alert = "success";
             } else {
                 $msg = "Error occcured" . mysqli_error($conn);
                 $alert = "danger";
             }
         } else {
+            // If the remaining amount is paid
             $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newName', payment_type = '$paymentType' WHERE po_id = '$poID'";
             $result = mysqli_query($conn, $update);
-
             if ($result) {
                 move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
                 $msg = "Successfull updated the invoice status to " . $invoiceStatus . " made";
@@ -71,19 +83,32 @@ if ($resultCheck) {
             }
         }
     } else {
-        // Update invoice table if deposit is made
-        $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newName', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
-        $resultInsert = mysqli_query($conn, $insert);
+        // If the remaining amount minus amount paid = 0, do this.
+        $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newName', payment_type = '$paymentType' WHERE po_id = '$poID'";
+        $resultInsert = mysqli_query($conn, $update);
 
         move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+        $msg = "Successfully updated the invoice #" . $invoiceNum;
+        $alert = "success";
 
-        if ($resultInsert) {
-            $msg = "Deposit made for invoice #" . $invoiceNum;
-            $alert = "success";
-            //header("Location: /project/templates/homedecor/order/view?msg=success");
-        } else {
-            $msg = "Error occcured" . mysqli_error($conn);
-            $alert = "danger";
+        if ($rowCheck['remaining_amount'] - $amountPaid == 0) {
+            $update = "UPDATE homedecor_invoice SET invoice_status ='Full' WHERE po_id = '$poID'";
+            $resultInsert = mysqli_query($conn, $update);
+            // Update product table
+            for ($i = 0; $i < count($productID); $i++) {
+                $id = $productID[$i];
+                $quantities = $quantity[$i];
+                $update = "UPDATE homedecor_product SET purchased = (purchased + '$quantities') WHERE id = '$id'";
+                $result = mysqli_query($conn, $update);
+            }
+            if ($result) {
+                move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+                $msg = "Successfully updated the invoice #" . $invoiceNum;
+                $alert = "success";
+            } else {
+                $msg = "Error occcured" . mysqli_error($conn);
+                $alert = "danger";
+            }
         }
     }
 } else {
