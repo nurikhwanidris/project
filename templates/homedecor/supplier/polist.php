@@ -1,5 +1,5 @@
 <!-- Title -->
-<?php $title = "Invoice List"; ?>
+<?php $title = "Purchase Order List"; ?>
 
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
@@ -145,7 +145,7 @@ $resFetch = mysqli_query($conn, $fetch);
                                             <?= array_sum($productQty); ?>
                                         </td>
                                         <td class="align-middle text-center">
-                                            ฿&nbsp;<?= array_sum($productPrice); ?>
+                                            ฿&nbsp;<?= number_format(array_sum($productPrice), 2, '.', ','); ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?= ($rowList['status'] = 'Pending' ? '<span class="badge badge-warning">Pending</span>' : ''); ?>

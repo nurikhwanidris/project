@@ -19,7 +19,7 @@ $numOfProd = mysqli_num_rows($result);
 $product = mysqli_fetch_assoc($result);
 
 // Fetch number of active items
-$active = "SELECT id FROM homedecor_product";
+$active = "SELECT id FROM homedecor_product WHERE quantity != 0 GROUP BY orderNo";
 $resultActive = mysqli_query($conn, $active);
 $numOfActive = mysqli_num_rows($resultActive);
 ?>

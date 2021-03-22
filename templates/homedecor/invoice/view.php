@@ -37,7 +37,6 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
 $selectReceipt = "SELECT * FROM homedecor_receipt WHERE customerID = '" . $rowOrder['customer_id'] . "'";
 $resultReceipt = mysqli_query($conn, $selectReceipt);
 ?>
-
 <!-- Body -->
 <div class="container-fluid">
     <form action="save-invoice.php" method="POST" enctype="multipart/form-data">
@@ -128,21 +127,21 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                         ?>
                                             <tr>
                                                 <!-- Item description -->
-                                                <td class="align-middle">
+                                                <td class="align-middle" style="border: 1px solid black;">
                                                     <?= $rowProduct['name']; ?>
                                                     <input type="text" name="productID[]" id="" class="form-control d-none" value="<?= $product; ?>">
                                                 </td>
                                                 <!-- Product ID -->
-                                                <td class="align-middle text-center">
+                                                <td class="align-middle text-center" style="border: 1px solid black;">
                                                     <?= $rowProduct['orderNo']; ?>
                                                 </td>
                                                 <!-- Product Quantity -->
-                                                <td class="align-middle text-center">
+                                                <td class="align-middle text-center" style="border: 1px solid black;">
                                                     <?= $quantity; ?>
                                                     <input type="text" name="quantity[]" id="" class="form-control d-none" value="<?= $quantity; ?>">
                                                 </td>
                                                 <!-- Selling Price -->
-                                                <td class="align-middle text-center">
+                                                <td class="align-middle text-center" style="border: 1px solid black;">
                                                     RM
                                                     <?php
                                                     if ($rowProduct['name'] == 'Shipping') {
@@ -158,7 +157,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                                 </td>
                                                 <!-- Discount -->
                                                 <?php if ($rowOrder['discount_items'] != '' || $rowOrder['discount_all'] != '') : ?>
-                                                    <td class="align-middle text-center">
+                                                    <td class="align-middle text-center" style="border: 1px solid black;">
                                                         <?php
                                                         if ($price == 0) :
                                                             echo 0;
@@ -171,28 +170,28 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                                     </td>
                                                 <?php endif; ?>
                                                 <!-- Amount -->
-                                                <td class="align-middle text-center">
+                                                <td class="align-middle text-center" style="border: 1px solid black;">
                                                     RM <?= $amount = number_format($discount, 2, '.', ''); ?>
                                                 </td>
                                             </tr>
                                         <?php endfor; ?>
                                         <tr class="">
-                                            <td colspan="5" class="align-middle font-weight-light text-right ">Subtotal</td>
-                                            <td class="align-middle text-center ">
+                                            <td colspan="5" class="align-middle font-weight-light text-right " style="border: 1px solid black;">Subtotal</td>
+                                            <td class="align-middle text-center " style="border: 1px solid black;">
                                                 RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
                                             </td>
                                         </tr>
                                         <?php if ($rowOrder['discount_all'] != 0) : ?>
                                             <tr>
-                                                <td colspan="5" class="text-right font-weight-bold ">Discount</td>
-                                                <td class="align-middle text-center "><?= $rowOrder['discount_all']; ?>%</td>
+                                                <td colspan="5" class="text-right font-weight-bold " style="border: 1px solid black;">Discount</td>
+                                                <td class="align-middle text-center " style="border: 1px solid black;"><?= $rowOrder['discount_all']; ?>%</td>
                                             </tr>
                                         <?php endif; ?>
                                         <tr>
-                                            <td colspan="5" class="align-middle text-right ">
+                                            <td colspan="5" class="align-middle text-right " style="border: 1px solid black;">
                                                 <h3 class="align-middle font-weight-bold">Total</h3>
                                             </td>
-                                            <td class="align-middle text-center ">
+                                            <td class="align-middle text-center " style="border: 1px solid black;">
                                                 <h3 class="align-middle font-weight-bold">
                                                     <?php if ($rowOrder['discount_items'] != 0 && $rowOrder['price'] != $rowOrder['discount_items']) : ?>
                                                         RM<?= number_format(round(array_sum($discountItems), 2), 2, '.', ''); ?>
@@ -241,7 +240,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                         </ul>
                                     </div>
                                     <div class="col-lg-6 text-right">
-                                        <p class="">This is a computer generated document. No signature is required.</p>
+                                        <small class="">This is a computer generated document. No signature is required.</small>
                                     </div>
                                 </div>
                             </div>

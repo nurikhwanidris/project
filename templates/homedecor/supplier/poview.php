@@ -78,13 +78,14 @@ $staffName = explode(',', $rowOrder['staffName']);
                             </div>
                             <div class="col-4 float-right text-right">
                                 <p>
-                                    Purchase Order # : <span class="font-weight-bold"><?= date("Ym") . str_pad($_GET['id'], 4, 0, STR_PAD_LEFT); ?></span>
-                                    <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($_GET['id'], 4, 0, STR_PAD_LEFT); ?>"><br>
+                                    Purchase Order # : <span class="font-weight-bold"><?= str_pad($_GET['id'], 4, 0, STR_PAD_LEFT); ?></span>
+                                    <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= str_pad($_GET['id'], 4, 0, STR_PAD_LEFT); ?>"><br>
                                     Date : <span class="font-weight-bold">
                                         <?php $created = $rowOrder['created'];
                                         $dt = new DateTime($created);
                                         $date = $dt->format('d/m/Y');
-                                        echo $date; ?><input type="text" name="invoiceDate" id="" class="form-control d-none" value="
+                                        echo $date; ?>
+                                        <input type="text" name="invoiceDate" id="" class="form-control d-none" value="
                                         <?php $created = $rowOrder['created'];
                                         $dt = new DateTime($created);
                                         $date = $dt->format('d/m/Y');
@@ -120,7 +121,6 @@ $staffName = explode(',', $rowOrder['staffName']);
                                         $selProduct = "SELECT * FROM homedecor_product WHERE id = '$product'";
                                         $resProduct = mysqli_query($conn, $selProduct);
                                         $rowProduct = mysqli_fetch_array($resProduct);
-
                                     ?>
                                         <tr>
                                             <td class="align-middle text-center">
@@ -133,13 +133,13 @@ $staffName = explode(',', $rowOrder['staffName']);
                                                 <?= $rowProduct['name']; ?>
                                             </td>
                                             <td class="align-middle text-right">
-                                                <?= $cost; ?>
+                                                <?= number_format($cost, 2, '.', ','); ?>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <?= $quantity; ?>
                                             </td>
                                             <td class="align-middle text-right">
-                                                <?= $price; ?>
+                                                <?= number_format($price, 2, '.', ','); ?>
                                             </td>
                                             <td class="align-middle text-center d-print-none">
                                                 <?= $rowProduct['orderNo']; ?>
@@ -148,7 +148,7 @@ $staffName = explode(',', $rowOrder['staffName']);
                                     <?php endfor; ?>
                                     <tr>
                                         <td class="text-right align-middle" colspan="6">
-                                            ฿<?= array_sum($productPrice); ?>
+                                            ฿ <?= number_format(array_sum($productPrice), 2, '.', ','); ?>
                                         </td>
                                     </tr>
                                 </tbody>
