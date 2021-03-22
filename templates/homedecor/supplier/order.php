@@ -31,6 +31,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                     <h6 class="m-0 font-weight-bold text-primary">Create Purchase Order</h6>
                 </div>
                 <form action="po.php" class="form-group" method="POST">
+                    <input type="text" name="staffName" id="" class="form-control d-none" value="<?= $staffName; ?>">
                     <div class="card-body">
                         <div class="row my-2">
                             <div class="col-lg-4">

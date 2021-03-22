@@ -78,9 +78,17 @@ $staffName = explode(',', $rowOrder['staffName']);
                             </div>
                             <div class="col-4 float-right text-right">
                                 <p>
-                                    Purchase Order # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
-                                    <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
-                                    Date : <span class="font-weight-bold"><?= date("d/m/Y"); ?><input type="text" name="invoiceDate" id="" class="form-control d-none" value="<?= date("Y-m-d"); ?>"></span>
+                                    Purchase Order # : <span class="font-weight-bold"><?= date("Ym") . str_pad($_GET['id'], 4, 0, STR_PAD_LEFT); ?></span>
+                                    <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($_GET['id'], 4, 0, STR_PAD_LEFT); ?>"><br>
+                                    Date : <span class="font-weight-bold">
+                                        <?php $created = $rowOrder['created'];
+                                        $dt = new DateTime($created);
+                                        $date = $dt->format('d/m/Y');
+                                        echo $date; ?><input type="text" name="invoiceDate" id="" class="form-control d-none" value="
+                                        <?php $created = $rowOrder['created'];
+                                        $dt = new DateTime($created);
+                                        $date = $dt->format('d/m/Y');
+                                        echo $date; ?>"></span>
                                 </p>
                             </div>
                         </div>

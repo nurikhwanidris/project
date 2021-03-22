@@ -7,7 +7,7 @@ $productId = implode(',', $_POST['productId']);
 $productCost = implode(',', $_POST['productCost']);
 $quantity = implode(',', $_POST['quantity']);
 $productPrice = implode(',', $_POST['productPrice']);
-$staffName = $row['fName'];
+$staffName = $_POST['staffName'];
 $img = implode(',', $_POST['img']);
 
 // Date created and modified

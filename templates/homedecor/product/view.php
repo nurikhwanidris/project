@@ -31,6 +31,7 @@ $row = mysqli_fetch_array($result);
     $sellingPriceTHB = $_POST['sellingPriceTHB'];
     $supplierCode = $_POST['supplierCode'];
     $thb = $_POST['thb'];
+    $promo = $_POST['promo'];
 
 
     // Upload image
@@ -52,7 +53,7 @@ $row = mysqli_fetch_array($result);
     $modified = date('Y-m-d H:i:s');
 
     // Insert to database
-    $update = "UPDATE homedecor_product SET name  = '$name', category = '$category', supplierCode = '$supplierCode', orderNo = '$orderNo', cost = '$cost', thb = '$thb', quantity = '$quantity', sku = '$sku', modified = '$modified', img = '$image', fixedPriceTHB = '$sellingPriceTHB', fixedPrice = '$sellingPriceRM' WHERE id = '$id'";
+    $update = "UPDATE homedecor_product SET name  = '$name', category = '$category', supplierCode = '$supplierCode', orderNo = '$orderNo', cost = '$cost', thb = '$thb', quantity = '$quantity', sku = '$sku', modified = '$modified', img = '$image', fixedPriceTHB = '$sellingPriceTHB', fixedPrice = '$sellingPriceRM', promo='$promo' WHERE id = '$id'";
 
     if ($result = mysqli_query($conn, $update)) {
         move_uploaded_file($_FILES['imgSave']['tmp_name'], $target);
@@ -134,6 +135,14 @@ $row = mysqli_fetch_array($result);
                                     <div class="col-lg-2">
                                         <label for="">Quantity</label>
                                         <input type="text" name="quantity" id="" class="form-control" value="<?= $row['quantity']; ?>">
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label for="">Promo?</label>
+                                        <input type="text" name="promo" id="" class="form-control" value="<?= $row['promo']; ?>" list="promo">
+                                        <datalist id="promo">
+                                            <option value="Raya"></option>
+                                            <!-- <option value=""></option> -->
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div class="row my-2">

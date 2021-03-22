@@ -22,19 +22,24 @@
 
                     <!-- Left -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
+                        <li class="nav-item <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : '' ?>">
                             <a class="nav-link waves-effect" href="/project/templates/shop/index.php?page=1">Home
-                                <span class="sr-only">(current)</span>
+                                <?php if (basename($_SERVER['PHP_SELF']) == 'index.php') : ?>
+                                    <span class="sr-only">(current)</span>
+                                <?php endif; ?>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="#" target="_blank">Promotions</a>
+                        <li class="nav-item <?= (basename($_SERVER['PHP_SELF']) == 'promo.php') ? 'active' : '' ?>"">
+                            <a class=" nav-link waves-effect" href="/project/templates/shop/promo.php" target="_self">Promotions</a>
+                            <?php if (basename($_SERVER['PHP_SELF']) == 'promo.php') : ?>
+                                <span class="sr-only">(current)</span>
+                            <?php endif; ?>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item <?= (basename($_SERVER['PHP_SELF']) == 'about.php') ? 'active' : '' ?>">
                             <a class="nav-link waves-effect" href="../../templates/main/about.php" target="_blank">About Us</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="#" target="_blank">Contact Us</a>
+                        <li class="nav-item <?= (basename($_SERVER['PHP_SELF']) == 'contact.php') ? 'active' : '' ?>">
+                            <a class="nav-link waves-effect" href="/project/templates/shop/contact.php" target="_blank">Contact Us</a>
                         </li>
                     </ul>
 

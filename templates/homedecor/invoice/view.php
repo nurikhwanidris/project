@@ -23,9 +23,6 @@ $quantities = explode(',', $rowOrder['quantity']);
 $prices = explode(',', $rowOrder['price']);
 $discountItems = explode(',', $rowOrder['discount_items']);
 $discountAll = explode(',', $rowOrder['discount_all']);
-
-// Generate invoice number
-$invoiceNum = date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT);
 ?>
 
 <!-- Get customer info -->
@@ -33,15 +30,6 @@ $invoiceNum = date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT);
 $customer = "SELECT * FROM homedecor_customer where id = '" . $rowOrder['customer_id'] . "'";
 $resultCustomer = mysqli_query($conn, $customer);
 $rowCustomer = mysqli_fetch_array($resultCustomer);
-?>
-
-<!-- Get invoice info if exist -->
-<?php
-$selectInvoice = "SELECT * FROM homedecor_invoice WHERE invoice_num = '$invoiceNum'";
-$resultInvoice = mysqli_query($conn, $selectInvoice);
-if (mysqli_num_rows($resultInvoice) < 0) {
-    $rowInvoice = mysqli_fetch_assoc($resultInvoice);
-}
 ?>
 
 <!-- Get receipt info if exist -->
@@ -105,8 +93,8 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                 </div>
                                 <div class="col-3 float-right text-right">
                                     <p>
-                                        Invoice # : <span class="font-weight-bold"><?= $invoiceNum; ?></span>
-                                        <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= $invoiceNum; ?>"><br>
+                                        Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
+                                        <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
                                         Invoice Date : <span class="font-weight-bold"><?= date("d/m/Y"); ?><input type="text" name="invoiceDate" id="" class="form-control d-none" value="<?= date("Y-m-d"); ?>"></span>
                                     </p>
                                 </div>
@@ -157,11 +145,15 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                                 <td class="align-middle text-center">
                                                     RM
                                                     <?php
-                                                    if (!empty($rowProduct['fixedPrice'])) :
-                                                        echo $rowProduct['fixedPrice'];
-                                                    else :
-                                                        echo $sellingPrice = number_format(round(($rowProduct['cost'] * 2.5) + 6), 2, '.', '');
-                                                    endif;
+                                                    if ($rowProduct['name'] == 'Shipping') {
+                                                        echo number_format($discount, 2, '.', ',');
+                                                    } else {
+                                                        if (!empty($rowProduct['fixedPrice'])) :
+                                                            echo number_format($rowProduct['fixedPrice'], 2, '.', ',');
+                                                        else :
+                                                            echo $sellingPrice = number_format(round(($rowProduct['cost'] * 2.5) + 6), 2, '.', ',');
+                                                        endif;
+                                                    }
                                                     ?>
                                                 </td>
                                                 <!-- Discount -->
@@ -180,7 +172,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                                 <?php endif; ?>
                                                 <!-- Amount -->
                                                 <td class="align-middle text-center">
-                                                    RM<?= $amount = number_format($discount, 2, '.', ''); ?>
+                                                    RM <?= $amount = number_format($discount, 2, '.', ''); ?>
                                                 </td>
                                             </tr>
                                         <?php endfor; ?>
@@ -219,6 +211,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                                         <input type="text" name="totalAmount" id="totalAmount" class="form-control d-none" value="<?= number_format(round(array_sum($prices)), 2, '.', '') ?>">
                                                     <?php endif; ?>
                                                 </h3>
+
                                             </td>
                                         </tr>
                                     </tbody>
@@ -305,7 +298,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                         </div>
                         <div class="row mt-3">
                             <div class="col-lg-12">
-                                <button type="submit" name="saveInvoice" class="btn btn-primary float-right "><i class="fas fa-save"></i> Save</button>
+                                <button type="submit" name="saveInvoice" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
                             </div>
                         </div>
                     </div>

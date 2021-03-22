@@ -24,7 +24,7 @@ $modified = date('Y-m-d H:i:s');
 
 // Renamed and find a target
 $paymentReceipt = $_FILES['paymentReceipt']['name'];
-$newName = "INV" . $invoiceNum . '-' . $invoiceDate . ".pdf";
+$newName = "INV" . $invoiceNum . '-' . $invoiceDate;
 $target = "../../../upload/invoice/" . basename($newName);
 
 // Check for existing invoice
