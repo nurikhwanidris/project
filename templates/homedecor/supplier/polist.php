@@ -139,7 +139,9 @@ $resFetch = mysqli_query($conn, $fetch);
                                         </td>
                                         <td class="align-middle text-center"><a href="poview?id=<?= $rowList['id']; ?>" target="blank"><?= str_pad($rowList['id'], 4, 0, STR_PAD_LEFT); ?></a></td>
                                         <td class="align-middle text-center">
-                                            <?= $rowList['supplierID']; ?>
+                                            <?php $supplier = mysqli_query($conn, "SELECT * FROM homedecor_supplier WHERE " . $rowList['id'] . "");
+                                            $rowSupplier = mysqli_fetch_assoc($supplier);
+                                            echo $rowSupplier['businessName']; ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?= array_sum($productQty); ?>

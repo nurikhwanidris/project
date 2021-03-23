@@ -1,3 +1,6 @@
+<!-- Title -->
+<?php $title = "Customer Details - ID" . $_GET['customerID']; ?>
+
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 
@@ -9,14 +12,10 @@
 
 <!-- Get Package ID -->
 <?php
-$sql = "SELECT id, customerName FROM homedecor_customer ORDER BY id DESC";
+$customerID = $_GET['customerID'];
+$sql = "SELECT * FROM homedecor_customer WHERE id = '$customerID'";
 $resultCustomer = mysqli_query($conn, $sql);
-if ($resultCustomer) {
-    $rowCustomer = mysqli_fetch_assoc($resultCustomer);
-    $customerID = $rowCustomer['id'] + 1;
-} else {
-    echo mysqli_error($conn);
-}
+$rowCustomer = mysqli_fetch_assoc($resultCustomer);
 ?>
 
 <!-- Get Product -->
@@ -58,19 +57,15 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <div class="row my-2">
                                     <div class="col-lg-4">
                                         <label for="staffName">Staff Name</label>
-                                        <input type="text" name="staffName" id="" class="form-control" value="<?= $row['fName']; ?>" readonly>
+                                        <input type="text" name="staffName" id="" class="form-control" value="<?= $rowCustomer['staffName']; ?>" readonly>
                                     </div>
                                     <div class="col-lg-4">
                                         <label for="tourDate">Insert Date</label>
-                                        <input type="text" name="insertDate" id="" class="form-control" value="<?= date("d-m-Y"); ?>" readonly>
+                                        <input type="text" name="insertDate" id="" class="form-control" value="<?= $rowCustomer['created']; ?>" readonly>
                                     </div>
                                     <div class="col-lg-4">
                                         <label for="source">Source</label>
-                                        <select name="source" id="" class="form-control">
-                                            <?php while ($rowSource = mysqli_fetch_assoc($resultSource)) : ?>
-                                                <option value="<?= $rowSource['sourceName']; ?>"><?= $rowSource['sourceName']; ?></option>
-                                            <?php endwhile; ?>
-                                        </select>
+                                        <input type="text" name="source" id="" class="form-control" value="<?= $rowCustomer['source']; ?>" readonly>
                                     </div>
                                 </div>
                                 <hr>
@@ -234,43 +229,6 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
         if (this.value.indexOf(prefix) !== 0) {
             this.value = prefix + this.value;
         }
-    });
-</script>
-
-<!-- Get existing customer info -->
-<script>
-    $customerName = $('#customerName');
-    $customerPhone = $('#customerPhone');
-    $customerEmail = $('#customerEmail');
-    $customerAddress = $('#customerAddress');
-    $customerCity = $('#customerCity');
-    $customerPostcode = $('#customerPostcode');
-    $customerState = $('#customerState');
-
-    // Fetch from the API
-    var url = 'getCustomerInfo.php';
-
-    function refreshInputForCustomer(customer) {
-        $.post(url, {
-            customer: customer
-        }, function(r) {
-            /**
-             * Assuming your PHP API responds with a JSON encoded array, with the ID available.
-             */
-            $customerName.val(r.customerName);
-            $customerPhone.val(r.customerPhone);
-            $customerEmail.val(r.customerEmail);
-            $customerAddress.val(r.customerAddress);
-            $customerCity.val(r.customerCity);
-            $customerPostcode.val(r.customerPostcode);
-            $customerState.val(r.customerState);
-        });
-    }
-
-    // Listen for when a customer is selected
-    $customerPhone.change(function() {
-        var customer = $(this).val();
-        refreshInputForCustomer(customer);
     });
 </script>
 

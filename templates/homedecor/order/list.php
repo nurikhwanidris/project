@@ -190,7 +190,7 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                             </a>
                                         </td>
                                         <td class="align-middle">
-                                            <a href="/project/templates/homedecor/crm/view?customerID=<?= $rowOrder['customerId']; ?>" target="_blank"><?= $rowOrder['customerName']; ?></a>
+                                            <?= $rowOrder['customerName']; ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?= $rowOrder['created']; ?>

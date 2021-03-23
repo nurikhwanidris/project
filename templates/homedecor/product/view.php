@@ -202,7 +202,7 @@ $row = mysqli_fetch_array($result);
                                     <?php else : ?>
                                         <img src="/project/upload/img/product/<?= $row['img']; ?>" alt="" style="width: 100%; height:auto;">
                                     <?php endif; ?>
-                                    <input type='file' id="imgInp" name="imgSave" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="<?= $row['img']; ?>">
+                                    <input type='file' id="imgInp" name="imgSave" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="<?= (empty($row['img'])) ? '' : $row['img']; ?>">
                                 </div>
                             </div>
                             <div class="row form-group mt-4 mb-0">

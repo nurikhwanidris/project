@@ -192,6 +192,12 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <a class="collapse-item" href="/project/templates/homedecor/crm/add">Add</a>
                         <a class="collapse-item" href="/project/templates/homedecor/crm/list">List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/crm/category">Category</a>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Membership</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/crm/memberslist"">Membership List</a>
+                        <a class=" collapse-item" href="#">Membership Report</a>
                     </div>
                 </div>
             </li>
