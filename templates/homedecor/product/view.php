@@ -63,6 +63,19 @@ $row = mysqli_fetch_array($result);
         $msg = "Error occured. " . mysqli_error($conn);
         $alert = "danger";
     }
+} elseif ($_GET['dlt']) {
+    $dltID = $_GET['dlt'];
+
+    // Delete
+    $delete = "DELETE FROM homedecor_product WHERE id = '$dltID'";
+    $resDelete = mysqli_query($conn, $delete);
+    if ($resDelete) {
+        $msg = "Succesfully deleted the product";
+        $alert = "success";
+    } else {
+        $msg = "Error occured. " . mysqli_error($conn);
+        $alert = "danger";
+    }
 } ?>
 
 <div class="container-fluid">
@@ -119,7 +132,6 @@ $row = mysqli_fetch_array($result);
                                             <option value="KL15" <?= ($row['supplierCode'] == 'KL15' ? 'selected' : '') ?>>15</option>
                                             <option value="KL20" <?= ($row['supplierCode'] == 'KL20' ? 'selected' : '') ?>>20</option>
                                             <option value="KL30" <?= ($row['supplierCode'] == 'KL30' ? 'selected' : '') ?>>30</option>
-
                                         </select>
                                     </div>
                                 </div>
@@ -205,10 +217,9 @@ $row = mysqli_fetch_array($result);
                                     <input type='file' id="imgInp" name="imgSave" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="<?= (empty($row['img'])) ? '' : $row['img']; ?>">
                                 </div>
                             </div>
-                            <div class="row form-group mt-4 mb-0">
-                                <div class="col-lg-12">
-                                    <button type="submit" name="submit" class="btn btn-info float-right">Submit</button>
-                                </div>
+                            <div class="col-lg-12 p-0 my-4">
+                                <button type="submit" name="submit" class="btn btn-info float-left">Submit</button>
+                                <a href="<?php $_SERVER['PHP_SELF']; ?>?dlt=<?= $id; ?>" name="delete" class="btn btn-danger float-right" onclick="dlt()"><i class="far fa-trash-alt"></i></a>
                             </div>
                         </div>
                     </div>
@@ -238,4 +249,10 @@ $row = mysqli_fetch_array($result);
     $("#imgInp").change(function() {
         readURL(this);
     });
+</script>
+
+<script>
+    function dlt() {
+        alert("Are you sure you want to delete <?= $row['name']; ?>?")
+    }
 </script>
