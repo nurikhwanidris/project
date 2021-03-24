@@ -16,7 +16,9 @@ $id = $_GET['id'];
 $select = "SELECT * FROM homedecor_order WHERE id = '$id'";
 $result = mysqli_query($conn, $select);
 $rowOrder = mysqli_fetch_array($result);
+?>
 
+<?php
 // Explode everything boom!
 $products = explode(',', $rowOrder['product_id']);
 $quantities = explode(',', $rowOrder['quantity']);
@@ -25,15 +27,15 @@ $discountItems = explode(',', $rowOrder['discount_items']);
 $discountAll = explode(',', $rowOrder['discount_all']);
 ?>
 
-<!-- Get customer info -->
 <?php
+// Get customer info
 $customer = "SELECT * FROM homedecor_customer where id = '" . $rowOrder['customer_id'] . "'";
 $resultCustomer = mysqli_query($conn, $customer);
 $rowCustomer = mysqli_fetch_array($resultCustomer);
 ?>
 
-<!-- Get receipt info if exist -->
 <?php
+// Get receipt info if exist
 $selectReceipt = "SELECT * FROM homedecor_receipt WHERE customerID = '" . $rowOrder['customer_id'] . "'";
 $resultReceipt = mysqli_query($conn, $selectReceipt);
 ?>
@@ -145,7 +147,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                                     RM
                                                     <?php
                                                     if ($rowProduct['name'] == 'Shipping') {
-                                                        echo number_format($discount, 2, '.', ',');
+                                                        echo number_format($price, 2, '.', ',');
                                                     } else {
                                                         if (!empty($rowProduct['fixedPrice'])) :
                                                             echo number_format($rowProduct['fixedPrice'], 2, '.', ',');
