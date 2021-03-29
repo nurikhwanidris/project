@@ -5,6 +5,9 @@ include('../../../src/model/dbconn.php');
 // Title
 $title = "Receipt";
 
+// Get data from GET
+//$invoiceId = $_GET['id'];
+
 // Get data from POST
 $productID = $_POST['productID'];
 $customerID = $_POST['customerID'];
@@ -28,7 +31,7 @@ $newName = "INV" . $invoiceNum . '-' . $invoiceDate;
 $target = "../../../upload/invoice/" . basename($newName);
 
 // Check for existing invoice
-$checkInvoice = "SELECT * FROM homedecor_invoice WHERE invoice_num = '$invoiceNum'";
+$checkInvoice = "SELECT * FROM homedecor_invoice WHERE po_id = '$poID'";
 $resultCheck = mysqli_query($conn, $checkInvoice);
 $rowCheck = mysqli_fetch_assoc($resultCheck);
 //$checkRow = mysqli_num_rows($resultCheck);
@@ -84,7 +87,7 @@ if ($resultCheck) {
         }
     } else {
         // If the remaining amount minus amount paid = 0, do this.
-        $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newName', payment_type = '$paymentType' WHERE po_id = '$poID'";
+        $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', total_amount = '$totalAmount', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newName', payment_type = '$paymentType' WHERE id = '$poID'";
         $resultInsert = mysqli_query($conn, $update);
 
         move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);

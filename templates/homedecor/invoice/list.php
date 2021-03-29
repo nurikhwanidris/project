@@ -38,15 +38,16 @@ $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
 
 // Calculate sales generated monthly
-$sales = "SELECT SUM(total_amount) AS totalSales FROM homedecor_invoice WHERE remaining_amount = 0";
+$sales = "SELECT SUM(amount_paid) AS totalSales, SUM(remaining_amount) AS balance FROM homedecor_invoice";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
 $sumSales = $rowSales['totalSales'];
+$balance = $rowSales['balance'];
 
 // Count Pending
-$pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
-$resultPending = mysqli_query($conn, $pending);
-$rowCountPending = mysqli_num_rows($resultPending);
+// $pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
+// $resultPending = mysqli_query($conn, $pending);
+// $rowCountPending = mysqli_num_rows($resultPending);
 ?>
 
 <div class="container-fluid">
@@ -121,7 +122,7 @@ $rowCountPending = mysqli_num_rows($resultPending);
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Pending Assigned Requests</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= $rowCountPending; ?>
+                                RM <?= number_format($balance, 2, '.', ','); ?>
                             </div>
                         </div>
                         <div class="col-auto">

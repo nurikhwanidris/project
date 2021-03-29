@@ -217,9 +217,9 @@ $row = mysqli_fetch_array($result);
                                     <input type='file' id="imgInp" name="imgSave" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="<?= (empty($row['img'])) ? '' : $row['img']; ?>">
                                 </div>
                             </div>
-                            <div class="col-lg-12 p-0 my-4">
+                            <div class="col-lg-12 p-0 mt-4">
                                 <button type="submit" name="submit" class="btn btn-info float-left">Submit</button>
-                                <a href="<?php $_SERVER['PHP_SELF']; ?>?dlt=<?= $id; ?>" name="delete" class="btn btn-danger float-right" onclick="dlt()"><i class="far fa-trash-alt"></i></a>
+                                <a href="<?php $_SERVER['PHP_SELF']; ?>?dlt=<?= $id; ?>" name="delete" class="btn btn-danger float-right" onclick="dlt()"><i class="far fa-trash-alt"></i> Delete</a>
                             </div>
                         </div>
                     </div>
@@ -253,6 +253,7 @@ $row = mysqli_fetch_array($result);
 
 <script>
     function dlt() {
-        alert("Are you sure you want to delete <?= $row['name']; ?>?")
+        alert("Are you sure you want to delete <?= $row['name']; ?>?");
+
     }
 </script>

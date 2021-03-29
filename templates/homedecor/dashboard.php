@@ -14,12 +14,12 @@ $resEnq = mysqli_query($conn, $enq);
 $numOfEnq = mysqli_num_rows($resEnq);
 
 // Fetch number of customers
-$cust = "SELECT id FROM homedecor_customer";
+$cust = "SELECT id FROM homedecor_customer GROUP BY customerName";
 $resCust = mysqli_query($conn, $cust);
 $numOfCust = mysqli_num_rows($resCust);
 
 // Fetch amount of sales made in a month
-$sales = "SELECT SUM(total_amount) AS salesMade FROM homedecor_invoice WHERE remaining_amount = 0";
+$sales = "SELECT SUM(amount_paid) AS salesMade, SUM(remaining_amount) AS balance FROM homedecor_invoice";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
 ?>
@@ -30,6 +30,7 @@ $rowSales = mysqli_fetch_assoc($resSales);
         <h1 class="h3 mb-0 text-gray-800">Arzu Home Dashboard</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
+
     <div class="row">
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
@@ -58,7 +59,7 @@ $rowSales = mysqli_fetch_assoc($resSales);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Total Customer</div>
+                                Total Customers</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 <?= $numOfCust; ?>
                             </div>
@@ -96,9 +97,9 @@ $rowSales = mysqli_fetch_assoc($resSales);
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Assigned Requests</div>
+                                Total Balance Due</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?//= $rowCountPending; ?>
+                                RM <?= number_format($rowSales['balance'], 2, '.', ','); ?>
                             </div>
                         </div>
                         <div class="col-auto">
