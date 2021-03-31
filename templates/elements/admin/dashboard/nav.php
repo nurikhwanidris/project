@@ -183,7 +183,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCRMdecor" aria-expanded="true" aria-controls="collapseCRMdecor">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-user-plus"></i>
                     <span>CRM</span>
                 </a>
                 <div id="collapseCRMdecor" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -204,7 +204,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="true" aria-controls="collapseProduct">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-box-open"></i>
                     <span>Products</span>
                 </a>
                 <div id="collapseProduct" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -219,7 +219,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="true" aria-controls="collapseOrder">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-tags"></i>
                     <span>Customer Order</span>
                 </a>
                 <div id="collapseOrder" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -233,7 +233,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-file-invoice-dollar"></i>
                     <span>Invoice</span>
                 </a>
                 <div id="collapseInvoice" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -247,7 +247,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplier" aria-expanded="true" aria-controls="collapseSupplier">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-parachute-box"></i>
                     <span>Supplier</span>
                 </a>
                 <div id="collapseSupplier" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -266,45 +266,60 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     </div>
                 </div>
             </li>
+
             <!-- Divider -->
-            <hr class="sidebar-divider">
+            <hr class="sidebar-divider d-none d-md-block">
+
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Accounting
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount" aria-expanded="true" aria-controls="collapseAccount">
+                    <i class="fas fa-calculator"></i>
+                    <span>Accounting</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseAccount" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <h6 class="collapse-header">Payment Voucher</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/add-pv">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/list-pv">List</a>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Cash In</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/add-cash">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/list-cash">List</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
-            <!-- Nav Item - Tables -->
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Business Inteligence
+            </div>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
+                    <i class="fas fa-brain"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Reporting Module</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/crm">Customer Report</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/product">Product Report</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/sales">Sales Report</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/supplier">Supplier Report</a>
+
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->

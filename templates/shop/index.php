@@ -6,7 +6,7 @@
 
 <?php
 // find out the number of results stored in database
-$sql = "SELECT * FROM homedecor_product";
+$sql = "SELECT * FROM homedecor_product WHERE quantity != 0";
 $result = mysqli_query($conn, $sql);
 $numberOfResult = mysqli_num_rows($result);
 
@@ -30,11 +30,11 @@ if (isset($_GET['category'])) {
   // Set the category first
   $category = $_GET['category'];
   if ($category) {
-    $sql = "SELECT * FROM homedecor_product WHERE category LIKE '%" . $category . "%' LIMIT " . $firstPageResult . "," .  $resultPerPage;
+    $sql = "SELECT * FROM homedecor_product WHERE quantity != 0 AND category LIKE '%" . $category . "%' LIMIT " . $firstPageResult . "," .  $resultPerPage;
   }
 } else {
   // If no category is selected
-  $sql = "SELECT * FROM homedecor_product LIMIT " . $firstPageResult . "," .  $resultPerPage;
+  $sql = "SELECT * FROM homedecor_product WHERE quantity != 0 LIMIT " . $firstPageResult . "," .  $resultPerPage;
 }
 
 $result = mysqli_query($conn, $sql);

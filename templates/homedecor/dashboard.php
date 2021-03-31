@@ -22,6 +22,21 @@ $numOfCust = mysqli_num_rows($resCust);
 $sales = "SELECT SUM(amount_paid) AS salesMade, SUM(remaining_amount) AS balance FROM homedecor_invoice GROUP BY MONTH(created)";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
+
+// Bar Chart
+$chartRevenue = "SELECT SUM(amount_paid) AS totalAmount FROM homedecor_invoice GROUP BY MONTH(created)";
+$resultChart = mysqli_query($conn, $chartRevenue);
+
+// Pie Chart
+$pieChart = "SELECT COUNT(source) AS countSource, source FROM homedecor_customer GROUP BY source";
+$resultPie = mysqli_query($conn, $pieChart);
+
+// Create the loop
+$dataRow = array();
+while ($rowPie = mysqli_fetch_assoc($resultPie)) {
+    $dataRow = $rowPie;
+}
+
 ?>
 
 <div class="container-fluid">
@@ -112,10 +127,22 @@ $rowSales = mysqli_fetch_assoc($resSales);
     </div>
     <div class="row">
         <div class="col-lg-12 col-xl-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Report</h6>
+                </div>
+                <div class="card-body">
+                    Test
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-xl-12">
             <!-- Bar Chart -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Yearly Revenue Chart</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Yearly Revenue</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-bar">
@@ -132,12 +159,7 @@ $rowSales = mysqli_fetch_assoc($resSales);
 <!-- Footer -->
 <?php include('../elements/admin/dashboard/footer.php') ?>
 
-<!-- Get data for chart -->
-<?php
-$chartRevenue = "SELECT SUM(amount_paid) AS totalAmount FROM homedecor_invoice GROUP BY MONTH(created)";
-$resultChart = mysqli_query($conn, $chartRevenue);
-?>
-
+<!-- Bar Chart -->
 <script>
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -167,7 +189,6 @@ $resultChart = mysqli_query($conn, $chartRevenue);
         }
         return s.join(dec);
     }
-
 
     // Bar Chart Example
     var ctx = document.getElementById("myBarChart");

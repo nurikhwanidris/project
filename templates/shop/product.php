@@ -36,14 +36,14 @@ $row = mysqli_fetch_assoc($res);
 
           <div class="mb-3">
             <a href="">
-              <span class="badge badge-info mr-1"><?= $row['category']; ?></span>
+              <span class="badge purple mr-1"><?= $row['category']; ?></span>
             </a>
             <a href="">
-              <span class="badge purple mr-1">New Arrival</span>
+              <span class="badge blue mr-1">New Arrival</span>
             </a>
             <?php if ($row['quantity'] == 0) : ?>
               <a href="">
-                <span class="badge badge-warning mr-1">Pre-Order</span>
+                <span class="badge red mr-1">Sold out</span>
               </a>
             <?php else : ?>
               <a href="">
@@ -144,9 +144,9 @@ $row = mysqli_fetch_assoc($res);
 
           <p class="lead font-weight-normal"><?= $rowRandProd['name']; ?></p>
           <span class="mr-1">
-            <del>RM<?= number_format(round((($rowRandProd['cost'] * 2.6) + 6) * 1.5), 2, '.', ''); ?></del>
+            <del>RM<?= number_format(($rowRandProd['fixedPrice'] * 1.3), 2, '.', ''); ?></del>
           </span>
-          <span>RM<?= number_format(round(($rowRandProd['cost'] * 2.6) + 6), 2, '.', ''); ?></span>
+          <span>RM<?= number_format($rowRandProd['fixedPrice'], 2, '.', ''); ?></span>
 
         </div>
       <?php endwhile; ?>

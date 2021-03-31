@@ -8,7 +8,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Arzu Home & Living | Handpainted Ceramics From Thailand</title>
+    <title>
+        <?php
+        if (!empty($title)) : echo $title;
+        else : echo "Arzu Home & Living | Handpainted Ceramics From Thailand";
+        endif;
+        ?>
+    </title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <!-- Bootstrap core CSS -->
