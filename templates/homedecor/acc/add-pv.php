@@ -18,7 +18,7 @@
     </div>
     <form action="save-pv.php" method="post">
         <div class="row">
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Add PV</h6>
@@ -57,7 +57,7 @@
                         <div class="row my-2 clearfix">
                             <div class="col-lg-8">
                                 <label for="">Payment Description</label>
-                                <input type="text" name="Description" id="" class="form-control">
+                                <input type="text" id="description" class="form-control clear" placeholder="Write something here">
                             </div>
                             <div class="col-lg-2">
                                 <label for="">Amount</label>
@@ -65,13 +65,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon1">RM</span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="00.00" aria-label="Amount" aria-describedby="basic-addon1">
+                                    <input type="text" id="amount" class="form-control clear" placeholder="00.00" aria-label="Amount" aria-describedby="basic-addon1">
                                 </div>
                             </div>
                             <div class="col-lg-2 ">
                                 <label for="">&nbsp;</label>
                                 <div class="form-group col-md-12 align-self-end">
-                                    <button class="btn btn-primary" id="btn" name="btn" type="button"><i class="far fa-plus-square"></i> Add</button>
+                                    <button class="btn btn-info float-right add-row" id="btn" name="btn" type="button"><i class="far fa-plus-square"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -81,26 +81,32 @@
                                 <div class="row my-2">
                                     <div class="col-lg-10">
                                         <label for="">Output</label>
-                                        <table class="table table-stripped table-bordered">
+                                        <table class="table table-stripped table-bordered table-md">
                                             <thead>
                                                 <tr>
-                                                    <th class="align-middle text-center">/</th>
-                                                    <th class="align-middle text-center">Product ID</th>
-                                                    <th class="align-middle" style="width: 60%;">Product Name</th>
-                                                    <th class="align-middle text-center">Quantity</th>
-                                                    <th class="align-middle text-center">Price</th>
-                                                    <th class="align-middle text-center">Discount</th>
+                                                    <th class="align-middle text-center" style="width: 5%;">/</th>
+                                                    <th class="align-middle" style="width: 70%;">Decription</th>
+                                                    <th class="align-middle text-center">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-lg-2 ">
+                                    <div class="col-lg-2">
                                         <label for="">&nbsp;</label>
                                         <div class="form-group col-md-12 align-self-end">
-                                            <button type="button" class="btn btn-danger delete-row"><i class="far fa-trash-alt"></i> Delete</button>
+                                            <button type="button" class="btn btn-danger delete-row float-right mx-0"><i class="far fa-trash-alt"></i></button>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clear-fix">
+                            <div class="col-lg-10">
+                                <div class="row my-2">
+                                    <div class="col-lg-12">
+                                        <button class="btn btn-success float-right align-self-end" name="submit" type="submit">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -114,3 +120,30 @@
 
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>
+
+<script>
+    // Give it a meaning
+    $(document).ready(function() {
+        $(".add-row").click(function() {
+
+            // Declare that shit
+            var description = $('#description').val();
+            var amount = parseInt($('#amount').val());
+            // Create tabel rows
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'><td class='align-middle text-left'><input type='text' name='description[]' value='" + description + "' class='border-0 text-left form-control'/></td><td><input name='amount[]' class='text-center align-middle form-control border-0' value='" + amount.toFixed(2) + "' /></td></tr>";
+            $("table tbody").append(markup);
+
+            // Clear the value after insert
+            var clear = $('.clear').val('');
+        });
+
+        // Find and remove selected table rows
+        $(".delete-row").click(function() {
+            $("table tbody").find('input[name="record"]').each(function() {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+    });
+</script>
