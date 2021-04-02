@@ -39,6 +39,17 @@ $rowCustomer = mysqli_fetch_array($resultCustomer);
 $selectReceipt = "SELECT * FROM homedecor_receipt WHERE customerID = '" . $rowOrder['customer_id'] . "'";
 $resultReceipt = mysqli_query($conn, $selectReceipt);
 ?>
+
+<?php
+// Get invoice id if exist
+$invoicee = "SELECT * FROM homedecor_invoice where customer_id = '" . $rowOrder['customer_id'] . "'";
+$resultInvoicee = mysqli_query($conn, $invoicee);
+
+if (mysqli_num_rows($resultInvoicee) > 0) {
+    $rowInvoicee = mysqli_fetch_assoc($resultInvoicee);
+    $date =  $rowInvoicee['invoice_date'];
+}
+?>
 <!-- Body -->
 <div class="container-fluid">
     <form action="save-invoice.php" method="POST" enctype="multipart/form-data">
@@ -96,7 +107,20 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                     <p>
                                         Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
                                         <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
-                                        Invoice Date : <span class="font-weight-bold"><?= date("d/m/Y"); ?><input type="text" name="invoiceDate" id="" class="form-control d-none" value="<?= date("Y-m-d"); ?>"></span>
+                                        Invoice Date : <span class="font-weight-bold">
+                                            <?php
+                                            if ($date) : echo date("d/m/Y", strtotime($date));
+                                            else : echo date("d/m/Y");
+                                            endif;
+                                            ?>
+                                            <input type="text" name="invoiceDate" id="" class="form-control d-none" value="
+                                            <?php
+                                            if ($date) : echo date("d/m/Y", strtotime($date));
+                                            else : echo date("d/m/Y");
+                                            endif;
+                                            ?>
+                                            ">
+                                        </span>
                                     </p>
                                 </div>
                             </div>
@@ -219,6 +243,40 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                 </table>
                             </div>
                         </div>
+                        <hr>
+                        <div class="row mt-4">
+                            <div class="col-lg-4 col-xl-4">
+                                <h6 class="font-weight-light text-secondary">Receipts</h6>
+                                <div class="table">
+                                    <table class="table table-bordered table-sm" style="border: 1px solid black;">
+                                        <thead style="border: 1px solid black;">
+                                            <tr style="border: 1px solid black;">
+                                                <th style="border: 1px solid black;" class="align-middle text-center">Receipt Num</th>
+                                                <th style="border: 1px solid black;" class="align-middle text-center">Date</th>
+                                                <th style="border: 1px solid black;" class="align-middle text-center">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="border: 1px solid black;">
+                                            <?php while ($rowReceipt = mysqli_fetch_array($resultReceipt)) : ?>
+                                                <tr style="border: 1px solid black;">
+                                                    <td class="align-middle text-center" style="border: 1px solid black;">
+                                                        <a href="receipt.php?id=<?= $rowReceipt['id']; ?>" target="_blank" class="text-decoration-none"><?= str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT); ?></a>
+                                                    </td>
+                                                    <td class="align-middle text-center" style="border: 1px solid black;">
+                                                        <?php $s = $rowReceipt['created'];
+                                                        $dt = new DateTime($s);
+                                                        echo $date = $dt->format('d/m/Y'); ?>
+                                                    </td>
+                                                    <td class="align-middle text-center" style="border: 1px solid black;">
+                                                        RM<?= $rowReceipt['amountPaid']; ?>
+                                                    </td>
+                                                </tr>
+                                            <?php endwhile; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row mt-4">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="row">
@@ -291,7 +349,7 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                                 </select>
                             </div>
                         </div>
-                        <div class="row my-3">
+                        <div class="row my-3 ">
                             <div class="col-lg-12">
                                 <label for="">Upload Payment Receipt</label>
                                 <input type="file" name="paymentReceipt" id="" class="form-control">
@@ -300,11 +358,12 @@ $resultReceipt = mysqli_query($conn, $selectReceipt);
                         <div class="row mt-3">
                             <div class="col-lg-12">
                                 <button type="submit" name="saveInvoice" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
+                                <button type="submit" name="createReceipt" class="btn btn-info float-left"><i class="fas fa-receipt"></i> Receipt</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card mt-3">
+                <div class="card mt-3 d-none">
                     <div class="card-body">
                         <h6 class="">Receipt Info</h6>
                         <div class="table table-responsive">

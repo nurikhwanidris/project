@@ -86,7 +86,7 @@
                                                 <tr>
                                                     <th class="align-middle text-center" style="width: 5%;">/</th>
                                                     <th class="align-middle" style="width: 70%;">Decription</th>
-                                                    <th class="align-middle text-center">Total</th>
+                                                    <th class="align-middle text-center">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -128,12 +128,12 @@
 
             // Declare that shit
             var description = $('#description').val();
-            var amount = parseInt($('#amount').val());
+            var amount = parseFloat($('#amount').val());
             // Create tabel rows
             var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'><td class='align-middle text-left'><input type='text' name='description[]' value='" + description + "' class='border-0 text-left form-control'/></td><td><input name='amount[]' class='text-center align-middle form-control border-0' value='" + amount.toFixed(2) + "' /></td></tr>";
             $("table tbody").append(markup);
 
-            // Clear the value after insert
+            // Clear all values after insert
             var clear = $('.clear').val('');
         });
 

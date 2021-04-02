@@ -21,6 +21,7 @@ homedecor_invoice.invoice_date AS invoiceDate,
 homedecor_invoice.total_amount AS invoiceTotal,
 homedecor_invoice.invoice_status AS invoiceStatus,
 homedecor_invoice.remaining_amount AS balanceDue,
+homedecor_invoice.amount_paid AS amountPaid,
 homedecor_invoice.modified AS modified
 FROM homedecor_invoice
 JOIN homedecor_customer
@@ -38,7 +39,7 @@ $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
 
 // Calculate sales generated monthly
-$sales = "SELECT SUM(amount_paid) AS totalSales, SUM(remaining_amount) AS balance FROM homedecor_invoice";
+$sales = "SELECT SUM(amount_paid) AS totalSales, SUM(remaining_amount) AS balance FROM homedecor_invoice WHERE MONTH(created) = MONTH(NOW()) AND YEAR(created) = YEAR(NOW())";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
 $sumSales = $rowSales['totalSales'];
@@ -102,7 +103,7 @@ $balance = $rowSales['balance'];
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Earnings</div>
+                                Earnings (Monthly)</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($sumSales, 2, '.', ','); ?></div>
                         </div>
                         <div class="col-auto">
@@ -120,7 +121,7 @@ $balance = $rowSales['balance'];
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Assigned Requests</div>
+                                Pending Assigned Requests (Monthly)</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 RM <?= number_format($balance, 2, '.', ','); ?>
                             </div>
@@ -157,14 +158,25 @@ $balance = $rowSales['balance'];
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered table-hover" id="myTable" width="100%" cellspacing="0">
+                            <colgroup>
+                                <col>
+                                <col>
+                                <col>
+                                <col class="bg-info">
+                                <col class="bg-success">
+                                <col class="bg-warning">
+                                <col>
+                                <col>
+                            </colgroup>
                             <thead>
                                 <tr>
-                                    <th class="align-middle text-center">Invoice Number</th>
+                                    <th class="align-middle text-center ">Invoice Number</th>
                                     <th class="align-middle">Client</th>
                                     <th class="align-middle text-center">Invoice Date</th>
-                                    <th class="align-middle text-center">Invoice Total</th>
-                                    <th class="align-middle text-center">Balance Due</th>
+                                    <th class="align-middle text-center text-white">Invoice Total</th>
+                                    <th class="align-middle text-center text-white">Amount Paid</th>
+                                    <th class="align-middle text-center text-white">Balance Due</th>
                                     <th class="align-middle text-center">Due Date</th>
                                     <th class="align-middle text-center">Status</th>
                                 </tr>
@@ -172,7 +184,7 @@ $balance = $rowSales['balance'];
                             <tbody>
                                 <?php while ($rowInvoice = mysqli_fetch_array($resultinvoice)) : ?>
                                     <tr>
-                                        <td class="align-middle text-center">
+                                        <td class="align-middle text-center ">
                                             <a href="/project/templates/homedecor/invoice/view?id=<?= $rowInvoice['id']; ?>" target="_blank">
                                                 INV<?= $rowInvoice['invoiceNum']; ?>
                                             </a>
@@ -183,11 +195,12 @@ $balance = $rowSales['balance'];
                                         <td class="align-middle text-center">
                                             <?= date("d/m/Y", strtotime($rowInvoice['invoiceDate'])); ?>
                                         </td>
-                                        <td class="align-middle text-center">
-                                            RM<?= $rowInvoice['invoiceTotal']; ?>
+                                        <td class="align-middle text-center text-white">
+                                            RM <?= $rowInvoice['invoiceTotal']; ?>
                                         </td>
-                                        <td class="align-middle text-center">
-                                            RM<?= number_format($rowInvoice['balanceDue'], 2, '.', ''); ?>
+                                        <td class="align-middle text-center text-white">RM <?= $rowInvoice['amountPaid']; ?></td>
+                                        <td class="align-middle text-center text-white">
+                                            RM <?= number_format($rowInvoice['balanceDue'], 2, '.', ''); ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?php
