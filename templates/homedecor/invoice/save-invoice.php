@@ -9,6 +9,8 @@ $title = "Receipt";
 //$invoiceId = $_GET['id'];
 
 // Get data from POST
+// $saveInvoice = $_POST['saveInvoice'];
+// $createReceipt = $_POST['createReceipt'];
 $productID = $_POST['productID'];
 $customerID = $_POST['customerID'];
 $quantity = $_POST['quantity'];
@@ -26,9 +28,9 @@ $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
 
 // Renamed and find a target
-$paymentReceipt = $_FILES['paymentReceipt']['name'];
-$newName = "INV" . $invoiceNum . '-' . $invoiceDate;
-$target = "../../../upload/invoice/" . basename($newName);
+$paymentReceipt = explode(".", $_FILES["paymentReceipt"]["name"]);
+$newfilename = "INV" . $invoiceNum . '-' . round(microtime(true)) . '.' . end($paymentReceipt);
+$target = $_SERVER['DOCUMENT_ROOT'] . "/project/upload/invoice/" . $newfilename;
 
 // Check for existing invoice
 $checkInvoice = "SELECT * FROM homedecor_invoice WHERE po_id = '$poID'";
@@ -36,91 +38,108 @@ $resultCheck = mysqli_query($conn, $checkInvoice);
 $rowCheck = mysqli_fetch_assoc($resultCheck);
 //$checkRow = mysqli_num_rows($resultCheck);
 
-if ($resultCheck) {
-    if (mysqli_num_rows($resultCheck) == 0) {
-        if ($totalAmount == $amountPaid) {
-            // Insert if a lucky client paid the full amount without deposit
-            $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newName', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
-            $resultInsert = mysqli_query($conn, $insert);
+if (isset($_POST['saveInvoice'])) {
+    if ($resultCheck) {
+        if (mysqli_num_rows($resultCheck) == 0) {
+            if ($totalAmount == $amountPaid) {
+                // Insert if a lucky client paid the full amount without deposit
+                $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newfilename', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
+                $resultInsert = mysqli_query($conn, $insert);
 
-            // move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+                // move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
 
-            // Update product table
-            for ($i = 0; $i < count($productID); $i++) {
-                $id = $productID[$i];
-                $quantities = $quantity[$i];
-                $update = "UPDATE homedecor_product SET purchased = (purchased + '$quantities') WHERE id = '$id'";
+                // Update product table
+                for ($i = 0; $i < count($productID); $i++) {
+                    $id = $productID[$i];
+                    $quantities = $quantity[$i];
+                    $update = "UPDATE homedecor_product SET purchased = (purchased + '$quantities') WHERE id = '$id'";
+                    $result = mysqli_query($conn, $update);
+                }
+                if ($result) {
+                    move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+                    $msg = "Successfully inserted the invoice #" . $invoiceNum;
+                    $alert = "success";
+                } else {
+                    $msg = "Error occcured" . mysqli_error($conn);
+                    $alert = "danger";
+                }
+            } elseif ($invoiceStatus == 'Deposit') {
+                // If some1 made a deposit first, do this
+                $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newfilename', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
+                $resultInsert = mysqli_query($conn, $insert);
+                if ($resultInsert) {
+                    move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+                    $msg = "Successfully created the invoice #" . $invoiceNum;
+                    $alert = "success";
+                } else {
+                    $msg = "Error occcured" . mysqli_error($conn);
+                    $alert = "danger";
+                }
+            } else {
+                // If the remaining amount is paid
+                $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newfilename', payment_type = '$paymentType' WHERE po_id = '$poID'";
                 $result = mysqli_query($conn, $update);
-            }
-            if ($result) {
-                move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
-                $msg = "Successfully inserted the invoice #" . $invoiceNum;
-                $alert = "success";
-            } else {
-                $msg = "Error occcured" . mysqli_error($conn);
-                $alert = "danger";
-            }
-        } elseif ($invoiceStatus == 'Deposit') {
-            // If some1 made a deposit first, do this
-            $insert = "INSERT INTO homedecor_invoice (customer_id, invoice_num, invoice_date, invoice_status, payment_receipt, payment_type, total_amount, amount_paid, remaining_amount, created, modified, po_id) VALUES ('$customerID', '$invoiceNum', '$invoiceDate', '$invoiceStatus', '$newName', '$paymentType', '$totalAmount', '$amountPaid', round('$totalAmount'-'$amountPaid',2), '$created', '$modified', '$poID')";
-            $resultInsert = mysqli_query($conn, $insert);
-            if ($resultInsert) {
-                move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
-                $msg = "Successfully created the invoice #" . $invoiceNum;
-                $alert = "success";
-            } else {
-                $msg = "Error occcured" . mysqli_error($conn);
-                $alert = "danger";
+                if ($result) {
+                    move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+                    $msg = "Successfull updated the invoice status to " . $invoiceStatus . " made";
+                    $alert = "success";
+                } else {
+                    $msg = "Error occcured" . mysqli_error($conn);
+                    $alert = 'danger';
+                }
             }
         } else {
-            // If the remaining amount is paid
-            $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newName', payment_type = '$paymentType' WHERE po_id = '$poID'";
-            $result = mysqli_query($conn, $update);
-            if ($result) {
-                move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
-                $msg = "Successfull updated the invoice status to " . $invoiceStatus . " made";
-                $alert = "success";
-            } else {
-                $msg = "Error occcured" . mysqli_error($conn);
-                $alert = 'danger';
+            // If the remaining amount minus amount paid = 0, do this.
+            $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', total_amount = '$totalAmount', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newfilename', payment_type = '$paymentType' WHERE id = '$poID'";
+            $resultInsert = mysqli_query($conn, $update);
+
+            move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+            $msg = "Successfully updated the invoice #" . $invoiceNum;
+            $alert = "success";
+
+            if ($rowCheck['remaining_amount'] - $amountPaid == 0) {
+                $update = "UPDATE homedecor_invoice SET invoice_status ='Full' WHERE po_id = '$poID'";
+                $resultInsert = mysqli_query($conn, $update);
+                // Update product table
+                for ($i = 0; $i < count($productID); $i++) {
+                    $id = $productID[$i];
+                    $quantities = $quantity[$i];
+                    $update = "UPDATE homedecor_product SET purchased = (purchased + '$quantities') WHERE id = '$id'";
+                    $result = mysqli_query($conn, $update);
+                }
+                if ($result) {
+                    move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
+                    $msg = "Successfully updated the invoice #" . $invoiceNum;
+                    $alert = "success";
+                } else {
+                    $msg = "Error occcured" . mysqli_error($conn);
+                    $alert = "danger";
+                }
             }
         }
     } else {
-        // If the remaining amount minus amount paid = 0, do this.
-        $update = "UPDATE homedecor_invoice SET invoice_status = '$invoiceStatus', total_amount = '$totalAmount', amount_paid = '$amountPaid', remaining_amount = round((remaining_amount-'$amountPaid'),2), payment_receipt = '$newName', payment_type = '$paymentType' WHERE id = '$poID'";
-        $resultInsert = mysqli_query($conn, $update);
-
+        echo "Error " . mysqli_error($conn);
+    }
+    // Create receipt
+    $createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified')";
+    $resultReceipt = mysqli_query($conn, $createReceipt);
+} elseif (isset($_POST['createReceipt'])) {
+    // Create receipt
+    $createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified')";
+    $resultReceipt = mysqli_query($conn, $createReceipt);
+    if ($resultReceipt) {
         move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
-        $msg = "Successfully updated the invoice #" . $invoiceNum;
+        $msg = "Successfully updated the receipt for invoice #" . $invoiceNum;
         $alert = "success";
-
-        if ($rowCheck['remaining_amount'] - $amountPaid == 0) {
-            $update = "UPDATE homedecor_invoice SET invoice_status ='Full' WHERE po_id = '$poID'";
-            $resultInsert = mysqli_query($conn, $update);
-            // Update product table
-            for ($i = 0; $i < count($productID); $i++) {
-                $id = $productID[$i];
-                $quantities = $quantity[$i];
-                $update = "UPDATE homedecor_product SET purchased = (purchased + '$quantities') WHERE id = '$id'";
-                $result = mysqli_query($conn, $update);
-            }
-            if ($result) {
-                move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
-                $msg = "Successfully updated the invoice #" . $invoiceNum;
-                $alert = "success";
-            } else {
-                $msg = "Error occcured" . mysqli_error($conn);
-                $alert = "danger";
-            }
-        }
+    } else {
+        $msg = "Error occcured" . mysqli_error($conn);
+        $alert = "danger";
     }
 } else {
     echo "Error " . mysqli_error($conn);
 }
 
-// Create receipt
-$createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified')";
-$resultReceipt = mysqli_query($conn, $createReceipt);
+
 
 // if ($resultReceipt) {
 //     echo 'It worked';
