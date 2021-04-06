@@ -107,20 +107,11 @@ if (mysqli_num_rows($resultInvoicee) > 0) {
                                     <p>
                                         Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
                                         <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
-                                        Invoice Date : <span class="font-weight-bold">
-                                            <?php
-                                            if ($date) : echo date("d/m/Y", strtotime($date));
-                                            else : echo date("d/m/Y");
-                                            endif;
-                                            ?>
-                                            <input type="text" name="invoiceDate" id="" class="form-control d-none" value="
-                                            <?php
-                                            if ($date) : echo date("d/m/Y", strtotime($date));
-                                            else : echo date("d/m/Y");
-                                            endif;
-                                            ?>
-                                            ">
-                                        </span>
+                                        <span class="text-left">Invoice Date</span>: <?php
+                                                                                        if ($rowInvoicee['invoice_date'] != '') : echo '<span class="font-weight-bold">' . date("d/m/Y", strtotime($rowInvoicee['invoice_date'])) . '</span> <input name="invoiceDate" type="" value="' . $rowInvoicee['invoice_date'] . '" class="d-none">';
+                                                                                        else : echo '<input type="date" class="border-0 input-sm" name="invoiceDate">';
+                                                                                        endif;
+                                                                                        ?>
                                     </p>
                                 </div>
                             </div>
@@ -358,7 +349,7 @@ if (mysqli_num_rows($resultInvoicee) > 0) {
                         <div class="row mt-3">
                             <div class="col-lg-12">
                                 <button type="submit" name="saveInvoice" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
-                                <button type="submit" name="createReceipt" class="btn btn-info float-left"><i class="fas fa-receipt"></i> Receipt</button>
+                                <button type="submit" name="createReceipt" class="btn btn-info float-left d-none"><i class="fas fa-receipt"></i> Receipt</button>
                             </div>
                         </div>
                     </div>

@@ -292,6 +292,10 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <h6 class="collapse-header">Cash In</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/acc/add-cash">Add</a>
                         <a class="collapse-item" href="/project/templates/homedecor/acc/list-cash">List</a>
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Settings</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/settings">Settings</a>
                     </div>
                 </div>
             </li>

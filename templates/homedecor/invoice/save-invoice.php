@@ -22,7 +22,7 @@ $totalAmount = $_POST['totalAmount'];
 $amountPaid = $_POST['amountPaid'];
 $poID = $_POST['poID'];
 
-// // Date created and modified
+// Date created and modified
 date_default_timezone_set("Asia/Kuala_Lumpur");
 $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
@@ -30,7 +30,7 @@ $modified = date('Y-m-d H:i:s');
 // Renamed and find a target
 $paymentReceipt = explode(".", $_FILES["paymentReceipt"]["name"]);
 $newfilename = "INV" . $invoiceNum . '-' . round(microtime(true)) . '.' . end($paymentReceipt);
-$target = $_SERVER['DOCUMENT_ROOT'] . "/project/upload/invoice/" . $newfilename;
+$target = $_SERVER['DOCUMENT_ROOT'] . "/upload/invoice/" . $newfilename;
 
 // Check for existing invoice
 $checkInvoice = "SELECT * FROM homedecor_invoice WHERE po_id = '$poID'";
@@ -121,11 +121,11 @@ if (isset($_POST['saveInvoice'])) {
         echo "Error " . mysqli_error($conn);
     }
     // Create receipt
-    $createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified')";
+    $createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified, invoiceDate) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified', '$invoiceDate')";
     $resultReceipt = mysqli_query($conn, $createReceipt);
 } elseif (isset($_POST['createReceipt'])) {
     // Create receipt
-    $createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified')";
+    $createReceipt = "INSERT INTO homedecor_receipt (customerID, invoiceNum, amountPaid, created, modified, invoiceDate) VALUES ('$customerID', '$invoiceNum', '$amountPaid', '$created', '$modified', '$invoiceDate')";
     $resultReceipt = mysqli_query($conn, $createReceipt);
     if ($resultReceipt) {
         move_uploaded_file($_FILES['paymentReceipt']['tmp_name'], $target);
@@ -185,7 +185,7 @@ $rowReceipt = mysqli_fetch_assoc($resultReceipt);
                         <div class="col-lg-12 col-xl-12">
                             <div class="col-4 float-left text-left">
                                 <h4 class="font-weight-bold">Payment Receipt</h4>
-                                <img src="/project/upload/img/invoice-logo-1.png" alt="" srcset="" style="height: auto; width: 40%;">
+                                <img src="/upload/img/invoice-logo-1.png" alt="" srcset="" style="height: auto; width: 40%;">
                             </div>
                             <div class="col-4 float-right text-right">
                                 <h5 class=""><span class="font-weight-bold">No :</span> <u><?= str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT); ?></u></h5>

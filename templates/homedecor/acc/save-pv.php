@@ -7,24 +7,6 @@
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-<?php
-$payTo = $_POST['payTo'];
-$bankAcc = $_POST['bankAcc'];
-
-// Implode
-$description = implode(',', $_POST['description']);
-$amount = implode(',', $_POST['amount']);
-
-// Sanitize bank acc
-$numAcc = $_POST['numAcc'];
-$sanitizeAccNum = preg_replace('/[^0-9]/', '', $numAcc);
-
-if (isset($_POST['save'])) {
-    $insert = "INSERT INTO homedecor_pv () VALUES ()";
-    $result = mysqli_query($conn, $insert);
-}
-?>
-
 <!-- This is where the magic happens -->
 <div class="container-fluid">
     <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post">

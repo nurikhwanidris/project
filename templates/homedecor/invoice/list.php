@@ -177,7 +177,6 @@ $balance = $rowSales['balance'];
                                     <th class="align-middle text-center text-white">Invoice Total</th>
                                     <th class="align-middle text-center text-white">Amount Paid</th>
                                     <th class="align-middle text-center text-white">Balance Due</th>
-                                    <th class="align-middle text-center">Due Date</th>
                                     <th class="align-middle text-center">Status</th>
                                 </tr>
                             </thead>
@@ -201,13 +200,6 @@ $balance = $rowSales['balance'];
                                         <td class="align-middle text-center text-white">RM <?= $rowInvoice['amountPaid']; ?></td>
                                         <td class="align-middle text-center text-white">
                                             RM <?= number_format($rowInvoice['balanceDue'], 2, '.', ''); ?>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <?php
-                                            $invoiceDate = $rowInvoice['invoiceDate'];
-                                            $newDate = date('d/m/Y', strtotime('+14 days', strtotime($invoiceDate)));
-                                            echo $newDate;
-                                            ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <?php if ($rowInvoice['invoiceStatus'] == 'Deposit') : ?>
