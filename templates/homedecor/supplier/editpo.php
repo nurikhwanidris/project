@@ -44,20 +44,23 @@ if (isset($_POST['submit'])) {
     $staffName = $_POST['staffName'];
     $img = implode(',', $_POST['img']);
 
+    // Discount
+    $discount = $_POST['discount'];
+
     // Date created and modified
     date_default_timezone_set("Asia/Kuala_Lumpur");
     $created = date('Y-m-d H:i:s');
     $modified = date('Y-m-d H:i:s');
 
     // Update the table
-    $update = "UPDATE homedecor_supplier_order SET productID = '$productId', productCost ='$productCost', productQty = '$quantity', productPrice = '$productPrice' WHERE id = '$id'";
+    $update = "UPDATE homedecor_supplier_order SET productID = '$productId', productCost ='$productCost', productQty = '$quantity', productPrice = '$productPrice', discount = '$discount' WHERE id = '$id'";
 
     $resutUpdate = mysqli_query($conn, $update);
 
     if ($resutUpdate) {
         $msg = "Successfully created a new purchase order.";
         $alert = "success";
-        header('Location: /templates/homedecor/supplier/polist?msg=success&alert=success');
+        header('Location: /project/templates/homedecor/supplier/polist?msg=success&alert=success');
     } else {
         $msg = "Error " . mysqli_error($conn);
     }

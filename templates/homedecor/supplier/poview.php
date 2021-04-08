@@ -33,6 +33,36 @@ $staffName = explode(',', $rowOrder['staffName']);
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
+<style>
+    @media print {
+        @page {
+            size: A4;
+            /* DIN A4 standard, Europe */
+            margin: 0;
+        }
+
+        html,
+        body {
+            width: 210mm;
+            /* height: 297mm; */
+            height: 282mm;
+            font-size: 11px;
+            background: #FFF;
+            overflow: visible;
+        }
+
+        body {
+            padding-top: 15mm;
+        }
+
+        table,
+        tr {
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+    }
+</style>
+
 <div class="container-fluid">
     <div class="row mt-4">
         <div class="col-lg-12 col-xl-12 p-0 m-0">
@@ -148,7 +178,33 @@ $staffName = explode(',', $rowOrder['staffName']);
                                     <?php endfor; ?>
                                     <tr>
                                         <td class="text-right align-middle" colspan="6">
-                                            ฿ <?= number_format(array_sum($productPrice), 2, '.', ','); ?>
+                                            Total
+                                        </td>
+                                        <td class="text-center align-middle" colspan="6">
+                                            ฿ <?= $amount = number_format(array_sum($productPrice), 2, '.', ','); ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right align-middle" colspan="6">
+                                            Discount
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= $discount = $rowOrder['discount']; ?>%
+                                        </td>
+                                    </tr>
+                                    <tr class="font-weight-bold">
+                                        <td class="text-right align-middle" colspan="6">
+                                            Grand Total
+                                        </td>
+                                        <td style="background-color: yellow;" class="text-center align-middle">
+                                            <?php
+                                            $total = array_sum($productPrice);
+                                            $discLvl = $discount / 100;
+                                            $totalAmount = number_format($total - ($total * $discLvl), 2, '.', ',');
+                                            ?>
+                                            <h5 class="font-weight-bold">
+                                                ฿ <?= $totalAmount; ?>
+                                            </h5>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -159,6 +215,11 @@ $staffName = explode(',', $rowOrder['staffName']);
                         <div class="col-lg-12 col-xl-12">
                             <div class="col-lg-4 float-right text-right">
                                 <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
+                            </div>
+                            <div class="col-lg-4 float-left text-left">
+                                <form action="" method="post">
+                                    <button class="btn btn-info" type="submit" name="createPDF">Create PDF</button>
+                                </form>
                             </div>
                         </div>
                     </div>
