@@ -32,6 +32,7 @@ if (isset($_POST['submit'])) {
     $created = date('Y-m-d H:i:s');
     $modified = date('Y-m-d H:i:s');
 
+    // Insert into table
     $insert = "INSERT INTO homedecor_supplier (businessName, firstName, lastName, supplierPhone, supplierEmail, supplierAddress1, supplierAddress2, supplierCity, supplierPostcode, supplierState, supplierBank, supplierAccountNumber, supplierCurrency, created, modified) VALUES ('$businessName', '$firstName', '$lastName', '$supplierPhone', '$supplierEmail', '$supplierAddress1', '$supplierAddress2', '$supplierCity', '$supplierPostcode', '$supplierState', '$supplierBank', '$supplierAccountNumber', '$supplierCurrency', '$created', '$modified')";
     $resInsert = mysqli_query($conn, $insert);
 

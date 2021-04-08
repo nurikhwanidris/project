@@ -50,20 +50,18 @@ if (isset($_POST['submit'])) {
     $modified = date('Y-m-d H:i:s');
 
     // Update the table
-    $update = "UPDATE homedecor_supplier_order SET productID = '$productId', productCost ='$productCost', productQty = '$productQty', productPrice = '$productPrice' WHERE id = '$id'";
+    $update = "UPDATE homedecor_supplier_order SET productID = '$productId', productCost ='$productCost', productQty = '$quantity', productPrice = '$productPrice' WHERE id = '$id'";
 
     $resutUpdate = mysqli_query($conn, $update);
 
     if ($resutUpdate) {
         $msg = "Successfully created a new purchase order.";
         $alert = "success";
-        header('Location: /project/templates/homedecor/supplier/polist?msg=success&alert=success');
+        header('Location: /templates/homedecor/supplier/polist?msg=success&alert=success');
     } else {
         $msg = "Error " . mysqli_error($conn);
     }
     echo $msg;
-} else {
-    echo "Error";
 }
 ?>
 
@@ -89,6 +87,15 @@ if (isset($_POST['submit'])) {
                                         <option value="<?= $rowSupply['id']; ?>"><?= $rowSupply['businessName']; ?></option>
                                     <?php endwhile; ?>
                                 </select>
+                            </div>
+                            <div class="col-lg-1">
+                                <label for="">Discount</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" name="discount" id="quantity" class="form-control text-center">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon1">%</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row my-2">
@@ -192,7 +199,7 @@ if (isset($_POST['submit'])) {
     // This should be the path to a PHP script set up to receive $_POST['product']
     // and return the product info in a JSON encoded array.
     // You should also set the Content-Type of the response to application/json so as our javascript parses it automatically.
-    var apiUrl = '/project/templates/homedecor/crm/getProductInfo.php';
+    var apiUrl = '/templates/homedecor/crm/getProductInfo.php';
 
     function refreshInputsForProduct(product) {
         $.post(apiUrl, {
