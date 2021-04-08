@@ -48,6 +48,21 @@ if (isset($_POST['addCategory'])) {
         $alert = "danger";
     }
 }
+if (isset($_GET['dlt'])) {
+    $dlt = $_GET['dlt'];
+
+    // Dlete from table
+    $dlete = "DELETE FROM homedecor_pv_category WHERE id = '$dlt'";
+    $resdlt = mysqli_query($conn, $dlete);
+
+    if ($resdlt) {
+        $msg = "Succesfully deleted the category";
+        $alert = "success";
+    } else {
+        $msg = "Error occured " . mysqli_error($conn);
+        $alert = "danger";
+    }
+}
 ?>
 
 <div class="container-fluid">
@@ -114,6 +129,7 @@ if (isset($_POST['addCategory'])) {
                                                 <th>/</th>
                                                 <th>Category</th>
                                                 <th>Created</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -123,6 +139,7 @@ if (isset($_POST['addCategory'])) {
                                                     <td><input type="checkbox" name="delete" id=""></td>
                                                     <td><?= $rowPV['name']; ?></td>
                                                     <td><?= $rowPV['created']; ?></td>
+                                                    <td><a href="settings?dlt=<?= $rowPV['id']; ?>" class="btn btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="far fa-trash-alt"></i></a></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>

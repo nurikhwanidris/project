@@ -16,7 +16,54 @@ $product = "SELECT * FROM homedecor_product WHERE thb != 0";
 $resultproduct = mysqli_query($conn, $product);
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
-    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'];
+    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'] . ' - ' . $rowProduct['orderNo'];
+}
+
+
+// Get the product
+$id = $_GET['id'];
+$po = "SELECT * FROM homedecor_supplier_order WHERE id = '$id'";
+$resultPO = mysqli_query($conn, $po);
+$rowPO = mysqli_fetch_assoc($resultPO);
+
+// Explode everything
+$productIDs = explode(',', $rowPO['productID']);
+$productCosts = explode(',', $rowPO['productCost']);
+$productQtys = explode(',', $rowPO['productQty']);
+$productPrices = explode(',', $rowPO['productPrice']);
+?>
+
+<?php
+if (isset($_POST['submit'])) {
+    // Get everything from the post
+    $supplier = $_POST['supplier'];
+    $productId = implode(',', $_POST['productId']);
+    $productCost = implode(',', $_POST['productCost']);
+    $quantity = implode(',', $_POST['quantity']);
+    $productPrice = implode(',', $_POST['productPrice']);
+    $staffName = $_POST['staffName'];
+    $img = implode(',', $_POST['img']);
+
+    // Date created and modified
+    date_default_timezone_set("Asia/Kuala_Lumpur");
+    $created = date('Y-m-d H:i:s');
+    $modified = date('Y-m-d H:i:s');
+
+    // Update the table
+    $update = "UPDATE homedecor_supplier_order SET productID = '$productId', productCost ='$productCost', productQty = '$productQty', productPrice = '$productPrice' WHERE id = '$id'";
+
+    $resutUpdate = mysqli_query($conn, $update);
+
+    if ($resutUpdate) {
+        $msg = "Successfully created a new purchase order.";
+        $alert = "success";
+        header('Location: /project/templates/homedecor/supplier/polist?msg=success&alert=success');
+    } else {
+        $msg = "Error " . mysqli_error($conn);
+    }
+    echo $msg;
+} else {
+    echo "Error";
 }
 ?>
 
@@ -30,7 +77,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Create Purchase Order</h6>
                 </div>
-                <form action="po.php" class="form-group" method="POST">
+                <form action="<?php $_SERVER['PHP_SELF']; ?>" class="form-group" method="POST">
                     <input type="text" name="staffName" id="" class="form-control d-none" value="<?= $staffName; ?>">
                     <div class="card-body">
                         <div class="row my-2">
@@ -94,6 +141,24 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php for ($i = 0; $i < count($productIDs); $i++) :
+                                            $products = $productIDs[$i];
+                                            $quantity = $productQtys[$i];
+                                            $cost = $productCosts[$i];
+                                            $price = $productPrices[$i];
+
+                                            $resultProductss = mysqli_query($conn, "SELECT* FROM homedecor_product WHERE id = '$products'");
+                                            $rowPOs = mysqli_fetch_array($resultProductss);
+                                        ?>
+                                            <td class='align-middle text-center'><input type='checkbox' name='record'></td>
+                                            <td class='text-center align-middle'><?= $rowPOs['orderNo']; ?></td>
+                                            <td class='align-middle'><input type='text' class='border-0 form-control' value='<?= $rowPOs['name']; ?>'><input type='text' name='productId[]' value='<?= $rowPOs['id']; ?>' class='d-none'></td>
+                                            <td class='text-center align-middle'><input type='text' class='text-center border-0 form-control' name='productCost[]' value='<?= $cost; ?>'></td>
+                                            <td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='<?= $quantity; ?>'></td>
+                                            <td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='<?= $price; ?>'></td>
+                                            <td class='text-center align-middle'><img src='/project/upload/img/product/<?= $rowPOs['img']; ?>' style='width:124px; height: 124px;'><input type='text' name='img[]' class='d-none' value='" + img + "'></td>
+                                            </tr>
+                                        <?php endfor; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -103,7 +168,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                         </div>
                         <div class="row my-3">
                             <div class="col">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                             </div>
                         </div>
                     </div>

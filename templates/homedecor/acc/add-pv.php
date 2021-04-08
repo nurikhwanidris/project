@@ -116,12 +116,12 @@ if (isset($_POST['submit'])) {
                                 <label for="">Category</label>
                                 <select id="category" class="form-control">
                                     <option value="">Select</option>
-                                    <option value="Bank Interest">Bank Interest</option>
-                                    <option value="Capital">Capital</option>
-                                    <option value="Claim">Claim</option>
-                                    <option value="PPE">PPE</option>
-                                    <option value="Supplier">Supplier</option>
-                                    <option value="Sales Refund">Sales Refund</option>
+                                    <?php
+                                    $resultAsd = mysqli_query($conn, "SELECT * FROM homedecor_pv_category");
+                                    while ($rowCategory = mysqli_fetch_array($resultAsd)) :
+                                    ?>
+                                        <option value="<?= $rowCategory['name']; ?>"><?= $rowCategory['name']; ?></option>
+                                    <?php endwhile; ?>
                                 </select>
                             </div>
                             <div class="col-lg-2">

@@ -125,6 +125,7 @@ $resFetch = mysqli_query($conn, $fetch);
                                     <th class="align-middle text-center">Status</th>
                                     <th class="align-middle text-center">Created by</th>
                                     <th class="align-middle text-center">Created</th>
+                                    <th class="align-middle text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,6 +158,9 @@ $resFetch = mysqli_query($conn, $fetch);
                                         </td>
                                         <td class="align-middle text-center">
                                             <?= $rowList['created']; ?>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <a href="editpo.php?id=<?= $rowList['id']; ?>" class="btn btn-info"><i class="far fa-edit"></i></a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
