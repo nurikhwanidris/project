@@ -30,10 +30,22 @@ $staffName = explode(',', $rowOrder['staffName']);
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 
+<!-- Link -->
+<link rel="stylesheet" type="text/css" href="/project/assets/css/print.min.css">
+
+<!-- jsPDF -->
+<script src="/project/assets/js/jspdf.umd.js"></script>
+<script src="/project/assets/js/jspdf.plugin.autotable.js"></script>
+
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
 <style>
+    .doubleUnderline {
+        text-decoration-line: underline;
+        text-decoration-style: double;
+    }
+
     @media print {
         @page {
             size: A4;
@@ -67,7 +79,7 @@ $staffName = explode(',', $rowOrder['staffName']);
     <div class="row mt-4">
         <div class="col-lg-12 col-xl-12 p-0 m-0">
             <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-body" id="">
                     <div class="row">
                         <div class="col-lg-12 col-xl-12">
                             <div class="col-4 float-left text-left">
@@ -81,7 +93,7 @@ $staffName = explode(',', $rowOrder['staffName']);
                                 </p>
                             </div>
                             <div class="col-4 float-right text-right">
-                                <img src="/project/upload/img/invoice-logo-1.png" alt="" srcset="" style="height: auto; width: 70%;">
+                                <img src="/project/upload/img/invoice-logo-1.png" alt="" srcset="" style="height: auto; width: 70%;" id="imgNjir">
                             </div>
                         </div>
                     </div>
@@ -126,15 +138,15 @@ $staffName = explode(',', $rowOrder['staffName']);
                     </div>
                     <div class="row mt-3">
                         <div class="col-lg-12 col-xl-12 table-reponsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="table">
                                 <thead>
                                     <tr>
                                         <th class="align-middle text-center">No</th>
                                         <th class="align-middle text-center">Picture</th>
                                         <th class="align-middle" style="width: 40%;">Description</th>
-                                        <th class="align-middle text-right" style="width: 15%;">Unit Price ฿</th>
+                                        <th class="align-middle text-right" style="width: 15%;">Unit Price <span class="d-none">THB</span></th>
                                         <th class="align-middle text-center">Qty</th>
-                                        <th class="align-middle text-right" style="width: 10%;">Amount ฿</th>
+                                        <th class="align-middle text-right" style="width: 10%;">Amount <span class="d-none">THB</span></th>
                                         <th class="align-middle text-center d-print-none">Code</th>
                                     </tr>
                                 </thead>
@@ -180,8 +192,8 @@ $staffName = explode(',', $rowOrder['staffName']);
                                         <td class="text-right align-middle" colspan="6">
                                             Total
                                         </td>
-                                        <td class="text-center align-middle" colspan="6">
-                                            ฿ <?= $amount = number_format(array_sum($productPrice), 2, '.', ','); ?>
+                                        <td class="text-center align-middle">
+                                            THB <?= $amount = number_format(array_sum($productPrice), 2, '.', ','); ?>
                                         </td>
                                     </tr>
                                     <tr>
@@ -194,7 +206,9 @@ $staffName = explode(',', $rowOrder['staffName']);
                                     </tr>
                                     <tr class="font-weight-bold">
                                         <td class="text-right align-middle" colspan="6">
-                                            Grand Total
+                                            <h5 class="font-weight-bold ">
+                                                Grand Total
+                                            </h5>
                                         </td>
                                         <td style="background-color: yellow;" class="text-center align-middle">
                                             <?php
@@ -202,9 +216,7 @@ $staffName = explode(',', $rowOrder['staffName']);
                                             $discLvl = $discount / 100;
                                             $totalAmount = number_format($total - ($total * $discLvl), 2, '.', ',');
                                             ?>
-                                            <h5 class="font-weight-bold">
-                                                ฿ <?= $totalAmount; ?>
-                                            </h5>
+                                            <h5 class="font-weight-bold doubleUnderline">THB <?= $totalAmount; ?></h5>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -217,9 +229,7 @@ $staffName = explode(',', $rowOrder['staffName']);
                                 <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
                             </div>
                             <div class="col-lg-4 float-left text-left">
-                                <form action="" method="post">
-                                    <button class="btn btn-info" type="submit" name="createPDF">Create PDF</button>
-                                </form>
+                                <button type="button" class="btn btn-primary" onclick="generate()"><i class="fas fa-file-pdf"></i> PDF</button>
                             </div>
                         </div>
                     </div>
@@ -228,6 +238,28 @@ $staffName = explode(',', $rowOrder['staffName']);
         </div>
     </div>
 </div>
-
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>
+
+<!-- HTMl to PDF -->
+<script>
+    function generate() {
+        var doc = new jspdf.jsPDF()
+        var imgData = 'data:image/png;base'
+        // Simple html example
+        doc.autoTable({
+            html: '#table',
+            theme: 'grid',
+            body: [
+                [{
+                    content: 'Text',
+                    styles: {
+                        halign: 'center'
+                    }
+                }],
+            ],
+        })
+
+        doc.save('<?= "PO-" . str_pad($_GET['id'], 4, 0, STR_PAD_LEFT); ?>.pdf');
+    }
+</script>
