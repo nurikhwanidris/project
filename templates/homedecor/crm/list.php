@@ -82,7 +82,6 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                     <th class="text-center align-middle">Client Phone</th>
                                     <th class="align-middle">Client Email</th>
                                     <th class="text-center align-middle">Enquiry Time</th>
-                                    <th class="text-center align-middle">Insert by</th>
                                     <th class="text-center align-middle">
                                         Staff Assigned
                                     </th>
@@ -110,13 +109,10 @@ $rowCountPending = mysqli_num_rows($resultPending);
                                         <td class="text-center align-middle">
                                             <?= $row['created']; ?>
                                         </td>
-                                        <td class=" text-center align-middle">
-                                            <?= $rowPackage['assigned']; ?>
-                                        </td>
                                         <td class="text-center align-middle">
                                             <?= $row['staffName']; ?>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             <span class="badge badge-success">Confirmed</span>
                                         </td>
                                     </tr>

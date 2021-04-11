@@ -230,6 +230,7 @@ $staffName = explode(',', $rowOrder['staffName']);
                             </div>
                             <div class="col-lg-4 float-left text-left">
                                 <button type="button" class="btn btn-primary" onclick="generate()"><i class="fas fa-file-pdf"></i> PDF</button>
+                                <a href="pdf.php?id=<?= $_GET['id']; ?>" class="btn btn-warning">Asd</a>
                             </div>
                         </div>
                     </div>
