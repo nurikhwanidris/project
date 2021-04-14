@@ -229,8 +229,8 @@ $staffName = explode(',', $rowOrder['staffName']);
                                 <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
                             </div>
                             <div class="col-lg-4 float-left text-left">
-                                <button type="button" class="btn btn-primary" onclick="generate()"><i class="fas fa-file-pdf"></i> PDF</button>
-                                <a href="pdf.php?id=<?= $_GET['id']; ?>" class="btn btn-warning">Asd</a>
+                                <!-- <button type="button" class="btn btn-primary" onclick="generate()"><i class="fas fa-file-pdf"></i> PDF</button> -->
+                                <a href="pdf.php?id=<?= $_GET['id']; ?>" class="btn btn-warning border"><i class="fas fa-file-pdf"></i> PDF</a>
                             </div>
                         </div>
                     </div>

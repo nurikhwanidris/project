@@ -220,8 +220,8 @@ $categories = explode(',', $rowPV['category']);
                         </div>
                         <div class="row my-2 d-print-none">
                             <div class="col-lg-12">
-                                <div class="col-lg-1 float-right p-0">
-                                    <button class="btn btn-success float-right" onclick="window.print();"><i class="fas fa-print"></i> Print</button>
+                                <div class="col-lg-2 float-right p-0">
+                                    <a href="pdf-pv.php?id=<?= $rowPV['id']; ?>" class="btn btn-info float-right"><i class="fas fa-print"></i> Print</a>
                                 </div>
                             </div>
                         </div>

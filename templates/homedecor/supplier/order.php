@@ -12,11 +12,11 @@ $resSupply = mysqli_query($conn, $supply);
 
 <?php
 // Get product
-$product = "SELECT * FROM homedecor_product WHERE thb != 0";
+$product = "SELECT * FROM homedecor_product";
 $resultproduct = mysqli_query($conn, $product);
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
-    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'];
+    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'] . ' - ' . $rowProduct['orderNo'];
 }
 ?>
 
@@ -31,7 +31,6 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                     <h6 class="m-0 font-weight-bold text-primary">Create Purchase Order</h6>
                 </div>
                 <form action="po.php" class="form-group" method="POST">
-                    <input type="text" name="staffName" id="" class="form-control d-none" value="<?= $staffName; ?>">
                     <div class="card-body">
                         <div class="row my-2">
                             <div class="col-lg-4">
@@ -127,7 +126,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     // This should be the path to a PHP script set up to receive $_POST['product']
     // and return the product info in a JSON encoded array.
     // You should also set the Content-Type of the response to application/json so as our javascript parses it automatically.
-    var apiUrl = '/project/templates/homedecor/crm/getProductInfo.php';
+    var apiUrl = '/templates/homedecor/crm/getProductInfo.php';
 
     function refreshInputsForProduct(product) {
         $.post(apiUrl, {
@@ -165,7 +164,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
             var total = thb * quantity;
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' class='text-center border-0 form-control' name='productCost[]' value='" + thb + "'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + total + "'></td><td class='text-center align-middle'><img src='/project/upload/img/product/" + img + "' style='width:124px; height: 124px;'><input type='text' name='img[]' class='d-none' value='" + img + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' class='text-center border-0 form-control' name='productCost[]' value='" + thb + "'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + total + "'></td><td class='text-center align-middle'><img src='/upload/img/product/" + img + "' style='width:124px; height: 124px;'><input type='text' name='img[]' class='d-none' value='" + img + "'></td></tr>";
             $("table tbody").append(markup);
         });
 

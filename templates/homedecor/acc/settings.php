@@ -126,13 +126,65 @@ if (isset($_GET['dlt'])) {
                                     <table class="table table-bordered table-stripped">
                                         <thead>
                                             <tr>
+                                                <th class="align-middle text-center">/</th>
+                                                <th class="align-middle">Category</th>
+                                                <th class="align-middle text-center">Created</th>
+                                                <th class="align-middle text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($rows as $rowPV) : ?>
+                                                <tr>
+                                                    <td class="align-middle text-center"><input type="checkbox" name="delete" id=""></td>
+                                                    <td class="align-middle"><?= $rowPV['name']; ?></td>
+                                                    <td class="align-middle text-center"><?= $rowPV['created']; ?></td>
+                                                    <td class="align-middle text-center"><a href="settings?dlt=<?= $rowPV['id']; ?>" class="btn btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="far fa-trash-alt"></i></a></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="<?php $_SERVER['PHP_SELF']; ?>" class="d-none">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">Bank</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="nameBank" id="categories">
+                                        <datalist list="categories">
+                                            <?php
+                                            $rows = array();
+                                            while ($rowPV = mysqli_fetch_array($resCat)) :
+                                                $rows[] = $rowPV;
+                                            ?>
+                                                <option value="<?= $rowPV['name']; ?>">
+                                                <?php endwhile; ?>
+                                        </datalist>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-primary" type="submit" name="addBank">Add</button>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-info" data-toggle="collapse" data-target="#collapseBank" aria-expanded="false" aria-controls="#collapseBank" type="button">View</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row collapse" id="collapseBank">
+                            <div class="col-lg-6">
+                                <div class="table">
+                                    <table class="table table-bordered table-stripped">
+                                        <thead>
+                                            <tr>
                                                 <th>/</th>
-                                                <th>Category</th>
+                                                <th>Bank</th>
                                                 <th>Created</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
                                         <tbody>
                                             <?php foreach ($rows as $rowPV) : ?>
                                                 <tr>
@@ -142,7 +194,6 @@ if (isset($_GET['dlt'])) {
                                                     <td><a href="settings?dlt=<?= $rowPV['id']; ?>" class="btn btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');"><i class="far fa-trash-alt"></i></a></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        </tbody>
                                         </tbody>
                                     </table>
                                 </div>

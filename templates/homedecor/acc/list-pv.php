@@ -17,6 +17,24 @@ $result = mysqli_query($conn, $sql);
 $pvs = mysqli_num_rows($result);
 ?>
 
+<!-- Cincau -->
+<?php
+// Delete
+if (isset($_GET['dlt'])) {
+    $id = $_GET['dlt'];
+    $delete = "DELETE FROM homedecor_pv WHERE id = '$id'";
+    $resDlt = mysqli_query($conn, $delete);
+
+    if ($resDlt) {
+        $msg = "Succesfully deleted the voucher";
+        $alert = "success";
+    } else {
+        $msg = "Error occured " . mysqli_error($conn);
+        $alert = "danger";
+    }
+}
+
+?>
 
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -26,7 +44,6 @@ $pvs = mysqli_num_rows($result);
     </div>
     <!-- Content Row -->
     <div class="row">
-
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-2 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
@@ -45,6 +62,19 @@ $pvs = mysqli_num_rows($result);
             </div>
         </div>
     </div>
+
+    <?php if (isset($msg)) : ?>
+        <div class="row mt-3 d-print-none">
+            <div class="col-lg-12 col-xl-12">
+                <div class="alert alert-<?= $alert; ?> alert-dismissible fade show" role="alert">
+                    <?= $msg; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <!-- Content Row -->
     <div class="row">
@@ -78,6 +108,7 @@ $pvs = mysqli_num_rows($result);
                                     <th class="text-center align-middle">Bank Name</th>
                                     <th class="align-middle">Insert by</th>
                                     <th class="text-center align-middle">Created</th>
+                                    <th class="text-center align-middle">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,6 +122,7 @@ $pvs = mysqli_num_rows($result);
                                         <td class="text-center align-middle"><?= $rowPV['accBank']; ?></td>
                                         <td class="align-middle"><?= $rowPV['staffName']; ?></td>
                                         <td class="text-center align-middle"><?= $rowPV['created']; ?></td>
+                                        <td class="text-center align-middle"><a href="pvedit.php?edit=<?= $rowPV['id']; ?>" class="btn btn-info"><i class="far fa-edit"></i></a>&nbsp;&nbsp;<a href="list-pv?dlt=<?= $rowPV['id']; ?>" class="btn btn-danger" onclick="return confirm('Sure ke nak delete?');"><i class=" far fa-trash-alt"></i></a></td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
@@ -111,7 +143,6 @@ $pvs = mysqli_num_rows($result);
         });
     });
 </script>
-
 
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>

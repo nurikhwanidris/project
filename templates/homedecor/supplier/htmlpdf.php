@@ -64,7 +64,7 @@ $pdf->setFontSubsetting(true);
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
-$pdf->SetFont('dejavusans', '', 14, '', true);
+$pdf->SetFont('Times', '', 14, '', true);
 
 // Add a page
 // This method has several options, check the source code documentation for more information.
@@ -84,22 +84,37 @@ $productPrice = explode(',', $rowOrder['productPrice']);
 $productStatus = explode(',', $rowOrder['status']);
 $staffName = explode(',', $rowOrder['staffName']);
 
-// Then loop that shhit
-// Add content
 $pdf->Cell(180, 10, 'Purchase Order');
 $pdf->Ln();
 
-$pdf->setFont('Helvetica', '', 11);
+$pdf->setFont('Times', '', 11);
 $pdf->Cell(12, 6, 'No', 1);
-$pdf->Cell(100, 6, 'Description', 1);
+$pdf->Cell(36, 6, 'Picture', 1);
+$pdf->Cell(80, 6, 'Description', 1);
 $pdf->Cell(20, 6, 'Unit Price', 1);
-$pdf->Cell(20, 6, 'Qty', 1);
+$pdf->Cell(12, 6, 'Qty', 1);
 $pdf->Cell(20, 6, 'Amount', 1);
 $pdf->Ln();
 
 $imgPath = $_SERVER['DOCUMENT_ROOT'] . '/project/upload/img/product/';
 
 $x = 1;
+// Html
+$html = '
+<table class="table table-bordered" id="table">
+    <thead>
+        <tr>
+            th class="align-middle text-center">No</th>
+            <th class="align-middle text-center">Picture</th>
+            <th class="align-middle" style="width: 40%;">Description</th>
+            <th class="align-middle text-right" style="width: 15%;">Unit Price <span class="d-none">THB</span></th>
+            <th class="align-middle text-center">Qty</th>
+            <th class="align-middle text-right" style="width: 10%;">Amount <span class="d-none">THB</span></th>
+            <th class="align-middle text-center d-print-none">Code</th>
+        </tr>
+    </thead>
+    <tbody>';
+
 for ($i = 0; $i < count($productID); $i++) :
     $product = $productID[$i];
     $quantity = $productQty[$i];
@@ -109,15 +124,76 @@ for ($i = 0; $i < count($productID); $i++) :
     $resProduct = mysqli_query($conn, $selProduct);
     $rowProduct = mysqli_fetch_array($resProduct);
 
+    $discount = $rowOrder['discount'];
+    $total = array_sum($productPrice);
+    $discLvl = $discount / 100;
+    $totalAmount = number_format(
+        $total - ($total * $discLvl),
+        2,
+        '.',
+        ','
+    );
 
-    $pdf->setFont('Helvetica', '', 11);
-    $pdf->Cell(12, 20, $x++, 1);
-    $pdf->Cell(100, 20, $rowProduct['name'], 1);
-    $pdf->Cell(20, 20, number_format($cost, 2, '.', ','), 1);
-    $pdf->Cell(20, 20, $quantity, 1);
-    $pdf->Cell(20, 20, number_format($price, 2, '.', ','), 1);
-    $pdf->Ln();
+    // Try writeHTMLcell method
+    $html .= '
+    <tr>
+        <td class="align-middle text-center">
+            ' . $x++ . '
+        </td>
+        <td class="align-middle text-center">
+            <img src="/project/upload/img/product/' . $rowProduct['img'] . '" alt="" srcset="" class="rounded"
+                style="width:124px; height:124px;">
+        </td>
+        <td class="align-middle">
+            ' . $rowProduct['name'] . '
+        </td>
+        <td class="align-middle text-right">
+            ' . number_format($cost, 2, '.', ',') . '
+        </td>
+        <td class="align-middle text-center">
+            $quantity
+        </td>
+        <td class="align-middle text-right">
+            ' . number_format($price, 2, '.', ',') . '
+        </td>
+        <td class="align-middle text-center d-print-none">
+            ' . $rowProduct['orderNo'] . '
+        </td>
+    </tr>
+    <tr>
+        <td class="text-right align-middle" colspan="6">
+            Total
+        </td>
+        <td class="text-center align-middle">
+            THB ' . $amount = number_format(array_sum($productPrice), 2, '.', ',') .
+        '
+        </td>
+    </tr>
+    <tr>
+        <td class="text-right align-middle" colspan="6">
+            Discount
+        </td>
+        <td class="text-center align-middle">
+            ' . $discount . '
+        </td>
+    </tr>
+    <tr class="font-weight-bold">
+        <td class="text-right align-middle" colspan="6">
+            <h5 class="font-weight-bold ">
+                Grand Total
+            </h5>
+        </td>
+        <td style="background-color: yellow;" class="text-center align-middle">
+            <h5 class="font-weight-bold doubleUnderline">THB ' . $totalAmount . '
+            </h5>
+        </td>
+    </tr>
+    </tbody>
+    </table>
+    ';
 endfor;
+
+$pdf->writeHTMLCell(80, 0, 0, 0, $html,);
 
 // Result
 $pdf->Output('PO-' . $title . '.pdf');
