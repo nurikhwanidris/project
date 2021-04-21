@@ -76,6 +76,7 @@ $pdf->SetFont('dejavusans', '', 14, '', true);
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
 
+
 $pdf->MultiCell(90, 10, 'Payment Voucher', 0, 'L', 0, 0);
 $pdf->MultiCell(90, 10, $rowPV['pvNum'], 0, 'R', 0, 0);
 $pdf->Ln();
@@ -120,7 +121,6 @@ for ($i = 0; $i < count($descriptions); $i++) :
     $category = $categories[$i];
     $amount = $amounts[$i];
 
-    // Table body
     $pdf->setFont('Helvetica', '', 10);
     $pdf->MultiCell(12, 10, $x++, 1, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
     $pdf->MultiCell(90, 10, $description, 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
@@ -130,11 +130,11 @@ for ($i = 0; $i < count($descriptions); $i++) :
 endfor;
 
 // Table footer
-$pdf->Ln();
 $pdf->setFont('Helvetica', '', 11);
 $pdf->MultiCell(150, 15, 'Total', 1, 'C', 0, 0, '', '', true, 0, false, true, 15, 'M');
 $pdf->setFont('Helvetica', 'B', 11);
 $pdf->MultiCell(30, 15, 'RM' . number_format(round(array_sum($amounts), 2), 2, '.', ','), 1, 'C', 0, 0, '', '', true, 0, false, true, 15, 'M');
+$pdf->Ln();
 $pdf->Ln();
 
 // Created on?

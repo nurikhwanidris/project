@@ -246,6 +246,21 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             </li>
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="true" aria-controls="collapseInventory">
+                    <i class="fas fa-boxes"></i>
+                    <span>Inventory</span>
+                </a>
+                <div id="collapseInventory" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Inventory Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/inventory/add">Add Item</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/inventory/list">Item List</a>
+                        <a class="collapse-item" href="#">Item Report</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplier" aria-expanded="true" aria-controls="collapseSupplier">
                     <i class="fas fa-parachute-box"></i>
                     <span>Supplier</span>

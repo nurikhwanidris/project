@@ -64,14 +64,14 @@ $row = mysqli_fetch_array($result);
         $alert = "danger";
     }
 } elseif ($_GET['dlt']) {
-    $dltID = $_GET['dlt'];
+    $dlt = $_GET['dlt'];
 
     // Delete
-    $delete = "DELETE FROM homedecor_product WHERE id = '$dltID'";
+    $delete = "DELETE FROM homedecor_product WHERE id = '$dlt'";
     $resDelete = mysqli_query($conn, $delete);
     if ($resDelete) {
         $msg = "Succesfully deleted the product";
-        $alert = "success";
+        $alert = "warning";
     } else {
         $msg = "Error occured. " . mysqli_error($conn);
         $alert = "danger";
@@ -84,7 +84,7 @@ $row = mysqli_fetch_array($result);
         <h1 class="h3 mb-0 text-gray-800">Product Management</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    <?php if (isset($_POST['submit'])) : ?>
+    <?php if (isset($_POST['submit']) || isset($_GET['dlt'])) : ?>
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="alert alert-<?= $alert; ?> alert-dismissible fade show" role="alert">
@@ -219,7 +219,7 @@ $row = mysqli_fetch_array($result);
                             </div>
                             <div class="col-lg-12 p-0 mt-4">
                                 <button type="submit" name="submit" class="btn btn-info float-left">Submit</button>
-                                <a href="<?php $_SERVER['PHP_SELF']; ?>?dlt=<?= $id; ?>" name="delete" class="btn btn-danger float-right" onclick="dlt()"><i class="far fa-trash-alt"></i> Delete</a>
+                                <a href="<?php $_SERVER['PHP_SELF']; ?>?dlt=<?= $id; ?>" name="delete" class="btn btn-danger float-right" onclick="return confirm('Sure ke nak delete <?= $row['name']; ?>?');"><i class="far fa-trash-alt"></i> Delete</a>
                             </div>
                         </div>
                     </div>
@@ -249,11 +249,4 @@ $row = mysqli_fetch_array($result);
     $("#imgInp").change(function() {
         readURL(this);
     });
-</script>
-
-<script>
-    function dlt() {
-        alert("Are you sure you want to delete <?= $row['name']; ?>?");
-
-    }
 </script>

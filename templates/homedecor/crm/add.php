@@ -211,7 +211,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 </div>
                                 <div class="row my-3">
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure about submitting the data?');">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -228,9 +228,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
 <!-- Insert phone number country code-->
 <script>
-    $("#customerPhone").keyup(function() {
+    $(" #customerPhone").keyup(function() {
         var prefix = "+60"
-
         if (this.value.indexOf(prefix) !== 0) {
             this.value = prefix + this.value;
         }
