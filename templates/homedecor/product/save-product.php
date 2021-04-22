@@ -29,17 +29,42 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 $created = date('Y-m-d H:i:s');
 $modified = date('Y-m-d H:i:s');
 
-// Insert to database
-$insert = "INSERT INTO homedecor_product (name, category, supplierCode, thb, sku, size, orderNo, cost, fixedPrice, fixedPriceTHB, quantity, img, created, modified) VALUE ('$name', '$category', '$supplierCode', '$thb', '$sku', '$size', '$orderNo', '$cost', '$sellingPriceRM', '$sellingPriceTHB', '$quantity','$trimmedImage', '$created', '$modified')";
+if ($sellingPriceRM != '') {
+    // Insert to database
+    $insert = "INSERT INTO homedecor_product (name, category, supplierCode, thb, sku, size, orderNo, cost, fixedPrice, fixedPriceTHB, quantity, img, created, modified) VALUE ('$name', '$category', '$supplierCode', '$thb', '$sku', '$size', '$orderNo', '$cost', '$sellingPriceRM', '$sellingPriceTHB', '$quantity','$trimmedImage', '$created', '$modified')";
 
-if ($result = mysqli_query($conn, $insert)) {
-    move_uploaded_file($_FILES['imgSave']['tmp_name'], $target);
-    $msg = "Successfull inserted the product";
-    $alert = "success";
+    if ($result = mysqli_query($conn, $insert)) {
+        move_uploaded_file($_FILES['imgSave']['tmp_name'], $target);
+        $msg = "Successfull inserted the product";
+        $alert = "success";
 
-    header('Location: /project/templates/homedecor/product/list');
+        header('Location: /project/templates/homedecor/product/list');
+    } else {
+        $msg = "Error occured." . mysqli_error($conn);
+        $alert = "danger";
+    }
 } else {
-    $msg = "Error occured." . mysqli_error($conn);
-    $alert = "danger";
+    // cabut dulu characters
+    $strippedDiscount = preg_replace("/[^a-zA-Z]/", "", $supplierCode);
+
+    // kira dulu berapa discount
+    $tolakDulu = (100 - (int)$strippedDiscount) / 100;
+
+    // harganya berapa dong?
+    $hargaJual = round(((($thb * $tolakDulu) / 100) * 15) * 2.5 + 6);
+
+    // Insert to database
+    $insert = "INSERT INTO homedecor_product (name, category, supplierCode, thb, sku, size, orderNo, cost, fixedPrice, fixedPriceTHB, quantity, img, created, modified) VALUE ('$name', '$category', '$supplierCode', '$thb', '$sku', '$size', '$orderNo', '$cost', '$hargaJual', '$sellingPriceTHB', '$quantity','$trimmedImage', '$created', '$modified')";
+
+    if ($result = mysqli_query($conn, $insert)) {
+        move_uploaded_file($_FILES['imgSave']['tmp_name'], $target);
+        $msg = "Successfull inserted the product";
+        $alert = "success";
+
+        header('Location: /project/templates/homedecor/product/list');
+    } else {
+        $msg = "Error occured." . mysqli_error($conn);
+        $alert = "danger";
+    }
 }
 echo $msg;

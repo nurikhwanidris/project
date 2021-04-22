@@ -59,6 +59,8 @@ $resultCategory = mysqli_query($conn, $category);
                                             <option value="KL10">10</option>
                                             <option value="KL15">15</option>
                                             <option value="KL20">20</option>
+                                            <option value="KL22">22</option>
+                                            <option value="KL25">25</option>
                                             <option value="KL30">30</option>
                                         </select>
                                     </div>
