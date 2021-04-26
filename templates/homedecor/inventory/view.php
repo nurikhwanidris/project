@@ -201,30 +201,30 @@ if (isset($_POST['submit'])) {
                                     // Date in
                                     $dateIn = $itemSummary['itemInDate'];
                                     if ($dateIn == '0000-00-00') {
-                                        $newDateIn = '-';
+                                        $newDateIn = '';
                                     } else {
                                         $newDateIn = date('d/m/Y', strtotime($dateIn));
-                                        $masuk = "text-success";
+                                        $masuk = "text-success font-weight-bold";
                                     }
                                     // Date out
                                     $dateOut = $itemSummary['itemOutDate'];
                                     if ($dateOut == '0000-00-00') {
-                                        $newDateOut = '-';
+                                        $newDateOut = '';
                                     } else {
                                         $newDateOut = date('d/m/y', strtotime($dateOut));
-                                        $keluar = "text-danger";
+                                        $keluar = "text-danger font-weight-bold";
                                     }
                                     // itemQtyIn
                                     $itemIn = $itemSummary['itemQtyIn'];
                                     if ($itemIn == '0') {
-                                        $itemIn = '-';
+                                        $itemIn = '';
                                     } else {
                                         $itemIn = $itemSummary['itemQtyIn'];
                                     }
                                     // itemQtyOut
                                     $itemOut = $itemSummary['itemQtyOut'];
                                     if ($itemOut == '0') {
-                                        $itemOut = '-';
+                                        $itemOut = '';
                                     } else {
                                         $itemOut = $itemSummary['itemQtyOut'];
                                     }
@@ -232,9 +232,9 @@ if (isset($_POST['submit'])) {
                                     <tr>
                                         <td class="text-center align-middle"><?= $i++; ?></td>
                                         <td class="text-center align-middle <?= $masuk; ?>"><?= $newDateIn; ?></td>
-                                        <td class="text-center align-middle"><?= $itemIn; ?></td>
+                                        <td class="text-center align-middle <?= $masuk; ?>"><?= $itemIn; ?></td>
                                         <td class="text-center align-middle <?= $keluar; ?>"><?= $newDateOut; ?></td>
-                                        <td class="text-center align-middle"><?= $itemOut; ?></td>
+                                        <td class="text-center align-middle <?= $keluar; ?>"><?= $itemOut; ?></td>
                                         <td class="text-center align-middle"><?= $itemSummary['itemBalance'] ?></td>
                                     </tr>
                                 <?php endwhile; ?>
