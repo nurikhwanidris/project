@@ -102,8 +102,7 @@ if (isset($_GET['dlt'])) {
                                         </td>
 
                                         <td class="text-center align-middle">
-                                            <a href="pvedit.php?edit=<?= $rowItem['id']; ?>" class="btn btn-info"><i class="far fa-edit"></i></a>
-                                            <a href="list-pv?dlt=<?= $rowItem['id']; ?>" class="btn btn-danger" onclick="return confirm('Sure ke nak delete?');"><i class=" far fa-trash-alt"></i></a>
+                                            <a href="list?dlt=<?= $rowItem['id']; ?>" class="btn btn-danger" onclick="return confirm('Sure ke nak delete?');"><i class=" far fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
