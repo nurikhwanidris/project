@@ -12,13 +12,11 @@
 
 <!-- Get the data from PV table -->
 <?php
-// homedecor_item table
-$sql = "SELECT * FROM homedecor_item";
-$result = mysqli_query($conn, $sql);
+// fetch the items
+$select = "SELECT * FROM homedecor_item";
 
-// homedecor_item_summary table
-$summary = "SELECT * FROM homedecor_item_summary";
-$resultSummary = mysqli_query($conn, $summary);
+$result = mysqli_query($conn, $select);
+
 ?>
 
 <!-- Cincau ais-->
@@ -82,17 +80,12 @@ if (isset($_GET['dlt'])) {
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive col-lg-6 mx-auto">
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th class="text-center align-middle">#</th>
                                     <th class="align-middle">Item Name</th>
-                                    <th class="text-center align-middle">Purchased</th>
-                                    <th class="text-center align-middle">In stock</th>
-                                    <th class="text-center align-middle">Balance</th>
-                                    <th class="text-center align-middle">Bought on</th>
-                                    <th class="text-center align-middle">Latest use</th>
                                     <th class="text-center align-middle">Action</th>
                                 </tr>
                             </thead>
@@ -107,21 +100,7 @@ if (isset($_GET['dlt'])) {
                                         <td class="text-left align-middle">
                                             <a href="view?id=<?= $rowItem['id']; ?>"><?= $rowItem['itemName']; ?></a>
                                         </td>
-                                        <td class="text-center align-middle">
 
-                                        </td>
-                                        <td class="text-center align-middle">
-
-                                        </td>
-                                        <td class="text-center align-middle">
-
-                                        </td>
-                                        <td class="text-center align-middle">
-
-                                        </td>
-                                        <td class="text-center align-middle">
-
-                                        </td>
                                         <td class="text-center align-middle">
                                             <a href="pvedit.php?edit=<?= $rowItem['id']; ?>" class="btn btn-info"><i class="far fa-edit"></i></a>
                                             <a href="list-pv?dlt=<?= $rowItem['id']; ?>" class="btn btn-danger" onclick="return confirm('Sure ke nak delete?');"><i class=" far fa-trash-alt"></i></a>
@@ -138,13 +117,9 @@ if (isset($_GET['dlt'])) {
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('#myTable').DataTable({
-            "order": [
-                [0, "desc"]
-            ]
-        });
-    });
+    // $(document).ready(function() {
+    //     $('#myTable').DataTable({});
+    // });
 </script>
 
 <!-- Footer -->

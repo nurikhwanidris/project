@@ -1,5 +1,5 @@
 <!-- Title -->
-<?php $title = "Add New Inventory"; ?>
+<?php $title = "Update Inventory"; ?>
 
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
@@ -21,8 +21,14 @@ $resultItem = mysqli_query($conn, $item);
 $rowItem = mysqli_fetch_assoc($resultItem);
 
 // homedecor_item_summary
-$summary = "SELECT * FROM homedecor_item_summary WHERE itemID = '$id'";
+$summary = "SELECT * FROM homedecor_item_summary WHERE itemID = '$id' ORDER BY id DESC";
 $resultSummary = mysqli_query($conn, $summary);
+
+// only for emergency
+$lastRow = "SELECT * FROM homedecor_item_summary ORDER BY id DESC LIMIT 1";
+$resultAsd = mysqli_query($conn, $lastRow);
+$rowSummary = mysqli_fetch_assoc($resultAsd);
+$existingBalance = $rowSummary['itemBalance'];
 
 // Date created and modified
 date_default_timezone_set("Asia/Kuala_Lumpur");
@@ -37,16 +43,56 @@ if (isset($_POST['submit'])) {
     $itemQtyOut = $_POST['itemQtyOut'];
     $itemOutDate = $_POST['itemOutDate'];
 
-    // Insert into homedecor_item_summary
-    $insert = "INSERT INTO homedecor_item_summary (itemID, itemCost, itemQtyIn, itemInDate, itemQtyOut, itemOutDate, itemBalance, created, modified) VALUES ('$id','$itemCost', '$itemQtyIn', '$itemInDate', '$itemQtyOut', '$itemOutDate', '$itemQtyIn - $itemQtyOut', '$created', '$modified')";
-    $resultInsert = mysqli_query($conn, $insert);
+    if ($itemQtyIn != '' && $itemInDate != '') {
+        // Insert dulu
+        $insert  = "INSERT INTO homedecor_item_summary (itemID, itemCost, itemQtyIn, itemInDate, created, modified) VALUES ('$id', '$itemCost', '$itemQtyIn', '$itemInDate', '$created', '$modified')";
+        $resultInsert = mysqli_query($conn, $insert);
 
-    if ($resultInsert) {
-        $msg = "Succesfully updated the item information";
-        $alert = "success";
-    } else {
-        $msg = "An error occured. " . mysqli_error($conn);
-        $alert = "danger";
+        // Cari last inserted id dia apa
+        // $lastID = mysqli_insert_id($conn);
+
+        // Cari last row
+        $selectRow = "SELECT * FROM homedecor_item_summary ORDER BY id DESC LIMIT 1";
+        $resultRow = mysqli_query($conn, $selectRow);
+        $lastRow = mysqli_fetch_assoc($resultRow);
+        $rowLast = $lastRow['id'];
+
+        // Update lepas tu
+        $update = "UPDATE homedecor_item_summary SET itemBalance = ItemQtyIn + '$existingBalance' WHERE id = '$rowLast'";
+        $resultUpdate = mysqli_query($conn, $update);
+
+        if ($resultUpdate) {
+            $msg = "Succesfully updated the item information for " . $lastID;
+            $alert = "success";
+        } else {
+            $msg = "An error occured. " . mysqli_error($conn);
+            $alert = "danger";
+        }
+    } elseif ($itemOutDate != '' && $itemQtyOut != '') {
+        // Insert dulu boi
+        $insert = "INSERT INTO homedecor_item_summary (itemID, itemQtyOut, itemOutDate, created, modified) VALUES ('$id', '$itemQtyOut', '$itemOutDate', '$created', '$modified')";
+        $resultInsert = mysqli_query($conn, $insert);
+
+        // cari last insert id dia boi
+        // $lastID = mysqli_insert_id($conn);
+
+        // Cari last row
+        $selectRow = "SELECT * FROM homedecor_item_summary ORDER BY id DESC LIMIT 1";
+        $resultRow = mysqli_query($conn, $selectRow);
+        $lastRow = mysqli_fetch_assoc($resultRow);
+        $rowLast = $lastRow['id'];
+
+        $update = "UPDATE homedecor_item_summary SET itemBalance = '$existingBalance' - '$itemQtyOut' WHERE id = '$rowLast'";
+        $resultUpdate = mysqli_query($conn, $update);
+
+        // check for result
+        if ($resultUpdate) {
+            $msg = "Successfully update the item information.";
+            $alert = "success";
+        } else {
+            $msg = "Error occured. " . mysqli_error($conn);
+            $alert = "danger";
+        }
     }
 }
 ?>
@@ -136,15 +182,15 @@ if (isset($_POST['submit'])) {
                     <h6 class="m-0 font-weight-bold text-primary">Item Summary</h6>
                 </div>
                 <div class="card-body">
-                    <div class="col-lg-12" style="height: 400px; overflow-y: scroll;">
+                    <div class="col-lg-12" style="height: 500px; overflow-y: scroll;">
                         <table class="table table-striped table-sm">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="text-center align-middle">#</th>
                                     <th class="text-center align-middle">In (Date)</th>
-                                    <th class="text-center align-middle">Qty</th>
+                                    <th class="text-center align-middle">Qty (In)</th>
                                     <th class="text-center align-middle">Out (Date)</th>
-                                    <th class="text-center align-middle">Qty</th>
+                                    <th class="text-center align-middle">Qty (Out)</th>
                                     <th class="text-center align-middle">Balance</th>
                                 </tr>
                             </thead>
@@ -158,6 +204,7 @@ if (isset($_POST['submit'])) {
                                         $newDateIn = '-';
                                     } else {
                                         $newDateIn = date('d/m/Y', strtotime($dateIn));
+                                        $masuk = "text-success";
                                     }
                                     // Date out
                                     $dateOut = $itemSummary['itemOutDate'];
@@ -165,6 +212,7 @@ if (isset($_POST['submit'])) {
                                         $newDateOut = '-';
                                     } else {
                                         $newDateOut = date('d/m/y', strtotime($dateOut));
+                                        $keluar = "text-danger";
                                     }
                                     // itemQtyIn
                                     $itemIn = $itemSummary['itemQtyIn'];
@@ -180,18 +228,14 @@ if (isset($_POST['submit'])) {
                                     } else {
                                         $itemOut = $itemSummary['itemQtyOut'];
                                     }
-                                    // count the balance
-                                    $select = "SELECT * FROM homedecor_item_summary WHERE itemID = '$id' ORDER BY created DESC";
-                                    $resultSelect = mysqli_query($conn, $select);
-                                    $rowSelect = mysqli_fetch_assoc($resultSelect);
                                 ?>
                                     <tr>
                                         <td class="text-center align-middle"><?= $i++; ?></td>
-                                        <td class="text-center align-middle"><?= $newDateIn; ?></td>
+                                        <td class="text-center align-middle <?= $masuk; ?>"><?= $newDateIn; ?></td>
                                         <td class="text-center align-middle"><?= $itemIn; ?></td>
-                                        <td class="text-center align-middle"><?= $newDateOut; ?></td>
+                                        <td class="text-center align-middle <?= $keluar; ?>"><?= $newDateOut; ?></td>
                                         <td class="text-center align-middle"><?= $itemOut; ?></td>
-                                        <td class="text-center align-middle"><?= $rowSelect['itemBalance'] ?></td>
+                                        <td class="text-center align-middle"><?= $itemSummary['itemBalance'] ?></td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>

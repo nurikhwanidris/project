@@ -4,6 +4,9 @@
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 
+<!-- Datatable CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+
 <!-- Get DB conn -->
 <?php include('../../../src/model/dbconn.php') ?>
 
@@ -23,6 +26,16 @@ $active = "SELECT id FROM homedecor_product WHERE quantity != 0 GROUP BY orderNo
 $resultActive = mysqli_query($conn, $active);
 $numOfActive = mysqli_num_rows($resultActive);
 ?>
+
+<style>
+    .dataTables_filter {
+        float: right !important;
+    }
+
+    .dataTables_paginate {
+        float: right !important;
+    }
+</style>
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -260,9 +273,15 @@ $numOfActive = mysqli_num_rows($resultActive);
 <script>
     $(document).ready(function() {
         $('#myTable').DataTable({
-            "order": [
-                [0, "asc"]
-            ]
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'excel',
+                attr: {
+                    title: 'Excel',
+                    id: 'copyButton',
+                    class: 'btn btn-success'
+                }
+            }]
         });
     });
 </script>
