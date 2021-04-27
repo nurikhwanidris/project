@@ -25,7 +25,7 @@ $summary = "SELECT * FROM homedecor_item_summary WHERE itemID = '$id' ORDER BY i
 $resultSummary = mysqli_query($conn, $summary);
 
 // only for emergency
-$lastRow = "SELECT * FROM homedecor_item_summary ORDER BY id DESC LIMIT 1";
+$lastRow = "SELECT * FROM homedecor_item_summary WHERE itemID = '$id' ORDER BY id DESC LIMIT 1";
 $resultAsd = mysqli_query($conn, $lastRow);
 $rowSummary = mysqli_fetch_assoc($resultAsd);
 $existingBalance = $rowSummary['itemBalance'];
@@ -48,22 +48,20 @@ if (isset($_POST['submit'])) {
         $insert  = "INSERT INTO homedecor_item_summary (itemID, itemCost, itemQtyIn, itemInDate, created, modified) VALUES ('$id', '$itemCost', '$itemQtyIn', '$itemInDate', '$created', '$modified')";
         $resultInsert = mysqli_query($conn, $insert);
 
-        // Cari last inserted id dia apa
-        // $lastID = mysqli_insert_id($conn);
-
         // Cari last row
-        $selectRow = "SELECT * FROM homedecor_item_summary ORDER BY id DESC LIMIT 1";
+        $selectRow = "SELECT * FROM homedecor_item_summary WHERE itemID = '$id' ORDER BY id DESC LIMIT 1";
         $resultRow = mysqli_query($conn, $selectRow);
         $lastRow = mysqli_fetch_assoc($resultRow);
         $rowLast = $lastRow['id'];
 
         // Update lepas tu
-        $update = "UPDATE homedecor_item_summary SET itemBalance = ItemQtyIn + '$existingBalance' WHERE id = '$rowLast'";
+        $update = "UPDATE homedecor_item_summary SET itemBalance = ItemQtyIn + '$existingBalance' WHERE id = '$rowLast' AND itemID = '$id'";
         $resultUpdate = mysqli_query($conn, $update);
 
         if ($resultUpdate) {
-            $msg = "Succesfully updated the item information for " . $lastID;
+            $msg = "Succesfully added " . $itemQtyIn . " the item information for " . $rowItem['itemName'];
             $alert = "success";
+            header("Location:/project/templates/homedecor/inventory/view.php");
         } else {
             $msg = "An error occured. " . mysqli_error($conn);
             $alert = "danger";
@@ -73,21 +71,18 @@ if (isset($_POST['submit'])) {
         $insert = "INSERT INTO homedecor_item_summary (itemID, itemQtyOut, itemOutDate, created, modified) VALUES ('$id', '$itemQtyOut', '$itemOutDate', '$created', '$modified')";
         $resultInsert = mysqli_query($conn, $insert);
 
-        // cari last insert id dia boi
-        // $lastID = mysqli_insert_id($conn);
-
         // Cari last row
-        $selectRow = "SELECT * FROM homedecor_item_summary ORDER BY id DESC LIMIT 1";
+        $selectRow = "SELECT * FROM homedecor_item_summary WHERE itemID = '$id' ORDER BY id DESC LIMIT 1";
         $resultRow = mysqli_query($conn, $selectRow);
         $lastRow = mysqli_fetch_assoc($resultRow);
         $rowLast = $lastRow['id'];
 
-        $update = "UPDATE homedecor_item_summary SET itemBalance = '$existingBalance' - '$itemQtyOut' WHERE id = '$rowLast'";
+        $update = "UPDATE homedecor_item_summary SET itemBalance = '$existingBalance' - '$itemQtyOut' WHERE id = '$rowLast' AND itemID = '$id'";
         $resultUpdate = mysqli_query($conn, $update);
 
         // check for result
         if ($resultUpdate) {
-            $msg = "Successfully update the item information.";
+            $msg = "Succesfully added " . $itemQtyOut . " the item information for " . $rowItem['itemName'];
             $alert = "success";
         } else {
             $msg = "Error occured. " . mysqli_error($conn);
@@ -235,7 +230,7 @@ if (isset($_POST['submit'])) {
                                         <td class="text-center align-middle <?= $masuk; ?>"><?= $itemIn; ?></td>
                                         <td class="text-center align-middle <?= $keluar; ?>"><?= $newDateOut; ?></td>
                                         <td class="text-center align-middle <?= $keluar; ?>"><?= $itemOut; ?></td>
-                                        <td class="text-center align-middle"><?= $itemSummary['itemBalance'] ?></td>
+                                        <td class="text-center align-middle bg-info text-white font-weight-bold"><?= $itemSummary['itemBalance'] ?></td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>

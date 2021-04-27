@@ -30,6 +30,7 @@ if (isset($_GET['dlt'])) {
     if ($resDlt) {
         $msg = "Succesfully deleted the voucher";
         $alert = "success";
+        header('Location:/project/templates/homedecor/inventory/list');
     } else {
         $msg = "Error occured " . mysqli_error($conn);
         $alert = "danger";
