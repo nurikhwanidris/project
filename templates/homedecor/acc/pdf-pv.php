@@ -110,7 +110,7 @@ $pdf->Ln();
 $pdf->setFont('Helvetica', '', 11);
 $pdf->MultiCell(12, 6, 'Item', 1, 'C', 0, 0);
 $pdf->Cell(90, 6, 'Description', 1);
-$pdf->Cell(48, 6, 'Category', 1);
+$pdf->Cell(48, 6, 'Category', 1, false, 'C', 0, '', 0, false, 'T', 'M');
 $pdf->MultiCell(30, 6, 'Amount', 1, 'C', 0, 0);
 $pdf->Ln();
 
@@ -122,10 +122,14 @@ for ($i = 0; $i < count($descriptions); $i++) :
     $amount = $amounts[$i];
 
     $pdf->setFont('Helvetica', '', 10);
-    $pdf->MultiCell(12, 10, $x++, 1, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
-    $pdf->MultiCell(90, 10, $description, 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
-    $pdf->MultiCell(48, 10, $category, 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
-    $pdf->MultiCell(30, 10, 'RM' . number_format($amount, 2, '.', ','), 1, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
+    // $pdf->MultiCell(12, 10, $x++, 1, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
+    // $pdf->MultiCell(90, 10, $description, 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
+    // $pdf->MultiCell(48, 10, $category, 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
+    // $pdf->MultiCell(30, 10, 'RM' . number_format($amount, 2, '.', ','), 1, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
+    $pdf->Cell(12, 10, $x++, 1, false, 'C', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(90, 10, $description, 1,);
+    $pdf->Cell(48, 10, $category, 1, false, 'C', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(30, 10, 'RM' . number_format($amount, 2, '.', ','), 1, false, 'C', 0, '', 0, false, 'T', 'M');
     $pdf->Ln();
 endfor;
 
