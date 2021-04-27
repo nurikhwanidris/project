@@ -5,12 +5,7 @@ include('../../../src/model/dbconn.php');
 // Title
 $title = "Receipt";
 
-// Get data from GET
-//$invoiceId = $_GET['id'];
-
 // Get data from POST
-// $saveInvoice = $_POST['saveInvoice'];
-// $createReceipt = $_POST['createReceipt'];
 $productID = $_POST['productID'];
 $customerID = $_POST['customerID'];
 $quantity = $_POST['quantity'];
@@ -36,8 +31,8 @@ $target = $_SERVER['DOCUMENT_ROOT'] . "/upload/invoice/" . $newfilename;
 $checkInvoice = "SELECT * FROM homedecor_invoice WHERE po_id = '$poID'";
 $resultCheck = mysqli_query($conn, $checkInvoice);
 $rowCheck = mysqli_fetch_assoc($resultCheck);
-//$checkRow = mysqli_num_rows($resultCheck);
 
+// Check for invoice
 if (isset($_POST['saveInvoice'])) {
     if ($resultCheck) {
         if (mysqli_num_rows($resultCheck) == 0) {
