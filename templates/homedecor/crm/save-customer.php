@@ -39,6 +39,20 @@ if (isset($_POST['update-order'])) {
     $updateProduct = "UPDATE homedecor_order SET product_id = '$productId', quantity = '$quantity', price = '$productPrice', discount_all ='$discountAll',discount_items = '$discountItem', modified = '$modified' WHERE id = '$id'";
     $resUpdateProduct = mysqli_query($conn, $updateProduct);
 
+    // Update the deducted items
+    $product1 = $_POST['productId'];
+    $quantityProduct1 = $_POST['quantity'];
+    for ($i = 0; $i < count($product1); $i++) {
+        $product2 = $product1[$i];
+        $quantityProduct2 = $quantityProduct1[$i];
+        $deduct = "UPDATE homedecor_product SET purchased = (purchased + '$quantityProduct2') WHERE id = '$product2'";
+        $resultDeduct = mysqli_query($conn, $deduct);
+        if ($resultDeduct) {
+            echo "WEEEE WOOOO BERJAYA";
+        } else {
+            echo "WEEE WOOO YOU'RE FUCKED";
+        }
+    }
 
     if ($resUpdateCustomer && $resUpdateProduct) {
         $msg = "Succesfully updated the customer details";
