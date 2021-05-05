@@ -66,7 +66,7 @@ if (isset($_POST['update-order'])) {
         if ($resultDeduct) {
             echo "WEEEE WOOOO BERJAYA";
         } else {
-            echo "WEEE WOOO YOURE FUCKED";
+            echo "WEEE WOOO YOU'RE FUCKED";
         }
     }
 
