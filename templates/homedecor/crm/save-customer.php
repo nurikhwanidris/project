@@ -39,6 +39,7 @@ if (isset($_POST['update-order'])) {
     $updateProduct = "UPDATE homedecor_order SET product_id = '$productId', quantity = '$quantity', price = '$productPrice', discount_all ='$discountAll',discount_items = '$discountItem', modified = '$modified' WHERE id = '$id'";
     $resUpdateProduct = mysqli_query($conn, $updateProduct);
 
+
     if ($resUpdateCustomer && $resUpdateProduct) {
         $msg = "Succesfully updated the customer details";
         $alert = "success";
@@ -54,17 +55,25 @@ if (isset($_POST['update-order'])) {
     $purchase = "INSERT INTO homedecor_order (customer_id, product_id, quantity, price, discount_all, discount_items, status, created, modified) VALUES ('$customerID', '$productId', '$quantity', '$productPrice', '$discountAll', '$discountItem', '$status', '$created', '$modified')";
     $resultPurchase = mysqli_query($conn, $purchase);
 
-    if ($resultInsert) {
-        $msg = "Successfully inserted <br>";
-        $alert = "success";
-        header('Location:/project/templates/homedecor/order/list');
-    } else {
-        $msg = "Error occured. " . mysqli_error($conn);
+    // Update the deducted items
+    $product1 = $_POST['productId'];
+    $quantityProduct1 = $_POST['quantity'];
+    for ($i = 0; $i < count($product1); $i++) {
+        $product2 = $product1[$i];
+        $quantityProduct2 = $quantityProduct1[$i];
+        $deduct = "UPDATE homedecor_product SET purchased = (purchased + '$quantityProduct2') WHERE id = '$product2'";
+        $resultDeduct = mysqli_query($conn, $deduct);
+        if ($resultDeduct) {
+            echo "WEEEE WOOOO BERJAYA";
+        } else {
+            echo "WEEE WOOO YOURE FUCKED";
+        }
     }
-    if ($resultPurchase) {
+
+    if ($resultInsert && $resultPurchase && $resultDeduct) {
         $msg = "Successfully inserted <br>";
         $alert = "success";
-        header('Location:/project/templates/homedecor/order/list');
+        //header('Location:/project/templates/homedecor/order/list');
     } else {
         $msg = "Error occured. " . mysqli_error($conn);
     }
