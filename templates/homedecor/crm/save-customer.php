@@ -39,34 +39,34 @@ if (isset($_POST['update-order'])) {
     $updateCustomer = "UPDATE homedecor_customer SET customerName = '$customerName', customerEmail = '$customerEmail', customerPhone = '$strippedSpace', address1 = '$address1', city = '$city', postcode = '$postcode', state = '$state', modified = '$modified' WHERE id = '$customerID'";
     $resUpdateCustomer = mysqli_query($conn, $updateCustomer);
 
-    // Check if the item already existed in the homedecor_order
-    $selectCheck = "SELECT product_id, quantity FROM homedecor_order WHERE customer_ID = '$id'";
-    $resultCheck = mysqli_query($conn, $selectCheck);
-    $rowCheck = mysqli_fetch_assoc($resultCheck);
+    // // Check if the item already existed in the homedecor_order
+    // $selectCheck = "SELECT product_id, quantity FROM homedecor_order WHERE customer_ID = '$id'";
+    // $resultCheck = mysqli_query($conn, $selectCheck);
+    // $rowCheck = mysqli_fetch_assoc($resultCheck);
 
-    // explode the array 1st
-    $prodID = explode(',', $rowCheck['product_id']);
+    // // explode the row 1st
+    // $prodID = explode(',', $rowCheck['product_id']);
 
-    // Loop that shit
-    for ($k = 0; $k < count($prodID); $k++) {
-        $item = $prodID[$k];
-        echo "ID = " . $item . "<br>";
-    }
+    // // Loop that shit
+    // for ($k = 0; $k < count($prodID); $k++) {
+    //     $item = $prodID[$k];
+    //     echo "ID = " . $item . "<br>";
+    // }
 
-    // Update the deducted items
-    $product1 = $_POST['productId'];
-    $quantityProduct1 = $_POST['quantity'];
-    for ($i = 0; $i < count($product1); $i++) {
-        $product2 = $product1[$i];
-        $quantityProduct2 = $quantityProduct1[$i];
+    // // Update the deducted items
+    // $product1 = $_POST['productId'];
+    // $quantityProduct1 = $_POST['quantity'];
+    // for ($i = 0; $i < count($product1); $i++) {
+    //     $product2 = $product1[$i];
+    //     $quantityProduct2 = $quantityProduct1[$i];
 
-        // //  Update the deducted items
-        // $deduct = "UPDATE homedecor_product SET purchased = (purchased + '$quantityProduct2') WHERE id = '$product2'";
-        // $resultDeduct = mysqli_query($conn, $deduct);
-        // echo "New product added";
+    //     // //  Update the deducted items
+    //     // $deduct = "UPDATE homedecor_product SET purchased = (purchased + '$quantityProduct2') WHERE id = '$product2'";
+    //     // $resultDeduct = mysqli_query($conn, $deduct);
+    //     // echo "New product added";
 
 
-    }
+    // }
 
     // Update order details
     $updateProduct = "UPDATE homedecor_order SET product_id = '$productId', quantity = '$quantity', price = '$productPrice', discount_all ='$discountAll',discount_items = '$discountItem', modified = '$modified' WHERE id = '$id'";
@@ -75,7 +75,7 @@ if (isset($_POST['update-order'])) {
     if ($resUpdateCustomer && $resUpdateProduct) {
         $msg = "Succesfully updated the customer details";
         $alert = "success";
-        //header('Location:/project/templates/homedecor/order/list');
+        header('Location:/project/templates/homedecor/order/list');
     }
 } else {
 
@@ -105,7 +105,7 @@ if (isset($_POST['update-order'])) {
     if ($resultInsert && $resultPurchase && $resultDeduct) {
         $msg = "Successfully inserted <br>";
         $alert = "success";
-        //header('Location:/project/templates/homedecor/order/list');
+        header('Location:/project/templates/homedecor/order/list');
     } else {
         $msg = "Error occured. " . mysqli_error($conn);
     }
