@@ -164,99 +164,23 @@ $numOfActive = mysqli_num_rows($resultActive);
                                     <th class="align-middle">Name</th>
                                     <th class="text-center align-middle">Category</th>
                                     <th class="text-center align-middle">Supplier Code</th>
-                                    <th class="text-center align-middle">Size</th>
-                                    <th class="text-center align-middle">SKU</th>
-                                    <th class="text-center align-middle">Cost</th>
-                                    <th class="text-center align-middle">Price</th>
                                     <th class="text-center align-middle">Quantity</th>
                                     <th class="text-center align-middle">Purchased</th>
                                     <th class="text-center align-middle">Balance</th>
                                     <th class="text-center align-middle">Reorder?</th>
-                                    <!-- <th class="text-center align-middle">Created</th> -->
-                                    <!-- <th class="text-center align-middle">Modified</th> -->
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($row = mysqli_fetch_array($result)) :
-                                    $quantity = (int)$row['quantity'];
-                                    $purchased = (int)$row['purchased'];
-                                ?>
+                                <?php while ($rowProduct = mysqli_fetch_array($result)) : ?>
                                     <tr>
-                                        <td class="text-center align-middle">
-                                            <?= $row['orderNo']; ?>
-                                        </td>
-                                        <td class="align-middle">
-                                            <a href="/project/templates/homedecor/product/view?id=<?= $row['id']; ?>" target="_blank" rel="noopener noreferrer">
-                                                <?= $row['name']; ?>
-                                            </a>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['category']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['supplierCode']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['size']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['sku']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['cost']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?php
-                                            if (empty($row['supplierCode'])) {
-                                                echo 0;
-                                            } elseif ($row['fixedPrice'] != 0) {
-                                                echo $row['fixedPrice'];
-                                            } else {
-                                                $stripped = (int)preg_replace("/[^0-9]/", "", $row['supplierCode']);
-                                                $thbDiscount = $row['thb'] * (1 - ($stripped / 100));
-                                                $costMYR = ($thbDiscount / 100) * 15;
-                                                echo $price = ($costMYR * 2.5) + 6;
-                                            }
-                                            ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $quantity; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?php if ($row['purchased'] == 0) : ?>
-                                                0
-                                            <?php else : ?>
-                                                <?= $row['purchased']; ?>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?php if ($quantity != 0) : $balance = $quantity - $purchased; ?>
-                                                <?= $balance; ?>
-                                            <?php else : ?>
-                                                0
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?php if ($row['quantity'] == 0) : ?>
-                                                <span class="badge badge-danger">
-                                                    Yes
-                                                </span>
-                                            <?php elseif ((($quantity - $purchased) / $quantity) < 0.5) : ?>
-                                                <span class="badge badge-warning">
-                                                    Yes
-                                                </span>
-                                            <?php else : ?>
-                                                <span class="badge badge-success">
-                                                    No
-                                                </span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <!-- <td class="text-center align-middle">
-                                            <?= $row['created']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <?= $row['modified']; ?>
-                                        </td> -->
+                                        <td class="text-center align-middle"><?= $rowProduct['orderNo']; ?></td>
+                                        <td class="align-middle"><?= $rowProduct; ?></td>
+                                        <td class="text-center align-middle"></td>
+                                        <td class="text-center align-middle"></td>
+                                        <td class="text-center align-middle"></td>
+                                        <td class="text-center align-middle"></td>
+                                        <td class="text-center align-middle"></td>
+                                        <td class="text-center align-middle"></td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
