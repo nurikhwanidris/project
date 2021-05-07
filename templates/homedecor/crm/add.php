@@ -1,3 +1,6 @@
+<!-- Title -->
+<?php $title = "Add New Customer"; ?>
+
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
 
@@ -131,82 +134,6 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                             <option value="Selangor">Selangor</option>
                                             <option value="Terengganu">Terengganu</option>
                                         </datalist>
-                                    </div>
-                                </div>
-                                <hr>
-                                <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
-                                <div class="row my-4">
-                                    <div class="col-lg-4">
-                                        <label for="">Product</label>
-                                        <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
-                                            <option value=""></option>
-                                            <?php foreach ($productSelectOptions as $val => $text) : ?>
-                                                <option value="<?= $val; ?>"><?= $text; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-1">
-                                        <label for="">Quantity</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Qty</span>
-                                            </div>
-                                            <input type="number" name="" id="quantity" class="form-control text-center" min="1" value="1">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-1">
-                                        <label for="">Discount</label>
-                                        <div class="input-group mb-3">
-                                            <input type="number" name="" id="discountItem" class="form-control text-center" placeholder="Discount" value="0">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-none">
-                                        <input type="text" name="id_text" id="productOrderNo" />
-                                        <input type="text" name="id_text" id="productName" />
-                                        <input type="text" name="id_text" id="productCost" />
-                                        <input type="text" name="id_text" id="productFixedPrice" />
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="row">
-                                            <label for="">&nbsp;</label>
-                                        </div>
-                                        <div class="row">
-                                            <input type="button" class="btn btn-info add-row" value="Add Item">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row my-2">
-                                    <div class="col-lg-10">
-                                        <table class="table table-stripped table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th class="align-middle text-center">/</th>
-                                                    <th class="align-middle text-center">Product ID</th>
-                                                    <th class="align-middle" style="width: 60%;">Product Name</th>
-                                                    <th class="align-middle text-center">Quantity</th>
-                                                    <th class="align-middle text-center">Price</th>
-                                                    <th class="align-middle text-center">Discount</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i> Delete Item</button>
-                                    </div>
-                                </div>
-                                <div class="row my-2">
-                                    <div class="col-lg-2">
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Disc for All</span>
-                                            </div>
-                                            <input type="number" name="discountAll" id="discountAll" class="form-control text-center" placeholder="Discount" value="0">
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="row my-3">
