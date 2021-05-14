@@ -238,6 +238,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             // Create tabel rows
             var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center border-0 form-control' value='" + discount + "'></td></tr>";
             $("table tbody").append(markup);
+
         });
 
         // Find and remove selected table rows

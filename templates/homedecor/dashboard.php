@@ -19,7 +19,7 @@ $resCust = mysqli_query($conn, $cust);
 $numOfCust = mysqli_num_rows($resCust);
 
 // Fetch amount of sales made in a month
-$sales = "SELECT SUM(amount_paid) AS salesMade, SUM(remaining_amount) AS   FROM homedecor_invoice";
+$sales = "SELECT SUM(amount_paid) AS salesMade, SUM(remaining_amount) AS balance FROM homedecor_invoice";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
 
