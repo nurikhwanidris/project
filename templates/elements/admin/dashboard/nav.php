@@ -311,6 +311,11 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <a class="collapse-item" href="/project/templates/homedecor/acc/list-cash">List</a>
                         <hr class="sidebar-divider">
                         <!-- Heading -->
+                        <h6 class="collapse-header">Payslip</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/add-payslip">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/list-payslip">List</a>
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
                         <h6 class="collapse-header">Settings</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/acc/settings">Settings</a>
                     </div>
