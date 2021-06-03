@@ -65,6 +65,10 @@
 <!-- Page level plugins -->
 <script src="/project/assets/vendor/chart.js/Chart.min.js"></script>
 
+<!-- Date range script -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 <!-- Page level custom scripts
 <script src="/project/assets/js/demo/chart-area-demo.js"></script>
 <script src="/project/assets/js/demo/chart-pie-demo.js"></script>
