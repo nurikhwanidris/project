@@ -100,7 +100,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-none">
+                                    <div class="">
                                         <input type="text" name="id_text" id="productOrderNo" />
                                         <input type="text" name="id_text" id="productName" />
                                         <input type="text" name="id_text" id="productCost" />
