@@ -70,7 +70,7 @@ if (isset($_POST['startDate'], $_POST['endDate'])) {
     } else {
         $output .= '  
                 <tr>  
-                     <td colspan="5">No Order Found</td>  
+                     <td class="text-center align-middle text-danger font-weight-bold" colspan="5">No Order Found</td>  
                 </tr>  
            ';
     }

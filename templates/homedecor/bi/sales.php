@@ -10,7 +10,6 @@
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -32,6 +31,7 @@
                             <legend>Month</legend>
                             <div class="col p-0">
                                 <select name="month" id="month" class="form-control">
+                                    <option value="">Select</option>
                                     <option value="01">January</option>
                                     <option value="02">February</option>
                                     <option value="03">March</option>
@@ -121,7 +121,7 @@
                     }
                 });
             } else {
-                alert("Please select both date!");
+                alert("Please select one of the filters");
             }
         });
     });
