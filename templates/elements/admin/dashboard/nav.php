@@ -196,7 +196,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <hr class="sidebar-divider">
                         <!-- Heading -->
                         <h6 class="collapse-header">Membership</h6>
-                        <a class="collapse-item" href="/project/templates/homedecor/crm/memberslist"">Membership List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/crm/memberslist">Membership List</a>
                         <a class=" collapse-item" href="#">Membership Report</a>
                     </div>
                 </div>
