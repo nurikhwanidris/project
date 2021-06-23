@@ -43,7 +43,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Order Management</h1>
     </div>
-    <form action="save-order.php" method="POST">
+    <form action="#" method="POST">
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
@@ -127,14 +127,26 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                                     <th class="align-middle pl-3" style="width: 60%;">Product Name</th>
                                                     <th class="align-middle text-center">Quantity</th>
                                                     <th class="align-middle text-center">Price</th>
+                                                    <th class="align-middle text-center">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="align-middle text-right" colspan="5">Subtotal</td>
+                                                    <td class="align-middle text-center"><input type="text" class="form-control border-0" readonly name="final_total_amount" id="final_total_amt"></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                     <div class="col-lg-2">
                                         <button type="button" class="btn btn-danger delete-row"><i class="far fa-trash-alt"></i></button>
+                                    </div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-lg-12">
+                                        <input type="text" name="subTotal" id="final_total_amt">
                                     </div>
                                 </div>
                                 <div style="display: none;" id="ship">
@@ -204,6 +216,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
 <script>
     $(document).ready(function() {
+        var final_total_amt = $('#final_total_amt').val();
+        var count = 1;
         $(".add-row").click(function() {
             var e = document.getElementById("product");
             var getID = e.value;
@@ -222,7 +236,6 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                 var productPrice = parseFloat($("#productFixedPrice").val()) * quantity
             }
 
-
             // Check for discount
             if (discountItem !== '') {
                 // Calculate discount
@@ -233,9 +246,11 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             }
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control total' id='total' value='" + productPrice + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' id='itemQuantity' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control total' id='itemPrice' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' class='border-0' id='actualAmount' readonly></td></tr>";
             $("table tbody").append(markup);
+
         });
+
         // Find and remove selected table rows
         $(".delete-row").click(function() {
             $("table tbody").find('input[name="record"]').each(function() {
@@ -244,6 +259,29 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                 }
             });
         });
+
+        function cal_final_total(count) {
+            var final_item_total = 0;
+            for (j = 1; j <= count; j++) {
+                var quantity = 0;
+                var price = 0;
+                var item_total = 0;
+                quantity = parseInt($("#quantity" + j).val());
+                // quantity = $("#quantity" + j).val();
+                if (quantity > 0) {
+                    price = parseFloat($("#productFixedPrice" + j).val());
+                    // price = $("#itemPrice" + j).val();
+                    if (price > 0) {
+                        actualAmount = parseFloat(quantity) * parseFloat(price);
+                        $("#actualAmount" + j).val(actualAmount);
+                        final_item_total = parseFloat(final_item_total) + parseFloat(item_total);
+                        $("#order_item_final_amount" + j).val(item_total);
+                    }
+                }
+            }
+            $('#final_total_amt').val('asd');
+        }
+
     });
 </script>
 
