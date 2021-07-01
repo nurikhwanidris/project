@@ -25,7 +25,11 @@ $rowSales = mysqli_fetch_assoc($resSales);
 
 // Bar Chart
 $chartRevenue = "SELECT SUM(amount_paid) AS totalAmount FROM homedecor_invoice GROUP BY MONTH(created)";
-$resultChart = mysqli_query($conn, $chartRevenue);
+$resultRevenue = mysqli_query($conn, $chartRevenue);
+
+// Bar Chart
+$chartBalance = "SELECT SUM(remaining_amount) AS sumBalance FROM homedecor_invoice GROUP BY MONTH(created)";
+$resultBalance = mysqli_query($conn, $chartBalance);
 
 // Pie Chart
 $pieChart = "SELECT COUNT(source) AS countSource, source FROM homedecor_customer GROUP BY source";
@@ -197,16 +201,32 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
         data: {
             labels: ["March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             datasets: [{
-                label: "Revenue",
-                backgroundColor: "#4e73df",
-                hoverBackgroundColor: "#2e59d9",
-                borderColor: "#4e73df",
-                data: [
-                    <?php while ($data = mysqli_fetch_array($resultChart)) :
-                        echo $data['totalAmount'] . ",";
-                    endwhile; ?>
-                ],
-            }],
+                    label: "Revenue",
+                    backgroundColor: "#4e73df",
+                    hoverBackgroundColor: "#2e59d9",
+                    borderColor: "#4e73df",
+                    data: [
+                        <?php
+                        while ($rowData1 = mysqli_fetch_array($resultRevenue)) :
+                            echo $rowData1['totalAmount'] . ",";
+                        endwhile;
+                        ?>
+                    ],
+                },
+                {
+                    label: "Balance",
+                    backgroundColor: "#df534e",
+                    hoverBackgroundColor: "#d9392e",
+                    borderColor: "#df534e",
+                    data: [
+                        <?php
+                        while ($rowData2 = mysqli_fetch_array($resultBalance)) :
+                            echo $rowData2['sumBalance'] . ",";
+                        endwhile;
+                        ?>
+                    ],
+                }
+            ],
         },
         options: {
             maintainAspectRatio: false,
