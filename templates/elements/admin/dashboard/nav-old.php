@@ -1,7 +1,7 @@
 <!-- Check for session -->
 <?php
 if (!isset($_SESSION['id'])) {
-    header('Location:/user/login?msg=Please login first.&alert=info');
+    header('Location:/project/user/login?msg=Please login first.&alert=info');
 }
 ?>
 
@@ -33,11 +33,11 @@ $rowLeave = mysqli_fetch_array($resultLeave);
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion d-print-none" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/project/templates/homedecor/dashboard">
-                <div class="sidebar-brand-icon">
-                    <i class="fas fa-brain"></i>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Neurali</div>
+                <div class="sidebar-brand-text mx-3">ETSB System</div>
             </a>
 
             <!-- Divider -->
@@ -45,10 +45,133 @@ $rowLeave = mysqli_fetch_array($resultLeave);
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="/project/templates/homedecor/dashboard">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Travel
+            </div>
+
+            <?php if ($rowOffice['role'] == 'Admin') : ?>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="far fa-window-maximize"></i>
+                        <span>CMS</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Components</h6>
+                            <a class="collapse-item" href="#">REMOVE THIS LATER</a>
+                            <a class="collapse-item" href="#">REMOVE THIS LATER</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+
+            <?php if ($rowOffice['dept'] == 'Tour' || $rowOffice['role'] == 'Admin') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-globe-asia"></i>
+                        <span>Tours</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Tour Components</h6>
+                            <a class="collapse-item" href="/project/templates/travel/tours/dashboard">Tours</a>
+                            <!-- <a class="collapse-item" href="/project/templates/travel/tours/summary">Summary</a> -->
+                            <a class="collapse-item" href="/project/templates/travel/tours/reports">Reports</a>
+                            <a class="collapse-item" href="/project/templates/travel/tours/settings">Settings</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCRM" aria-expanded="true" aria-controls="collapseCRM">
+                    <i class="far fa-address-card"></i>
+                    <span>CRM</span>
+                </a>
+                <div id="collapseCRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">CRM Components</h6>
+                        <a class="collapse-item" href="/project/templates/travel/crm/add">Customers</a>
+                        <a class="collapse-item" href="/project/templates/travel/crm/summary">Summary</a>
+                        <a class="collapse-item" href="/project/templates/travel/crm/reports">Reports</a>
+                        <a class="collapse-item" href="/project/templates/travel/crm/settings">Settings</a>
+                    </div>
+                </div>
+            </li>
+
+            <?php if ($rowOffice['dept'] == 'Tour' || $rowOffice['role'] == 'Admin') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHotel" aria-expanded="true" aria-controls="collapseHotel">
+                        <i class="fas fa-hotel"></i>
+                        <span>Hotel</span>
+                    </a>
+                    <div id="collapseHotel" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Hotel Components</h6>
+                            <a class="collapse-item" href="model/crm/add">Hotels</a>
+                            <a class="collapse-item" href="model/crm/summary">Rooms</a>
+                            <a class="collapse-item" href="model/crm/reports">Services</a>
+                            <a class="collapse-item" href="model/crm/settings">Settings</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Human Resource
+            </div>
+            <?php if ($rowOffice['role'] == 'Admin' || $rowOffice['role'] == 'Manager') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHRM" aria-expanded="true" aria-controls="collapseHRM">
+                        <i class="far fa-user-circle"></i>
+                        <span>HRM</span>
+                    </a>
+                    <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">HR Management</h6>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/summary">Employee List</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm//leave/summary">Leave Summary</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/add">Add Employee</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/report">Report</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/add">Settings</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
+
+            <?php if ($rowOffice['role'] == 'Staff') : ?>
+                <!-- Nav Item - Utilities Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHRM" aria-expanded="true" aria-controls="collapseHRM">
+                        <i class="fas fa-leaf"></i>
+                        <span>Leave</span>
+                    </a>
+                    <div id="collapseHRM" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Leave Management</h6>
+                            <a class="collapse-item" href="/project/templates/travel/hrm/summary">Leave Application</a>
+                            <a class="collapse-item" href="/project/templates/travel/hrm//leave/summary">Leave Summary</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -60,7 +183,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCRMdecor" aria-expanded="true" aria-controls="collapseCRMdecor">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-user-plus"></i>
                     <span>CRM</span>
                 </a>
                 <div id="collapseCRMdecor" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -69,13 +192,19 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <a class="collapse-item" href="/project/templates/homedecor/crm/add">Add</a>
                         <a class="collapse-item" href="/project/templates/homedecor/crm/list">List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/crm/category">Category</a>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Membership</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/crm/memberslist">Membership List</a>
+                        <a class=" collapse-item" href="#">Membership Report</a>
                     </div>
                 </div>
             </li>
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="true" aria-controls="collapseProduct">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-box-open"></i>
                     <span>Products</span>
                 </a>
                 <div id="collapseProduct" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -90,13 +219,15 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="true" aria-controls="collapseOrder">
-                    <i class="fas fa-meteor"></i>
-                    <span>Customer Order</span>
+                    <i class="fas fa-tags"></i>
+                    <span>Order</span>
                 </a>
                 <div id="collapseOrder" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Order Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/order/add">Add</a>
                         <a class="collapse-item" href="/project/templates/homedecor/order/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/order/product">Product List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/order/report">Report</a>
                     </div>
                 </div>
@@ -104,7 +235,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-file-invoice-dollar"></i>
                     <span>Invoice</span>
                 </a>
                 <div id="collapseInvoice" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -117,8 +248,23 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             </li>
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="true" aria-controls="collapseInventory">
+                    <i class="fas fa-boxes"></i>
+                    <span>Inventory</span>
+                </a>
+                <div id="collapseInventory" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Inventory Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/inventory/add">Add Item</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/inventory/list">Item List</a>
+                        <a class="collapse-item" href="#">Item Report</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplier" aria-expanded="true" aria-controls="collapseSupplier">
-                    <i class="fas fa-meteor"></i>
+                    <i class="fas fa-parachute-box"></i>
                     <span>Supplier</span>
                 </a>
                 <div id="collapseSupplier" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -138,18 +284,40 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                 </div>
             </li>
 
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Accounting
+            </div>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="true" aria-controls="collapseInventory">
-                    <i class="fas fa-boxes"></i>
-                    <span>Inventory</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount" aria-expanded="true" aria-controls="collapseAccount">
+                    <i class="fas fa-calculator"></i>
+                    <span>Accounting</span>
                 </a>
-                <div id="collapseInventory" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div id="collapseAccount" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Inventory Management</h6>
-                        <a class="collapse-item" href="/project/templates/homedecor/inventory/add">Add Item</a>
-                        <a class="collapse-item" href="/project/templates/homedecor/inventory/list">Item List</a>
-                        <a class="collapse-item" href="#">Item Report</a>
+                        <h6 class="collapse-header">Payment Voucher</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/add-pv">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/list-pv">List</a>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Cash In</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/add-cash">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/list-cash">List</a>
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Payslip</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/add-payslip">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/list-payslip">List</a>
+                        <hr class="sidebar-divider">
+                        <!-- Heading -->
+                        <h6 class="collapse-header">Settings</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/acc/settings">Settings</a>
                     </div>
                 </div>
             </li>
@@ -159,38 +327,27 @@ $rowLeave = mysqli_fetch_array($resultLeave);
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Accounting
+                Business Inteligence
             </div>
 
-            <?php if ($row['username'] = 'faridah' || $row['username'] = 'arzu.abdullah' || $row['username'] = 'nurikhwanidris') : ?>
-                <!-- Nav Item - Utilities Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount" aria-expanded="true" aria-controls="collapseAccount">
-                        <i class="fas fa-calculator"></i>
-                        <span>Accounting</span>
-                    </a>
-                    <div id="collapseAccount" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Payment Voucher</h6>
-                            <a class="collapse-item" href="/project/templates/homedecor/acc/add-pv">Add</a>
-                            <a class="collapse-item" href="/project/templates/homedecor/acc/list-pv">List</a>
-                            <!-- Divider -->
-                            <hr class="sidebar-divider">
-                            <!-- Heading -->
-                            <h6 class="collapse-header">Cash In</h6>
-                            <a class="collapse-item" href="/project/templates/homedecor/acc/add-cash">Add</a>
-                            <a class="collapse-item" href="/project/templates/homedecor/acc/list-cash">List</a>
-                            <!-- Heading -->
-                            <h6 class="collapse-header">Payslip</h6>
-                            <a class="collapse-item" href="/project/templates/homedecor/acc/add-payslip">Add</a>
-                            <a class="collapse-item" href="/project/templates/homedecor/acc/list-payslip">List</a>
-                            <!-- Heading -->
-                            <h6 class="collapse-header">Settings</h6>
-                            <a class="collapse-item" href="/project/templates/homedecor/acc/settings">Settings</a>
-                        </div>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true" aria-controls="collapseReport">
+                    <i class="fas fa-brain"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Reporting Module</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/crm">Customer Report</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/product">Product Report</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/sales">Sales Report</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/bi/supplier">Supplier Report</a>
+
                     </div>
-                </li>
-            <?php endif; ?>
+                </div>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -366,7 +523,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                    <?= $row['fName']; ?>
+                                    <?= $staffName = $row['fName']; ?>
                                 </span>
                                 <img class="img-profile rounded-circle" src="/project/assets/img/undraw_profile.svg">
                             </a>

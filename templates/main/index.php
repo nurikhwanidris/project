@@ -3,7 +3,6 @@
 
 <!-- Nav -->
 <?php include('../elements/main/nav.php') ?>
-
 <!--Main layout-->
 <main class="mt-5 pt-5">
     <div class="container">

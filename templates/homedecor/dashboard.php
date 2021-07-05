@@ -227,6 +227,7 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
                     ],
                 }
             ],
+            maxBarThickness: 25
         },
         options: {
             maintainAspectRatio: false,
@@ -250,7 +251,6 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
                     ticks: {
                         maxTicksLimit: 6
                     },
-                    maxBarThickness: 25,
                 }],
                 yAxes: [{
                     ticks: {
