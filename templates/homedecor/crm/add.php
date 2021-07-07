@@ -10,7 +10,6 @@
 <!-- Sidebar -->
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
-
 <!-- Get Package ID -->
 <?php
 $sql = "SELECT id, customerName FROM homedecor_customer ORDER BY id DESC";
