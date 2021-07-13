@@ -121,9 +121,8 @@
 
 <script>
     $(document).ready(function() {
-        // var splitValues = 0;
+
         $("input.variant").change(function() {
-            // asdasd
             var itemName = $("#itemName").val();
             var itemSupplier = $("#itemSupplier").val();
             var variantType = $("#variantType").val();
@@ -143,9 +142,10 @@
                     var pattern = "000"
                     var key = index + 1;
 
-                    var rows = '<tr><td class="text-left align-middle">' + itemName + ' - ' + item + ' - ' + splitColor[index] + '</td><td class="text-center align-middle">' + itemSku + '/' + (pattern + key).slice(-3) + '</td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostThb[]" id="costTHB"></td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostMyr" id="costMYR" readonly></td><td><input type="text" class="form-control border-0 text-center" name="itemSellingMyr[]" id="sellingMYR"></td></tr>';
+                    var rows = '<tr id="key' + index + '"><td class="text-left align-middle">' + itemName + ' - ' + item + ' - ' + splitColor[index] + '</td><td class="text-center align-middle">' + itemSku + '/' + (pattern + key).slice(-3) + '</td><td class="text-center align-middle"><input type="text" class="getTHB form-control border-0 text-center" name="itemCostThb[]" id="costTHB' + index + '"></td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostMyr" id="costMYR' + index + '" readonly></td><td><input type="text" class="form-control border-0 text-center" name="itemSellingMyr[]" id="sellingMYR' + index + '"></td></tr>';
                     $("table tbody").append(rows);
                 });
+
             } else if (size !== '') {
                 // split the value
                 var splitSize = size.split(',');
@@ -154,11 +154,15 @@
                     // Create SKU
                     var itemSku = itemName.substring(0, 3) + '/' + item;
 
+                    var index = 1;
+
                     var pattern = "000"
                     var key = index + 1;
 
-                    var rows = '<tr><td class="text-left align-middle">' + itemName + ' - ' + item + '</td><td class="text-center align-middle">' + itemSku + '/' + (pattern + key).slice(-3) + '</td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostThb[]" id="costTHB"></td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostMyr" id="costMYR" readonly></td><td><input type="text" class="form-control border-0 text-center" name="itemSellingMyr[]" id="sellingMYR"></td></tr>';
+                    var rows = '<tr id="key' + index + '"><td class="text-left align-middle">' + itemName + ' - ' + item + '</td><td class="text-center align-middle">' + itemSku + '/' + (pattern + key).slice(-3) + '</td><td class="text-center align-middle"><input type="text" class="getTHB form-control border-0 text-center" name="itemCostThb[]" id="costTHB' + index + '"></td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostMyr" id="costMYR' + index + '" readonly></td><td><input type="text" class="form-control border-0 text-center" name="itemSellingMyr[]" id="sellingMYR' + index + '"></td></tr>';
                     $("table tbody").append(rows);
+
+                    alert(index);
                 });
             } else {
                 // split the value
@@ -170,23 +174,25 @@
                     var pattern = "000"
                     var key = index + 1;
 
-                    var rows = '<tr id="test"><td class="text-left align-middle">' + itemName + ' - ' + item + '</td><td class="text-center align-middle">' + itemSku + '/' + (pattern + key).slice(-3) + '</td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostThb[]" id="costTHB"></td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostMyr" id="costMYR" readonly></td><td><input type="text" class="form-control border-0 text-center" name="itemSellingMyr[]" id="sellingMYR"></td></tr>';
+                    var rows = '<tr id="key' + index + '"><td class="text-left align-middle">' + itemName + ' - ' + item + '</td><td class="text-center align-middle">' + itemSku + '/' + (pattern + key).slice(-3) + '</td><td class="text-center align-middle"><input type="text" class="getTHB form-control border-0 text-center" name="itemCostThb[]" id="costTHB' + index + '"></td><td class="text-center align-middle"><input type="text" class="form-control border-0 text-center" name="itemCostMyr" id="costMYR' + index + '" readonly></td><td><input type="text" class="form-control border-0 text-center" name="itemSellingMyr[]" id="sellingMYR' + index + '"></td></tr>';
                     $("table tbody").append(rows);
-
-                    $("body tr[id='test']").on("change", "#costTHB", function() {
-                        var costTHB = $("#costTHB").val();
-
-                        // Calculate that shit
-                        var discTHB = (costTHB * .8);
-                        var costMYR = (discTHB / 100) * 15;
-                        var sellingMYR = (costMYR * 2.5) + 6 + 10;
-
-                        $("#costMYR").val(costMYR);
-                        $("#sellingMYR").val(sellingMYR);
-                    })
                 });
-
             }
         });
+
+        $("body").on("change", ".getTHB", function() {
+
+            var i = $(this).attr("id").replace(/costTHB/, '');
+
+            var costTHB = $("#costTHB" + i).val();
+
+            // Calculate that shit
+            var discTHB = (costTHB * .8);
+            var costMYR = (discTHB / 100) * 15;
+            var sellingMYR = (costMYR * 2.5) + 6 + 10;
+
+            $("#costMYR" + i).val(costMYR);
+            $("#sellingMYR" + i).val(sellingMYR);
+        })
     });
 </script>
