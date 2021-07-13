@@ -83,6 +83,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <h6 class="collapse-header">Product Management</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/product/add-new">Create New</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/add">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/product/new-list">New List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/list">List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/category">Category</a>
                     </div>
