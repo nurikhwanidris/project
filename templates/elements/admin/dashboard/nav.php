@@ -82,11 +82,15 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Product Management</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/product/add-new">Create New</a>
-                        <a class="collapse-item" href="/project/templates/homedecor/product/new2">New New</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/product/addProduct">New New</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/add">Add</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/new-list">New List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/list">List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/category">Category</a>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider my-0">
+                        <h6 class="collapse-header">Item Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/product/addItem">Add Item</a>
                     </div>
                 </div>
             </li>

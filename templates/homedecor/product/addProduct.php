@@ -40,7 +40,7 @@ $resultSource = mysqli_query($conn, $selectSource);
                             <div class="form-group row" id="productName-group">
                                 <label for="productName" class="col-sm-2 col-form-label">Product Name</label>
                                 <div class="col-sm-4">
-                                    <input type="text" name="productName" class="form-control" id="productName" value="" required>
+                                    <input type="text" name="productName" class="form-control text-capitalize" id="productName" value="" required>
                                 </div>
                             </div>
                             <div class="form-group row" id="productSupplier-group">
@@ -175,7 +175,7 @@ $resultSource = mysqli_query($conn, $selectSource);
             };
             $.ajax({
                 type: "POST",
-                url: "processProduct.php",
+                url: "insertProduct.php",
                 data: formData,
                 dataType: "json",
                 encode: true,

@@ -160,16 +160,6 @@ $result = mysqli_query($conn, $sql);
 
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                extend: 'excel',
-                attr: {
-                    title: 'Excel',
-                    id: 'copyButton',
-                    class: 'btn btn-success'
-                }
-            }]
-        });
+        $('#myTable').DataTable({});
     });
 </script>
