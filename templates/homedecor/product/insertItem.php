@@ -14,13 +14,13 @@ $itemSold = $_POST['itemSold'];
 date_default_timezone_set("Asia/Kuala_Lumpur");
 $created = date('Y-m-d H:i:s');
 
-$insert = "INSERT INTO homedecor_item2 (itemId, itemQuantity, itemAvailable, itemDefective, itemSold, created) VALUES ('$itemId', '$itemQuantity', '$itemAvailable', '$itemDefective', '$itemSold', '$created')";
+$insert = "INSERT INTO homedecor_item2 (productId, itemQuantity, itemAvailable, itemDefective, itemSold, created) VALUES ('$itemId', '$itemQuantity', '$itemAvailable', '$itemDefective', '$itemSold', '$created')";
 $result = mysqli_query($conn, $insert);
 
 if ($result) {
     // Message
     $data['success'] = true;
-    $data['message'] = 'Item quantity successfully inserted!';
+    $data['message'] = 'Item quantity succesfully inserted!';
 } else {
     // Message
     $data['success'] = false;

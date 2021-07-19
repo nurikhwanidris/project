@@ -109,7 +109,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                                 <div class="row my-2">
                                     <div class="col">
                                         <button type="submit" class="btn btn-primary float-right mx-2" id="submit">Submit</button>
-                                        <button type="reset" class="btn btn-danger float-right mx-2" id="">Reset</button>
+                                        <button type="reset" class="btn btn-danger float-left mx-2" id="">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -182,25 +182,25 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 data: formData,
                 encode: true,
             }).done(function(data) {
-                if (data) {
+                if (data.success = true) {
                     // console.log(data);
                     $("#message").html(
-                        '<div class="alert alert-success">Item quantity succesfully inserted</div>'
+                        '<div class="alert alert-success">Item quantity succesfully inserted!</div>'
                     );
-                    $("#message").fadeTo(3000, 500).slideUp(500, function() {
+                    $("#message").fadeTo(4000, 500).slideUp(500, function() {
                         $("#message").slideUp(500);
                     });
                 } else {
                     // console.log(data);
                     $("#message").html(
-                        '<div class="alert alert-danger">' + data.message + '</div>'
+                        '<div class="alert alert-danger">Something went wrong.</div>'
                     );
                 }
             }).fail(function(data) {
                 $("#message").html(
                     '<div class="alert alert-danger">Could not reach server, please try again later.</div>'
                 );
-                $("#message").fadeTo(3000, 500).slideUp(500, function() {
+                $("#message").fadeTo(4000, 500).slideUp(500, function() {
                     $("#message").slideUp(500);
                 });
             });
