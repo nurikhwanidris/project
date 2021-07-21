@@ -66,7 +66,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                 <div id="collapseCRMdecor" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Customer Management</h6>
-                        <a class="collapse-item" href="/project/templates/homedecor/crm/add">Add</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/crm/addCustomer">Add Customer</a>
                         <a class="collapse-item" href="/project/templates/homedecor/crm/list">List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/crm/category">Category</a>
                     </div>
