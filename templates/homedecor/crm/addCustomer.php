@@ -345,7 +345,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
         $(".add-row").click(function() {
             var e = $("#product");
-            var itemId = $("#itemId");
+            var itemId = $("#itemId").val();
             var getID = e.val();
             var name = $("#product option:selected").text();
             var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(3, '0') + '-' + $("#productId").val();
