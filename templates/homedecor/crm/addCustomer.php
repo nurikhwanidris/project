@@ -46,7 +46,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
         <h1 class="h3 mb-0 text-gray-800">Customers Management</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    <form action="save-customer.php" method="POST">
+    <form action="saveOrder.php" method="POST">
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
@@ -94,7 +94,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     </div>
                                     <div class="col-lg-2 form-group">
                                         <label for="">Birthday</label>
-                                        <input type="date" name="dob" id="" class="form-control">
+                                        <input type="date" name="customerBirthday" id="" class="form-control">
                                     </div>
                                     <div class="col-lg-3 form-group">
                                         <label for="">Client Email</label>
@@ -179,12 +179,16 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <input type="text" id="productItemCode" />
                                 <label for="">product category</label>
                                 <input type="text" id="productCategory" />
+                                <label for="">item id</label>
+                                <input type="text" id="itemId" />
                                 <label for="">item available</label>
                                 <input type="text" id="itemAvailable" />
                                 item code
                                 <input type="text" id="itemProductId" />
                                 <label for="">item sold</label>
                                 <input type="text" id="itemSold" />
+                                <label for="">selling myr</label>
+                                <input type="text" id="productSellingMYR" />
                             </div>
                             <div class="col-lg-1">
                                 <div class="row">
@@ -195,15 +199,15 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                         </div>
                         <div class="row my-2">
                             <div class="col-lg-11">
-                                <table class="table table-sm table-stripped table-bordered">
+                                <table class="table table-sm table-stripped table-bordered" id="tblProducts">
                                     <thead>
                                         <tr>
                                             <th class="align-middle text-center">/</th>
-                                            <th class="align-middle text-center">ID</th>
+                                            <th class="align-middle text-center">Code</th>
                                             <th class="align-middle" style="width: 60%;">Product Name</th>
                                             <th class="align-middle text-center">Quantity</th>
-                                            <th class="align-middle text-center">Price</th>
-                                            <th class="align-middle text-center">Discount</th>
+                                            <th class="align-middle text-right">Unit Price</th>
+                                            <th class="align-middle text-right">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -220,6 +224,20 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <input type="number" name="discountAll" id="discountAll" class="form-control text-center" placeholder="Discount" value="0">
                             </div>
                         </div> -->
+                        <div class="row my-2">
+                            <div class="col-sm-2">
+                                <label for="">Shipping</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">RM</span>
+                                    </div>
+                                    <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row my-3">
                             <div class="col">
                                 <button type="submit" class="btn btn-primary float-right" onclick="return confirm('Are you sure about submitting the data?');">Submit</button>
@@ -290,7 +308,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     var $productSupplier = $("#productSupplier");
     var $productItemCode = $("#productItemCode");
     var $productCategory = $("#productCategory");
-    var $itemAvailable = $("#itemAvailable");
+    var $productSellingMYR = $("#productSellingMYR");
+    var $itemId = $("#itemId");
     var $itemAvailable = $("#itemAvailable");
     var $itemProductId = $("#itemProductId");
     var $itemSold = $("#itemSold");
@@ -306,8 +325,10 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             $productSupplier.val(r.productSupplier);
             $productItemCode.val(r.productItemCode);
             $productCategory.val(r.productCategory);
+            $itemId.val(r.itemId);
             $itemAvailable.val(r.itemAvailable);
             $itemProductId.val(r.itemProductId);
+            $productSellingMYR.val(r.productSellingMYR);
             $itemSold.val(r.itemSold);
         });
     }
@@ -321,31 +342,28 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
 <script>
     $(document).ready(function() {
+
         $(".add-row").click(function() {
             var e = $("#product");
+            var itemId = $("#itemId");
             var getID = e.val();
             var name = $("#product option:selected").text();
             var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(3, '0') + '-' + $("#productId").val();
             var productOrderNo = $("#productOrderNo").val();
             var quantity = parseInt($("#quantity").val());
             var discountItem = parseInt($("#discountItem").val());
+            var productSellingMYR = parseFloat($("#productSellingMYR").val());
 
-            // Calculate price based on cost
-            var productCost = parseFloat($("#productCost").val());
-            var productFixedPrice = parseFloat($("#productFixedPrice").val());
-            if (productFixedPrice === 0) {
-                var productPrice = Math.round((productCost * 2.5) + 6) * quantity;
+            // Calculate the price
+            if (discountItem !== 0) {
+                var discount = (discountItem / 100) * productSellingMYR;
+                var amount = Math.round((productSellingMYR - discount) * quantity);
             } else {
-                var productPrice = parseFloat($("#productFixedPrice").val()) * quantity
+                var amount = productSellingMYR * quantity;
             }
 
-            // Calculate discount
-            var percentToDecimal = discountItem / 100;
-            var percent = percentToDecimal * productPrice;
-            var discount = productPrice - percent;
-
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center border-0 form-control' value='" + discount + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemIds[]' value='" + itemId + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-right p-0 m-0 border-0 form-control' value='" + productSellingMYR.toFixed(2) + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-right p-0 m-0 border-0 form-control' value='" + amount.toFixed(2) + "'></td></tr>";
             $("table tbody").append(markup);
         });
 

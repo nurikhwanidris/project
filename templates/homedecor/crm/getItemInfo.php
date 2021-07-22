@@ -23,6 +23,7 @@ if (array_key_exists('product', $_POST)) {
     $rowProduct = mysqli_fetch_assoc($resultProduct);
 
     $selectItem = "SELECT
+    homedecor_item2.id AS itemId,
     homedecor_item2.productId AS itemProductId,
     homedecor_item2.itemAvailable AS itemAvailable,
     homedecor_item2.itemSold As itemSold
@@ -40,6 +41,7 @@ if (array_key_exists('product', $_POST)) {
     $response['productCategory'] = $rowProduct['productCategory'];
     $response['productSize'] = $rowProduct['productSize'];
     $response['productSellingMYR'] = $rowProduct['productSellingMYR'];
+    $response['itemId'] = $rowItem['itemId'];
     $response['itemProductId'] = $rowItem['itemProductId'];
     $response['itemAvailable'] = $rowItem['itemAvailable'];
     $response['itemSold'] = $rowItem['itemSold'];
