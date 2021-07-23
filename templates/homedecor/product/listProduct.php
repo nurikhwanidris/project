@@ -80,7 +80,7 @@ $result = mysqli_query($conn, $sql);
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
                                         <td class="text-left align-middle">
-                                            <a href="#" id="editProduct" data-toggle="modal" data-target="#exampleModalLong"><?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?></a>
+                                            <a href="viewProduct?id=<?= $rowItem['id']; ?>"><?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?></a>
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['name']; ?>
@@ -115,38 +115,9 @@ $result = mysqli_query($conn, $sql);
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Item Code</th>
-                                    <th>Name</th>
-                                    <th>Supplier</th>
-                                    <th>Category</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -157,32 +128,12 @@ $result = mysqli_query($conn, $sql);
 
 <script>
     $(document).ready(function() {
-        // Setup - add a text input to each footer cell
-        $('#myTable tfoot th').each(function() {
-            var title = $(this).text();
-            $(this).html('<input type="text" class="border-0 input-sm" placeholder="Search ' + title + '" />');
-        });
-
         var table = $('#myTable').DataTable({
             orderFixed: [
                 [3, 'asc']
             ],
             rowGroup: {
                 dataSrc: 3
-            },
-            initComplete: function() {
-                // Apply the search
-                this.api().columns().every(function() {
-                    var that = this;
-
-                    $('input', this.footer()).on('keyup change clear', function() {
-                        if (that.search() !== this.value) {
-                            that
-                                .search(this.value)
-                                .draw();
-                        }
-                    });
-                });
             }
         });
 
@@ -201,26 +152,4 @@ $result = mysqli_query($conn, $sql);
             table.rowGroup().dataSrc($(this).data('column'));
         });
     });
-
-    // // Edit product
-    // $(document).on('click', 'btn-edit', function() {
-    //     var id = $(this).data("id");
-    //     var editName = $(this).data("editName");
-    //     var editCategory = $(this).data("editCategory");
-    //     var editSupplier = $(this).data("editSupplier");
-    //     var editCostTHB = $(this).data("editCostTHB");
-    //     var editSellingMYR = $(this).data("editSellingMYR");
-
-    //     $("#editId").val(id);
-    //     $("#editName").val(editName);
-    //     $("#editCategory").val(editCategory);
-    //     $("#editSupplier").val(editSupplier);
-    //     $("#editCostTHB").val(editCostTHB);
-    //     $("#editSellingMYR").val(editSellingMYR);
-
-    //     // Sambung dkt sini
-    //     $(document).on('click', '#submitEdit', function(event) {
-
-    //     })
-    // });
 </script>
