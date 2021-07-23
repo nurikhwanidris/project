@@ -6,6 +6,7 @@
 
 <!-- Datatable CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.1.3/css/rowGroup.dataTables.min.css">
 
 <!-- Get DB conn -->
 <?php include('../../../src/model/dbconn.php') ?>
@@ -19,54 +20,19 @@
 $sql = "SELECT * FROM homedecor_product2";
 $result = mysqli_query($conn, $sql);
 ?>
+
+<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Product List</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-    </div>
-    <!-- Content Row -->
-    <div class="row">
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Product Inserted</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= $numOfProd; ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-id-card fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Active Products</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= $numOfActive; ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-users fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Content Row -->
@@ -92,10 +58,12 @@ $result = mysqli_query($conn, $sql);
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="table-responsive">
+                        <a class="group-by btn btn-info btn-sm float-right" data-column="2">Supplier</a>
+                        <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th class="text-center align-middle">Item Code</th>
+                                    <th class="text-left align-middle">Item Code</th>
                                     <th class="align-middle">Name</th>
                                     <th class="text-center align-middle">Supplier</th>
                                     <th class="text-center align-middle">Category</th>
@@ -111,8 +79,8 @@ $result = mysqli_query($conn, $sql);
                             <tbody>
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
-                                        <td class="text-center align-middle">
-                                            <?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
+                                        <td class="text-left align-middle">
+                                            <a href="#" id="editProduct" data-toggle="modal" data-target="#exampleModalLong"><?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?></a>
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['name']; ?>
@@ -147,9 +115,38 @@ $result = mysqli_query($conn, $sql);
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Item Code</th>
+                                    <th>Name</th>
+                                    <th>Supplier</th>
+                                    <th>Category</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -160,6 +157,70 @@ $result = mysqli_query($conn, $sql);
 
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable({});
+        // Setup - add a text input to each footer cell
+        $('#myTable tfoot th').each(function() {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="border-0 input-sm" placeholder="Search ' + title + '" />');
+        });
+
+        var table = $('#myTable').DataTable({
+            orderFixed: [
+                [3, 'asc']
+            ],
+            rowGroup: {
+                dataSrc: 3
+            },
+            initComplete: function() {
+                // Apply the search
+                this.api().columns().every(function() {
+                    var that = this;
+
+                    $('input', this.footer()).on('keyup change clear', function() {
+                        if (that.search() !== this.value) {
+                            that
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+                });
+            }
+        });
+
+        // Change the fixed ordering when the data source is updated
+        table.on('rowgroup-datasrc', function(e, dt, val) {
+            table.order.fixed({
+                pre: [
+                    [val, 'asc']
+                ]
+            }).draw();
+        });
+
+        $('a.group-by').on('click', function(e) {
+            e.preventDefault();
+
+            table.rowGroup().dataSrc($(this).data('column'));
+        });
     });
+
+    // // Edit product
+    // $(document).on('click', 'btn-edit', function() {
+    //     var id = $(this).data("id");
+    //     var editName = $(this).data("editName");
+    //     var editCategory = $(this).data("editCategory");
+    //     var editSupplier = $(this).data("editSupplier");
+    //     var editCostTHB = $(this).data("editCostTHB");
+    //     var editSellingMYR = $(this).data("editSellingMYR");
+
+    //     $("#editId").val(id);
+    //     $("#editName").val(editName);
+    //     $("#editCategory").val(editCategory);
+    //     $("#editSupplier").val(editSupplier);
+    //     $("#editCostTHB").val(editCostTHB);
+    //     $("#editSellingMYR").val(editSellingMYR);
+
+    //     // Sambung dkt sini
+    //     $(document).on('click', '#submitEdit', function(event) {
+
+    //     })
+    // });
 </script>
