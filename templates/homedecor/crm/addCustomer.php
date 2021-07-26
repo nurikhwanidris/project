@@ -231,7 +231,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">RM</span>
                                     </div>
-                                    <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)">
+                                    <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)" value="20">
                                     <div class="input-group-append">
                                         <span class="input-group-text">.00</span>
                                     </div>
