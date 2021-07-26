@@ -18,12 +18,12 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
 // Get order details
 $id = $_GET['id'];
-$order = "SELECT * FROM homedecor_order WHERE id = '$id'";
+$order = "SELECT * FROM homedecor_order2 WHERE id = '$id'";
 $resultOrder = mysqli_query($conn, $order);
 $rowOrder = mysqli_fetch_assoc($resultOrder);
 
 // Get customer Details
-$customer = "SELECT * FROM homedecor_customer WHERE id = '" . $rowOrder['customer_id'] . "'";
+$customer = "SELECT * FROM homedecor_customer WHERE id = '" . $rowOrder['customerId'] . "'";
 $resultCustomer = mysqli_query($conn, $customer);
 $rowCustomer = mysqli_fetch_assoc($resultCustomer);
 
@@ -192,8 +192,7 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php
-                                                for ($i = 0; $i < count($products); $i++) :
+                                                <?php for ($i = 0; $i < count($products); $i++) :
                                                     $product = $products[$i];
                                                     $quantity = $quantities[$i];
                                                     $price = $prices[$i];

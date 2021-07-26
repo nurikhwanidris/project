@@ -104,4 +104,7 @@ for ($i = 0; $i < count($productIds); $i++) {
     } else {
         echo mysqli_error($conn) . '<br>';
     }
+
+    $_SESSION['items'] = 'Successfully created the order and update item details';
+    header("Location: /project/templates/homedecor/order/orderList.php");
 }
