@@ -89,12 +89,18 @@ for ($i = 0; $i < count($productIds); $i++) {
     $insertOrderItems = "INSERT INTO homedecor_order_item (orderId, productId, itemId, productPrice, productDiscount, quantity, created) VALUES ('$lastInsertId', '$productId', '$itemId', '$productPrice', '$discountItem', '$quantity', '$created')";
     $resultOrderItems = mysqli_query($conn, $insertOrderItems);
 
+    if ($resultOrderItems) {
+        echo "Succesfully inserted the order with item details <br>";
+    } else {
+        echo mysqli_error($conn) . '<br>';
+    }
+
     // Update the quantity
     $updateOrderItems = "UPDATE homedecor_item2 SET itemAvailable = itemAvailable - '$quantity', itemSold = itemSold + '$quantity' WHERE productId = '$productId'";
     $resultUpdateItems = mysqli_query($conn, $updateOrderItems);
 
-    if ($resultOrderItems && $resultUpdateItems) {
-        echo "Succesfully insert and update the order with item details <br>";
+    if ($resultUpdateItems) {
+        echo "Succesfully updated the order with item details <br>";
     } else {
         echo mysqli_error($conn) . '<br>';
     }
