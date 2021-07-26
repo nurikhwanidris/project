@@ -65,14 +65,13 @@ if ($resultInsertCustomer) {
 }
 
 // Insert order details 2nd
-// $insertOrder = "INSERT INTO homedecor_order2 (customerId, status, subTotal, itemDiscount, shipping, total, promo, discount, grandTotal, created) VALUES ('$lastInsertCustomer', '$status', '$subTotal', '$itemDiscount', '$shipping', '$total', '$promo', '$discAfterPromo', '$grandTotal' '$created')";
 $insertOrder = "INSERT INTO homedecor_order2 (customerId, status, subTotal,  itemDiscount, shipping, total, promo, discount, grandTotal, created) VALUES ('$lastInsertCustomer', '$status', '$subTotal', '$itemDiscount', '$shipping', '$total', '$promo', '$discAfterPromo','$grandTotal', '$created')";
 $resultInsertOrder = mysqli_query($conn, $insertOrder);
 $lastInsertId = mysqli_insert_id($conn);
 
 // Error check
 if ($resultInsertOrder) {
-    echo "Successfully inserted the order details <br>";
+    echo "Succesfully inserted the order details <br>";
 } else {
     echo mysqli_error($conn) . '<br>';
 }
@@ -90,8 +89,12 @@ for ($i = 0; $i < count($productIds); $i++) {
     $insertOrderItems = "INSERT INTO homedecor_order_item (orderId, productId, itemId, productPrice, productDiscount, quantity, created) VALUES ('$lastInsertId', '$productId', '$itemId', '$productPrice', '$discountItem', '$quantity', '$created')";
     $resultOrderItems = mysqli_query($conn, $insertOrderItems);
 
-    if ($resultOrderItems) {
-        echo "Succesfully insert the order with item details <br>";
+    // Update the quantity
+    $updateOrderItems = "UPDATE homedecor_item2 SET itemAvailable = itemAvailable - '$quantity', itemSold = itemSold + '$quantity' WHERE productId = '$productId'";
+    $resultUpdateItems = mysqli_query($conn, $updateOrderItems);
+
+    if ($resultOrderItems && $resultUpdateItems) {
+        echo "Succesfully insert and update the order with item details <br>";
     } else {
         echo mysqli_error($conn) . '<br>';
     }
