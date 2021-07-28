@@ -192,29 +192,7 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php for ($i = 0; $i < count($products); $i++) :
-                                                    $product = $products[$i];
-                                                    $quantity = $quantities[$i];
-                                                    $price = $prices[$i];
-                                                    $discount = $discountItems[$i];
-                                                    $selectProduct = "SELECT * FROM homedecor_product WHERE id = '$product'";
-                                                    $resultProduct = mysqli_query($conn, $selectProduct);
-                                                    $rowProduct = mysqli_fetch_array($resultProduct);
-                                                ?>
-                                                    <tr>
-                                                        <td class="align-middle text-center">
-                                                            <input type='checkbox' name='record'>
-                                                        </td>
-                                                        <td class="align-middle text-center"><?= $rowProduct['orderNo']; ?></td>
-                                                        <td class="align-middle "><input type='text' class='border-0 form-control' value='<?= $rowProduct['name']; ?>'><input type='text' name='productId[]' value='<?= $rowProduct['id']; ?>' class='d-none'></td>
-                                                        <td class="align-middle text-center">
-                                                            <input type="text" name="quantity[]" id="" class="form-control text-center border-0 form-control-sm" value="<?= $quantity; ?>">
-                                                        </td>
-                                                        <td class="align-middle text-center"><input type="text" name="productPrice[]" id="" class="form-control form-control-sm text-center border-0" value="<?= $price; ?>">
-                                                        </td>
-                                                        <td class="align-middle text-center"><input type="text" name="discountItem[]" id="" class="form-control text-center form-control-sm border-0" value="<?= $discount; ?>"></td>
-                                                    </tr>
-                                                <?php endfor; ?>
+                                                asd
                                             </tbody>
                                         </table>
                                     </div>
