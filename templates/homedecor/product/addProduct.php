@@ -23,12 +23,20 @@ $resultSource = mysqli_query($conn, $selectSource);
         <h1 class="h3 mb-0 text-gray-800">Product Management</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div id="message"></div>
+    <?php if (isset($_SESSION['status'])) : ?>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-<?= $_SESSION['alert'] ?> alert-dismissible fade show" role="alert">
+                    <?= $_SESSION['status'] ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-    <form action="#" method="POST" class="was-validated" novalidate>
+    <?php unset($_SESSION['status']);
+    endif; ?>
+    <form action="insertProduct.php" method="POST" class="was-validated" novalidate enctype="multipart/form-data">
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
@@ -103,11 +111,24 @@ $resultSource = mysqli_query($conn, $selectSource);
                             <div class="form-group row" id="productSellingMYR-group">
                                 <label for="productSellingMYR" class="col-sm-2">Selling Price (MYR)</label>
                                 <div class="col-sm-2">
-                                    <input type="text" name="productSellingMYR" id="productSellingMYR" class="form-control">
+                                    <input type="text" name="productSellingMYR" id="productSellingMYR" class="form-control" required>
                                 </div>
                                 <label for="productProfitMYR" class="col-sm-1">Profit (MYR)</label>
                                 <div class="col-sm-2">
                                     <input type="text" name="productProfitMYR" id="productProfitMYR" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="productImg-group">
+                                <label for="" class="col-sm-2">Product Image</label>
+                                <div class="col-sm-2">
+
+                                    <input type='file' id="productImg" name="productImg" class="form-control" accept="image/x-png,image/gif,image/jpeg">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-2">
+                                    <img id="preview" src="#" alt="image will display here" class="img-thumbnail" style="margin-bottom: 10px;">
                                 </div>
                             </div>
                             <div class="row">
@@ -156,100 +177,118 @@ $resultSource = mysqli_query($conn, $selectSource);
         });
     });
 
-    $(document).ready(function() {
-        // Submit form backend
-        $("form").submit(function(event) {
-            $(".form-group").removeClass("has-error");
-            $(".text-danger").remove();
-            var formData = {
-                productName: $("#productName").val(),
-                productSupplier: $("#productSupplier").val(),
-                productCategory: $("#productCategory").val(),
-                productCategoryCode: $("#productCategoryCode").val(),
-                productSize: $("#productSize").val(),
-                productVariation: $("#productVariation").val(),
-                productCostTHB: $("#productCostTHB").val(),
-                productAfterDiscTHB: $("#productAfterDiscTHB").val(),
-                productCostMYR: $("#productCostMYR").val(),
-                productSellingMYR: $("#productSellingMYR").val(),
-            };
-            $.ajax({
-                type: "POST",
-                url: "insertProduct.php",
-                data: formData,
-                dataType: "json",
-                encode: true,
-            }).done(function(data) {
-                $("form").trigger("reset");
-                console.log(data);
-                if (!data.success) {
-                    if (data.errors.productName) {
-                        $("#productName-group").append(
-                            '<div class="text-danger">' + data.errors.productName + "</div>"
-                        );
-                    }
-                    if (data.errors.productSupplier) {
-                        $("#productSupplier-group").append(
-                            '<div class="text-danger">' + data.errors.productSupplier + "</div>"
-                        );
-                    }
-                    if (data.errors.productCategory) {
-                        $("#productCategory-group").append(
-                            '<div class="text-danger">' + data.errors.productCategory + "</div>"
-                        );
-                    }
-                    if (data.errors.productCategoryCode) {
-                        $("#productCategoryCode-group").append(
-                            '<div class="text-danger">' + data.errors.productCategoryCode + "</div>"
-                        );
-                    }
-                    if (data.errors.productSize) {
-                        $("#productSize-group").append(
-                            '<div class="text-danger">' + data.errors.productSize + "</div>"
-                        );
-                    }
-                    if (data.errors.productVariation) {
-                        $("#productVariation-group").append(
-                            '<div class="text-danger">' + data.errors.productVariation + "</div>"
-                        );
-                    }
-                    if (data.errors.productCostTHB) {
-                        $("#productCostTHB-group").append(
-                            '<div class="text-danger">' + data.errors.productCostTHB + "</div>"
-                        );
-                    }
-                    if (data.errors.productAfterDiscountTHB) {
-                        $("#productAfterDiscountTHB-group").append(
-                            '<div class="text-danger">' + data.errors.productAfterDiscountTHB + "</div>"
-                        );
-                    }
-                    if (data.errors.productCostMYR) {
-                        $("#productCostMYR-group").append(
-                            '<div class="text-danger">' + data.errors.productCostMYR + "</div>"
-                        );
-                    }
-                    if (data.errors.productSellingMYR) {
-                        $("#productSellingMYR-group").append(
-                            '<div class="text-danger">' + data.errors.productSellingMYR + "</div>"
-                        );
-                    } else {
-                        $("#message").html(
-                            '<div class="alert alert-success">' + data.message + "</div>"
-                        );
-                        $("#message").fadeTo(3000, 500).slideUp(500, function() {
-                            $("#message").slideUp(500);
-                        });
-                    }
-                }
-            }).fail(function(data) {
-                $("#message").html(
-                    '<div class="alert alert-danger">Could not reach server, please try again later.</div>'
-                );
-                $("#message").fadeTo(3000, 500).slideUp(500, function() {
-                    $("#message").slideUp(500);
-                });
-            });
-            event.preventDefault();
-        });
-    })
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#productImg").change(function() {
+        readURL(this);
+    });
+
+    // Used pure php instead ajax because of image being uploaded too.
+
+    // $(document).ready(function() {
+    //     // Submit form backend
+    //     $("form").submit(function(event) {
+    //         $(".form-group").removeClass("has-error");
+    //         $(".text-danger").remove();
+    //         var formData = {
+    //             productName: $("#productName").val(),
+    //             productSupplier: $("#productSupplier").val(),
+    //             productCategory: $("#productCategory").val(),
+    //             productCategoryCode: $("#productCategoryCode").val(),
+    //             productSize: $("#productSize").val(),
+    //             productVariation: $("#productVariation").val(),
+    //             productCostTHB: $("#productCostTHB").val(),
+    //             productAfterDiscTHB: $("#productAfterDiscTHB").val(),
+    //             productCostMYR: $("#productCostMYR").val(),
+    //             productSellingMYR: $("#productSellingMYR").val(),
+    //         };
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "insertProduct.php",
+    //             data: formData,
+    //             dataType: "json",
+    //             encode: true,
+    //         }).done(function(data) {
+    //             $("form").trigger("reset");
+    //             console.log(data);
+    //             if (!data.success) {
+    //                 if (data.errors.productName) {
+    //                     $("#productName-group").append(
+    //                         '<div class="text-danger">' + data.errors.productName + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productSupplier) {
+    //                     $("#productSupplier-group").append(
+    //                         '<div class="text-danger">' + data.errors.productSupplier + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productCategory) {
+    //                     $("#productCategory-group").append(
+    //                         '<div class="text-danger">' + data.errors.productCategory + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productCategoryCode) {
+    //                     $("#productCategoryCode-group").append(
+    //                         '<div class="text-danger">' + data.errors.productCategoryCode + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productSize) {
+    //                     $("#productSize-group").append(
+    //                         '<div class="text-danger">' + data.errors.productSize + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productVariation) {
+    //                     $("#productVariation-group").append(
+    //                         '<div class="text-danger">' + data.errors.productVariation + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productCostTHB) {
+    //                     $("#productCostTHB-group").append(
+    //                         '<div class="text-danger">' + data.errors.productCostTHB + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productAfterDiscountTHB) {
+    //                     $("#productAfterDiscountTHB-group").append(
+    //                         '<div class="text-danger">' + data.errors.productAfterDiscountTHB + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productCostMYR) {
+    //                     $("#productCostMYR-group").append(
+    //                         '<div class="text-danger">' + data.errors.productCostMYR + "</div>"
+    //                     );
+    //                 }
+    //                 if (data.errors.productSellingMYR) {
+    //                     $("#productSellingMYR-group").append(
+    //                         '<div class="text-danger">' + data.errors.productSellingMYR + "</div>"
+    //                     );
+    //                 } else {
+    //                     $("#message").html(
+    //                         '<div class="alert alert-success">' + data.message + "</div>"
+    //                     );
+    //                     $("#message").fadeTo(3000, 500).slideUp(500, function() {
+    //                         $("#message").slideUp(500);
+    //                     });
+    //                 }
+    //             }
+    //         }).fail(function(data) {
+    //             $("#message").html(
+    //                 '<div class="alert alert-danger">Could not reach server, please try again later.</div>'
+    //             );
+    //             $("#message").fadeTo(3000, 500).slideUp(500, function() {
+    //                 $("#message").slideUp(500);
+    //             });
+    //         });
+    //         event.preventDefault();
+    //     });
+    // })
 </script>
