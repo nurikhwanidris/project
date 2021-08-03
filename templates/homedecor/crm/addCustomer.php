@@ -24,11 +24,23 @@ if ($resultCustomer) {
 
 <!-- Get Product -->
 <?php
-$product = "SELECT * FROM homedecor_product2";
+$product = "SELECT 
+homedecor_product2.id AS productid,
+homedecor_product2.name AS productName,
+homedecor_product2.variation AS productVariation,
+homedecor_product2.supplier AS productSupplier,
+homedecor_product2.itemId AS productItemId,
+homedecor_item2.productId AS itemId,
+homedecor_item2.itemAvailable AS itemAvailable
+FROM homedecor_product2
+JOIN homedecor_item2
+ON homedecor_product2.id = homedecor_item2.productId";
 $resultproduct = mysqli_query($conn, $product);
+
+// Select product
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
-    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'] . ' - ' . $rowProduct['itemId'];
+    $productSelectOptions[$rowProduct['productid']] = $rowProduct['productSupplier'] . ' | ' . $rowProduct['productItemId'] .  ' - ' .  $rowProduct['productName'] . ' - ' . $rowProduct['productVariation'] . ' [' . $rowProduct['itemAvailable'] . ' left]';
 }
 ?>
 
@@ -179,6 +191,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <input type="text" id="productItemCode" />
                                 <label for="">product category</label>
                                 <input type="text" id="productCategory" />
+                                <label for="">product variation</label>
+                                <input type="text" id="productVariation" />
                                 <label for="">item id</label>
                                 <input type="text" id="itemId" />
                                 <label for="">item available</label>
@@ -218,12 +232,6 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i></button>
                             </div>
                         </div>
-                        <!-- <div class="row my-2">
-                            <div class="col-lg-3">
-                                <label for="discountAll" class="">Discount for All</label>
-                                <input type="number" name="discountAll" id="discountAll" class="form-control text-center" placeholder="Discount" value="0">
-                            </div>
-                        </div> -->
                         <div class="row my-2">
                             <div class="col-sm-2">
                                 <label for="">Shipping</label>
@@ -308,6 +316,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     var $productSupplier = $("#productSupplier");
     var $productItemCode = $("#productItemCode");
     var $productCategory = $("#productCategory");
+    var $productVariation = $("#productVariation");
     var $productSellingMYR = $("#productSellingMYR");
     var $itemId = $("#itemId");
     var $itemAvailable = $("#itemAvailable");
@@ -325,6 +334,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             $productSupplier.val(r.productSupplier);
             $productItemCode.val(r.productItemCode);
             $productCategory.val(r.productCategory);
+            $productVariation.val(r.productVariation);
             $itemId.val(r.itemId);
             $itemAvailable.val(r.itemAvailable);
             $itemProductId.val(r.itemProductId);

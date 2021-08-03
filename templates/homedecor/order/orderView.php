@@ -18,6 +18,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
 // Get order details
 $id = $_GET['id'];
+
+// $order = "SELECT * FROM homedecor_order2 WHERE id = '$id'";
 $order = "SELECT * FROM homedecor_order2 WHERE id = '$id'";
 $resultOrder = mysqli_query($conn, $order);
 $rowOrder = mysqli_fetch_assoc($resultOrder);
@@ -28,19 +30,48 @@ $resultCustomer = mysqli_query($conn, $customer);
 $rowCustomer = mysqli_fetch_assoc($resultCustomer);
 
 // Get product details
-$product = "SELECT * FROM homedecor_product";
+$product = "SELECT 
+homedecor_product2.id AS productid,
+homedecor_product2.name AS productName,
+homedecor_product2.variation AS productVariation,
+homedecor_product2.supplier AS productSupplier,
+homedecor_product2.itemId AS productItemId,
+homedecor_item2.productId AS itemId,
+homedecor_item2.itemAvailable AS itemAvailable
+FROM homedecor_product2
+JOIN homedecor_item2
+ON homedecor_product2.id = homedecor_item2.productId";
 $resultproduct = mysqli_query($conn, $product);
+
+// Get product details
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
-    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'] . ' | ' . $rowProduct['orderNo'] . ' | ' . $rowProduct['supplierCode'];
+    $productSelectOptions[$rowProduct['productid']] = $rowProduct['productSupplier'] . ' | ' . $rowProduct['productItemId'] .  ' - ' .  $rowProduct['productName'] . ' - ' . $rowProduct['productVariation'] . ' [' . $rowProduct['itemAvailable'] . ' left]';
 }
 
-// Explode everything boom!
-$products = explode(',', $rowOrder['product_id']);
-$quantities = explode(',', $rowOrder['quantity']);
-$prices = explode(',', $rowOrder['price']);
-$discountItems = explode(',', $rowOrder['discount_items']);
-$discountAll = explode(',', $rowOrder['discount_all']);
+// Order items
+$orderItem = "SELECT 
+homedecor_order2.customerId, 
+homedecor_order_item.id AS orderItemId,
+homedecor_order_item.productId, 
+homedecor_order_item.itemId, 
+homedecor_order_item.orderId, 
+homedecor_order_item.quantity, 
+homedecor_order_item.productPrice, 
+homedecor_order_item.productDiscount, 
+homedecor_product2.name,
+homedecor_product2.itemId AS productItemId,
+homedecor_product2.supplier,
+homedecor_product2.itemCode
+FROM homedecor_order_item 
+INNER JOIN homedecor_order2 ON homedecor_order_item.orderId = '$id' 
+JOIN homedecor_product2 
+ON homedecor_order_item.productId = homedecor_product2.id 
+JOIN homedecor_customer 
+ON homedecor_order2.customerId = homedecor_customer.id 
+GROUP BY homedecor_order_item.productId, homedecor_order_item.itemId 
+HAVING COUNT(homedecor_order_item.itemId) = COUNT(homedecor_order_item.productId)";
+$resultOrderItem = mysqli_query($conn, $orderItem);
 ?>
 <div class="container-fluid">
 
@@ -49,13 +80,14 @@ $discountAll = explode(',', $rowOrder['discount_all']);
         <h1 class="h3 mb-0 text-gray-800">Order Management</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    <form action="/project/templates/homedecor/crm/save-customer.php" method="POST">
+    <form action="updateOrder.php" method="POST">
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Order ID - <?= $id; ?></h6>
-                        <input type="text" name="id" id="" class="d-none" value="<?= $id; ?>"><input type="text" name="customerID" id="" class="form-control d-none" value="<?= $rowOrder['customer_id']; ?>">
+                        <input type="text" name="id" id="" class="form-control d-none" value="<?= $id; ?>">
+                        <input type="text" name="customerID" id="" class="form-control d-none" value="<?= $rowOrder['customerId']; ?>">
                     </div>
                     <div class="card-body">
                         <div class="tab-content" id="myTabContent">
@@ -89,7 +121,7 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                     </div>
                                     <div class="col-lg-2 form-group">
                                         <label for="">Birthday</label>
-                                        <input type="date" name="dob" id="" class="form-control">
+                                        <input type="date" name="customerBirthday" id="" class="form-control" value="<?= $rowCustomer['customerBirthday']; ?>">
                                     </div>
                                     <div class="col-lg-3 form-group">
                                         <label for="">Client Phone</label>
@@ -138,15 +170,16 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                 <hr>
                                 <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
                                 <div class="row my-4">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-7">
                                         <label for="">Product</label>
                                         <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
+                                            <option value=""></option>
                                             <?php foreach ($productSelectOptions as $val => $text) : ?>
                                                 <option value="<?= $val; ?>"><?= $text; ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <div class="col-lg-1">
+                                    <div class="col-lg-2">
                                         <label for="">Quantity</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
@@ -155,7 +188,7 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                             <input type="number" name="" id="quantity" class="form-control text-center" min="1" value="1">
                                         </div>
                                     </div>
-                                    <div class="col-lg-1">
+                                    <div class="col-lg-2">
                                         <label for="">Discount</label>
                                         <div class="input-group mb-3">
                                             <input type="number" name="" id="discountItem" class="form-control text-center" placeholder="Discount" value="0">
@@ -164,49 +197,94 @@ $discountAll = explode(',', $rowOrder['discount_all']);
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-none">
-                                        <input type="text" name="id_text" id="productOrderNo" />
-                                        <input type="text" name="id_text" id="productName" />
-                                        <input type="text" name="id_text" id="productCost" />
+                                    <div class="col-lg-12 d-none">
+                                        <label for="">product id</label>
+                                        <input type="text" id="productId" />
+                                        <label for="">product name</label>
+                                        <input type="text" id="productName" />
+                                        <label for="">product supplier</label>
+                                        <input type="text" id="productSupplier" />
+                                        <label for="">product code</label>
+                                        <input type="text" id="productItemCode" />
+                                        <label for="">product category</label>
+                                        <input type="text" id="productCategory" />
+                                        <label for="">product variation</label>
+                                        <input type="text" id="productVariation" />
+                                        <label for="">item id</label>
+                                        <input type="text" id="itemId" />
+                                        <label for="">item available</label>
+                                        <input type="text" id="itemAvailable" />
+                                        item code
+                                        <input type="text" id="itemProductId" />
+                                        <label for="">item sold</label>
+                                        <input type="text" id="itemSold" />
+                                        <label for="">selling myr</label>
+                                        <input type="text" id="productSellingMYR" />
                                     </div>
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-1">
                                         <div class="row">
                                             <label for="">&nbsp;</label>
                                         </div>
-                                        <div class="row">
-                                            <input type="button" class="btn btn-info add-row" value="Add Item">
-                                        </div>
+                                        <button type="button" class="btn btn-primary float-right add-row"><i class="fas fa-plus"></i></button>
                                     </div>
                                 </div>
                                 <div class="row my-2">
-                                    <div class="col-lg-10">
-                                        <table class="table table-stripped table-bordered">
+                                    <div class="col-lg-11">
+                                        <table class="table table-sm table-stripped table-bordered" id="tblProducts">
                                             <thead>
                                                 <tr>
                                                     <th class="align-middle text-center">/</th>
-                                                    <th class="align-middle text-center">Product ID</th>
+                                                    <th class="align-middle text-center">Code</th>
                                                     <th class="align-middle" style="width: 60%;">Product Name</th>
                                                     <th class="align-middle text-center">Quantity</th>
-                                                    <th class="align-middle text-center">Price</th>
-                                                    <th class="align-middle text-center">Discount</th>
+                                                    <th class="align-middle text-right">Unit Price</th>
+                                                    <th class="align-middle text-right">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                asd
+                                                <?php while ($rowOrderItem = mysqli_fetch_assoc($resultOrderItem)) : ?>
+                                                    <tr>
+                                                        <td class="text-center align-middle">
+                                                            <input type='checkbox' name='record'>
+                                                            <input type="text" class="form-control d-none" value="<?= $rowOrderItem['orderItemId']; ?>" name="orderItemId">
+                                                        </td>
+                                                        <td class="text-center align-middle">
+                                                            <?= $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['productItemId']; ?>
+                                                            <input type="text" name="productItemId" id="" class="form-control" value="<?= $rowOrderItem['productItemId']; ?>">
+                                                        </td>
+                                                        <td class="text-left align-middle">
+                                                            <?= $rowOrderItem['name']; ?>
+                                                            <input type="text" name="productId[]" value="<?= $rowOrderItem['productId']; ?>" class=""><input type="text" name="itemIds[]" value="<?= $rowOrderItem['productItemId']; ?>" class="">
+                                                        </td>
+                                                        <td class="text-center align-middle">
+                                                            <input type="text" name="quantity[]" class="text-center p-0 border-0 form-control" value="<?= $rowOrderItem['quantity']; ?>">
+                                                        </td>
+                                                        <td class="text-right align-middle">
+                                                            <input type="text" name="productPrice[]" class="text-right p-0 m-0 border-0 form-control" value="<?= number_format($rowOrderItem['productPrice'], 2, '.', ''); ?>">
+                                                        </td>
+                                                        <td class="text-right align-middle">
+                                                            <input type="text" name="discountItem[]" class="text-right p-0 m-0 border-0 form-control" value="<?= number_format($rowOrderItem['productDiscount'], 2, '.', ''); ?>">
+                                                        </td>
+                                                    </tr>
+                                                <?php endwhile; ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i> Delete Item</button>
+                                    <div class="col-lg-1">
+                                        <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i></button>
                                     </div>
                                 </div>
                                 <div class="row my-2">
-                                    <div class="col-lg-2">
+                                    <div class="col-sm-2">
+                                        <label for="">Shipping</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Disc for All</span>
+                                                <span class="input-group-text">RM</span>
                                             </div>
-                                            <input type="number" name="discountAll" id="discountAll" class="form-control text-center" placeholder="Discount" value="<?= $rowOrder['discount_all']; ?>">
+                                            <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)" value="20">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -242,30 +320,74 @@ $discountAll = explode(',', $rowOrder['discount_all']);
 </script>
 
 <!-- Get existing customer info -->
+<script>
+    $customerName = $('#customerName');
+    $customerPhone = $('#customerPhone');
+    $customerEmail = $('#customerEmail');
+    $customerAddress = $('#customerAddress');
+    $customerCity = $('#customerCity');
+    $customerPostcode = $('#customerPostcode');
+    $customerState = $('#customerState');
 
+    // Fetch from the API
+    var url = 'getCustomerInfo.php';
+
+    function refreshInputForCustomer(customer) {
+        $.post(url, {
+            customer: customer
+        }, function(r) {
+            /**
+             * Assuming your PHP API responds with a JSON encoded array, with the ID available.
+             */
+            $customerName.val(r.customerName);
+            $customerPhone.val(r.customerPhone);
+            $customerEmail.val(r.customerEmail);
+            $customerAddress.val(r.customerAddress);
+            $customerCity.val(r.customerCity);
+            $customerPostcode.val(r.customerPostcode);
+            $customerState.val(r.customerState);
+        });
+    }
+
+    // Listen for when a customer is selected
+    $customerPhone.change(function() {
+        var customer = $(this).val();
+        refreshInputForCustomer(customer);
+    });
+</script>
 
 <!-- Get Product Info -->
 <script>
-    var $productSelect = $('#product');
-    var $productOrderNo = $('#productOrderNo');
-    var $productName = $('#productName');
-    var $productCost = $('#productCost');
+    var $productSelect = $("#product");
+    var $productId = $("#productId");
+    var $productName = $("#productName");
+    var $productSupplier = $("#productSupplier");
+    var $productItemCode = $("#productItemCode");
+    var $productCategory = $("#productCategory");
+    var $productVariation = $("#productVariation");
+    var $productSellingMYR = $("#productSellingMYR");
+    var $itemId = $("#itemId");
+    var $itemAvailable = $("#itemAvailable");
+    var $itemProductId = $("#itemProductId");
+    var $itemSold = $("#itemSold");
 
-    // This should be the path to a PHP script set up to receive $_POST['product']
-    // and return the product info in a JSON encoded array.
-    // You should also set the Content-Type of the response to application/json so as our javascript parses it automatically.
-    var apiUrl = '/project/templates/homedecor/crm/getProductInfo.php';
+    var apiUrl = "getItemInfo.php";
 
     function refreshInputsForProduct(product) {
         $.post(apiUrl, {
             product: product
         }, function(r) {
-            /**
-             * Assuming your PHP API responds with a JSON encoded array, with the ID available.
-             */
-            $productOrderNo.val(r.orderNo);
-            $productName.val(r.name);
-            $productCost.val(r.cost);
+            $productId.val(r.productId);
+            $productName.val(r.productName);
+            $productSupplier.val(r.productSupplier);
+            $productItemCode.val(r.productItemCode);
+            $productCategory.val(r.productCategory);
+            $productVariation.val(r.productVariation);
+            $itemId.val(r.itemId);
+            $itemAvailable.val(r.itemAvailable);
+            $itemProductId.val(r.itemProductId);
+            $productSellingMYR.val(r.productSellingMYR);
+            $itemSold.val(r.itemSold);
         });
     }
 
@@ -278,25 +400,28 @@ $discountAll = explode(',', $rowOrder['discount_all']);
 
 <script>
     $(document).ready(function() {
+
         $(".add-row").click(function() {
-            var e = document.getElementById("product");
-            var getID = e.value;
-            var name = e.options[e.selectedIndex].text;
-            var productOrderNo = parseInt($("#productOrderNo").val());
+            var e = $("#product");
+            var itemId = $("#itemId").val();
+            var getID = e.val();
+            var name = $("#product option:selected").text();
+            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(4, '0') + '-' + $("#productId").val();
+            var productOrderNo = $("#productOrderNo").val();
             var quantity = parseInt($("#quantity").val());
             var discountItem = parseInt($("#discountItem").val());
+            var productSellingMYR = parseFloat($("#productSellingMYR").val());
 
-            // Calculate price based on cost
-            var productCost = parseFloat($("#productCost").val());
-            var productPrice = Math.round((productCost * 2.5) + 6) * quantity;
-
-            // Calculate discount
-            var percentToDecimal = discountItem / 100;
-            var percent = percentToDecimal * productPrice;
-            var discount = productPrice - percent;
+            // Calculate the price
+            if (discountItem !== 0) {
+                var discount = (discountItem / 100) * productSellingMYR;
+                var amount = Math.round((productSellingMYR - discount) * quantity);
+            } else {
+                var amount = productSellingMYR * quantity;
+            }
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + productOrderNo + "</td><td class='align-middle'>" + name + "<input type='text' name='productId[]' value='" + getID + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center border-0 form-control' value='" + productPrice + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center border-0 form-control' value='" + discount + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'>" + name + "<input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemIds[]' value='" + itemId + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-right p-0 m-0 border-0 form-control' value='" + productSellingMYR.toFixed(2) + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-right p-0 m-0 border-0 form-control' value='" + amount.toFixed(2) + "'></td></tr>";
             $("table tbody").append(markup);
         });
 

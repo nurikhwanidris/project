@@ -21,6 +21,7 @@ $sql = "SELECT
 homedecor_product2.itemId AS itemId,
 homedecor_product2.name AS name,
 homedecor_product2.itemCode AS itemCode,
+homedecor_product2.supplier AS supplier,
 homedecor_product2.category AS category,
 homedecor_product2.size AS size,
 homedecor_product2.variation AS variation,
@@ -87,16 +88,17 @@ $result = mysqli_query($conn, $sql);
                                     <th class="text-center align-middle">Cost MYR</th>
                                     <th class="text-center align-middle">Selling MYR</th>
                                     <th class="text-center align-middle">Quantity</th>
-                                    <th class="text-center align-middle">Weight</th>
+                                    <th class="text-center align-middle">Available</th>
+                                    <th class="text-center align-middle">Sold</th>
                                     <th class="text-center align-middle">Size</th>
-                                    <th class="text-center align-middle">Image</th>
+                                    <!-- <th class="text-center-align-middle">Image</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
-                                        <td class="text-center align-middle">
-                                            <?= $rowItem['itemId']; ?>
+                                        <td class="text-left align-middle">
+                                            <?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['name']; ?>
@@ -117,12 +119,17 @@ $result = mysqli_query($conn, $sql);
                                             <?= $rowItem['itemQuantity']; ?>
                                         </td>
                                         <td class="text-center align-middle">
-                                            <!-- <?= $rowItem['']; ?> -->
+                                            <?= $rowItem['itemAvailable']; ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= $rowItem['itemSold']; ?>
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['size']; ?>
                                         </td>
-                                        <td class="text-center align-middle"></td>
+                                        <!-- <td class="text-center align-middle">
+                                            img goes here
+                                        </td> -->
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
@@ -140,6 +147,13 @@ $result = mysqli_query($conn, $sql);
 <script>
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
             // orderFixed: [
             //     [3, 'asc']
             // ],
