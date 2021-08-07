@@ -122,15 +122,15 @@ $resultItems = mysqli_query($conn, $items);
                         </div>
                         <div class="row mt-4">
                             <div class="col-lg-12 col-xl-12">
-                                <table class="table table-bordered">
+                                <table class="table">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th class="align-middle">Description</th>
                                             <th class="align-middle text-center">Product ID</th>
                                             <th class="align-middle text-center">Quantity</th>
-                                            <th class="align-middle text-center">Price/Unit</th>
-                                            <th class="align-middle text-center">Discount</th>
-                                            <th class="align-middle text-center">Amount</th>
+                                            <th class="align-middle text-right">Price/Unit</th>
+                                            <th class="align-middle text-right">Discount</th>
+                                            <th class="align-middle text-right">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -138,62 +138,61 @@ $resultItems = mysqli_query($conn, $items);
                                             <?php $shipping = $rowOrderItem['shipping']; ?>
                                             <tr>
                                                 <!-- Item description -->
-                                                <td class="align-middle" style="border: 1px solid black;">
+                                                <td class="align-middle">
                                                     <?= $rowOrderItem['name']; ?>
                                                 </td>
                                                 <!-- Product ID -->
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
+                                                <td class="align-middle text-center">
                                                     <?= $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId']; ?>
                                                 </td>
                                                 <!-- Product Quantity -->
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
+                                                <td class="align-middle text-center">
                                                     <?= $rowOrderItem['quantity']; ?>
                                                 </td>
                                                 <!-- Selling Price -->
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
+                                                <td class="align-middle text-right">
                                                     RM <?= number_format($rowOrderItem['productPrice'], 2, '.', ''); ?>
                                                 </td>
                                                 <!-- Discount -->
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
+                                                <td class="align-middle text-right">
                                                     <?= (($rowOrderItem['productPrice'] - $rowOrderItem['productDiscount']) * 100) / 100; ?>%
                                                 </td>
                                                 <!-- Amount -->
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
+                                                <td class="align-middle text-right">
                                                     RM <?= number_format($rowOrderItem['productDiscount'], 2, '.', ''); ?>
                                                 </td>
                                             </tr>
-                                            <?= $subTotal = array($rowOrderItmes['productDiscount']); ?>
                                         <?php endwhile ?>
                                         <tr>
-                                            <td colspan="5" class="align-middle text-right font-weight-light" style="border: 1px solid black;">
+                                            <td colspan="5" class="align-middle text-right font-weight-light">
                                                 Shipping
                                             </td>
-                                            <td class="align-middle text-center" style="border: 1px solid black;">
+                                            <td class="align-middle text-right">
                                                 RM <?= number_format($rowOrder['shipping'], 2, '.', ''); ?>
                                             </td>
                                         </tr>
                                         <tr class="">
-                                            <td colspan="5" class="align-middle font-weight-light text-right " style="border: 1px solid black;">Subtotal</td>
-                                            <td class="align-middle text-center " style="border: 1px solid black;">
-                                                <?= array_sum($subTotal); ?>
+                                            <td colspan="5" class="align-middle font-weight-light text-right ">Subtotal</td>
+                                            <td class="align-middle text-right ">
+                                                RM <?= number_format($rowOrder['discount'], 2, '.', ','); ?>
                                             </td>
                                         </tr>
                                         <!-- Promo -->
                                         <?php if ($rowOrderItem['promo'] != 0) : ?>
                                             <tr class="">
-                                                <td colspan="5" class="align-middle font-weight-light text-right " style="border: 1px solid black;">Promo</td>
-                                                <td class="align-middle text-center " style="border: 1px solid black;">
-                                                    Deduct promo too
+                                                <td colspan="5" class="align-middle font-weight-light text-right ">Promo</td>
+                                                <td class="align-middle text-right ">
+                                                    RM <?= number_format($rowOrder['promo'], 2, '.', ','); ?>
                                                 </td>
                                             </tr>
                                         <?php endif; ?>
                                         <tr>
-                                            <td colspan="5" class="align-middle text-right " style="border: 1px solid black;">
+                                            <td colspan="5" class="align-middle text-right ">
                                                 <h3 class="align-middle font-weight-bold">Total</h3>
                                             </td>
-                                            <td class="align-middle text-center " style="border: 1px solid black;">
+                                            <td class="align-middle text-right ">
                                                 <h3 class="align-middle font-weight-bold">
-                                                    asd
+                                                    RM <?= number_format($rowOrder['grandTotal'], 2, '.', ','); ?>
                                                 </h3>
                                             </td>
                                         </tr>
@@ -201,37 +200,9 @@ $resultItems = mysqli_query($conn, $items);
                                 </table>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row mt-4">
-                            <div class="col-lg-4 col-xl-4">
-                                <h6 class="font-weight-light text-secondary">Receipts</h6>
-                                <div class="table">
-                                    <table class="table table-bordered table-sm" style="border: 1px solid black;">
-                                        <thead style="border: 1px solid black;">
-                                            <tr style="border: 1px solid black;">
-                                                <th style="border: 1px solid black;" class="align-middle text-center">Receipt Num</th>
-                                                <th style="border: 1px solid black;" class="align-middle text-center">Date</th>
-                                                <th style="border: 1px solid black;" class="align-middle text-center">Amount</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody style="border: 1px solid black;">
-                                            <tr style="border: 1px solid black;">
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
-                                                    Payment receipt link goes here
-                                                </td>
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
-                                                    Payment receipt date
-                                                </td>
-                                                <td class="align-middle text-center" style="border: 1px solid black;">
-                                                    Payment receipt amount paid
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4">
+                        <!-- <hr>
+                         -->
+                        <!-- <div class="row mt-4 d-none">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -258,7 +229,7 @@ $resultItems = mysqli_query($conn, $items);
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row mt-4 d-print-none">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="col-lg-4 float-right text-right">
@@ -269,7 +240,7 @@ $resultItems = mysqli_query($conn, $items);
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-xl-3 d-print-none">
+            <div class="col-lg-3 col-xl-3">
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="row mb-3">
@@ -317,36 +288,47 @@ $resultItems = mysqli_query($conn, $items);
                         </div>
                     </div>
                 </div>
-                <div class="card mt-3 d-none">
+                <div class="card">
+                    <div class="card-header text-primary font-weight-bold">
+                        Receipts
+                    </div>
                     <div class="card-body">
-                        <h6 class="">Receipt Info</h6>
-                        <div class="table table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="align-middle text-center">Receipt</th>
-                                        <th class="align-middle text-center">Paid</th>
-                                        <th class="align-middle text-center">Created</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while ($rowReceipt = mysqli_fetch_array($resultReceipt)) : ?>
-                                        <tr>
-                                            <td class="align-middle text-center">
-                                                <a href="receipt.php?id=<?= $rowReceipt['id']; ?>" target="_blank"><?= str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT); ?></a>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                RM<?= $rowReceipt['amountPaid']; ?>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                <?php $s = $rowReceipt['created'];
-                                                $dt = new DateTime($s);
-                                                echo $date = $dt->format('d/m/Y'); ?>
-                                            </td>
-                                        </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
+                        <div class="row mb-3">
+                            <div class="col-lg-12">
+                                <div class="row mt-4">
+                                    <div class="table">
+                                        <table class="table table-bordered table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th class="align-middle text-left">#</th>
+                                                    <th class="align-middle text-left">Receipt Num</th>
+                                                    <th class="align-middle text-left">Date</th>
+                                                    <th class="align-middle text-left">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $asd = 1;
+                                                while ($asd <= 10) : ?>
+                                                    <tr>
+                                                        <td class="text-left align-middle">
+                                                            <?= $asd++; ?>
+                                                        </td>
+                                                        <td class="align-middle text-left">
+                                                            <a href="#">0455</a>
+                                                        </td>
+                                                        <td class="align-middle text-left">
+                                                            04/08/2021
+                                                        </td>
+                                                        <td class="align-middle text-left">
+                                                            RM200.00
+                                                        </td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
