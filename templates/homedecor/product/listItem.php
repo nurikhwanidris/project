@@ -18,6 +18,7 @@
 <?php
 // Fetch number of products
 $sql = "SELECT
+homedecor_product2.id,
 homedecor_product2.itemId AS itemId,
 homedecor_product2.name AS name,
 homedecor_product2.itemCode AS itemCode,
@@ -26,8 +27,10 @@ homedecor_product2.category AS category,
 homedecor_product2.size AS size,
 homedecor_product2.variation AS variation,
 homedecor_product2.costTHB AS costTHB,
+homedecor_product2.discTHB AS discTHB,
 homedecor_product2.costMYR AS costMYR,
 homedecor_product2.sellingMYR AS sellingMYR,
+homedecor_product2.img AS img,
 homedecor_item2.productId AS productId,
 homedecor_item2.itemQuantity AS itemQuantity,
 homedecor_item2.itemAvailable AS itemAvailable,
@@ -50,7 +53,7 @@ $result = mysqli_query($conn, $sql);
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Product List</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+        <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#displayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
     </div>
 
     <!-- Content Row -->
@@ -76,13 +79,19 @@ $result = mysqli_query($conn, $sql);
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="table-responsive">
-                        <a class="group-by btn btn-info btn-sm float-right" data-column="2">Supplier</a>
-                        <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
+                        <div class="my-2">
+                            <a class="group-by btn btn-info btn-sm float-right" data-column="2">Supplier</a>
+                            <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
+                            <input type="text" name="searchCode" id="searchCode" class="float-right" placeholder="Search by item code">
+                        </div>
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th class="text-left align-middle">Item Code</th>
                                     <th class="align-middle">Name</th>
+                                    <th class="d-none text-center align-middle">Item ID</th>
+                                    <th class="text-center align-middle d-none">Category</th>
+                                    <th class="text-center align-middle d-none">Supplier</th>
                                     <th class="text-center align-middle">Variation</th>
                                     <th class="text-center align-middle">Cost THB</th>
                                     <th class="text-center align-middle">Cost MYR</th>
@@ -91,17 +100,28 @@ $result = mysqli_query($conn, $sql);
                                     <th class="text-center align-middle">Available</th>
                                     <th class="text-center align-middle">Sold</th>
                                     <th class="text-center align-middle">Size</th>
-                                    <!-- <th class="text-center-align-middle">Image</th> -->
+                                    <th class="text-center align-middle">Image</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
                                         <td class="text-left align-middle">
-                                            <?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
+                                            <a href="viewItem.php?id=<?= $rowItem['id']; ?>" id="editItem">
+                                                <?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
+                                            </a>
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['name']; ?>
+                                        </td>
+                                        <td class="text-center align-middle d-none">
+                                            <?= $rowItem['itemId']; ?>
+                                        </td>
+                                        <td class="text-center align-middle d-none">
+                                            <?= $rowItem['category']; ?>
+                                        </td>
+                                        <td class="text-center align-middle d-none">
+                                            <?= $rowItem['supplier']; ?>
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['variation']; ?>
@@ -127,9 +147,11 @@ $result = mysqli_query($conn, $sql);
                                         <td class="text-center align-middle">
                                             <?= $rowItem['size']; ?>
                                         </td>
-                                        <!-- <td class="text-center align-middle">
-                                            img goes here
-                                        </td> -->
+                                        <td class="text-center align-middle">
+                                            <?php if ($rowItem['img'] != '') : ?>
+                                                <img src="/project/upload/img/product/2021/<?= $rowItem['img']; ?>" alt="" id="editImg" class="img-thumbnail changeImg" style="width:100px; height:auto;">
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
@@ -147,34 +169,44 @@ $result = mysqli_query($conn, $sql);
 <script>
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-            ]
-            // orderFixed: [
-            //     [3, 'asc']
-            // ],
-            // rowGroup: {
-            //     dataSrc: 3
-            // }
+            dom: 'ltipr',
+            orderFixed: [
+                [3, 'asc']
+            ],
+            rowGroup: {
+                dataSrc: 3
+            }
         });
 
-        // // Change the fixed ordering when the data source is updated
-        // table.on('rowgroup-datasrc', function(e, dt, val) {
-        //     table.order.fixed({
-        //         pre: [
-        //             [val, 'asc']
-        //         ]
-        //     }).draw();
-        // });
+        $('#searchCode').on('keyup', function() {
+            table
+                .columns(2)
+                .search(this.value)
+                .draw();
+        });
 
-        // $('a.group-by').on('click', function(e) {
-        //     e.preventDefault();
+        // Change the fixed ordering when the data source is updated
+        table.on('rowgroup-datasrc', function(e, dt, val) {
+            table.order.fixed({
+                pre: [
+                    [val, 'asc']
+                ]
+            }).draw();
+        });
 
-        //     table.rowGroup().dataSrc($(this).data('column'));
-        // });
+        $('a.group-by').on('click', function(e) {
+            e.preventDefault();
+
+            table.rowGroup().dataSrc($(this).data('column'));
+        });
+    });
+
+    // Enlarge image
+    $(document).ready(function() {
+        $('.img-thumbnail').click(function() {
+            $(this).css('width', function(_, cur) {
+                return cur === '100px' ? '100%' : '100px'
+            }); // original width is 500px 
+        });
     });
 </script>

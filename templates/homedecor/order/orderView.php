@@ -250,7 +250,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                                         </td>
                                                         <td class="text-center align-middle">
                                                             <?= $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['productItemId']; ?>
-                                                            <input type="text" name="productItemId" id="" class="form-control d-none" value="<?= $rowOrderItem['productItemId']; ?>">
+                                                            <!-- <input type="text" name="productItemId" id="" class="form-control d-none" value="<?= $rowOrderItem['productItemId']; ?>"> -->
                                                         </td>
                                                         <td class="text-left align-middle">
                                                             <?= $rowOrderItem['name']; ?>

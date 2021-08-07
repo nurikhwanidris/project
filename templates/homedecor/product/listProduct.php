@@ -58,13 +58,18 @@ $result = mysqli_query($conn, $sql);
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="table-responsive">
-                        <a class="group-by btn btn-info btn-sm float-right" data-column="2">Supplier</a>
-                        <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
+                        <div class="my-2">
+                            <a class="group-by btn btn-success btn-sm mx-2 float-right" id="exportCSV"><i class="fas fa-file-excel"></i></a>
+                            <a class="group-by btn btn-info btn-sm float-right" data-column="2">Supplier</a>
+                            <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
+                            <input type="text" name="searchCode" id="searchCode" class="float-right" placeholder="Search by item code">
+                        </div>
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th class="text-left align-middle">Item Code</th>
                                     <th class="align-middle">Name</th>
+                                    <th class="d-none text-center align-middle">Item Code</th>
                                     <th class="text-center align-middle">Supplier</th>
                                     <th class="text-center align-middle">Category</th>
                                     <th class="text-center align-middle">SKU</th>
@@ -84,6 +89,9 @@ $result = mysqli_query($conn, $sql);
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['name']; ?>
+                                        </td>
+                                        <td class="text-center align-middle d-none">
+                                            <?= $rowItem['itemId']; ?>
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['supplier']; ?>
@@ -129,12 +137,30 @@ $result = mysqli_query($conn, $sql);
 <script>
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
+            "paging": true,
+            "info": true,
+            // "searching": true,
+
+            buttons: [{
+                extend: 'csv',
+            }],
             orderFixed: [
                 [3, 'asc']
             ],
             rowGroup: {
                 dataSrc: 3
             }
+        });
+
+        $("#exportCSV").on("click", function() {
+            table.button('.buttons-csv').trigger();
+        });
+
+        $('#searchCode').on('keyup', function() {
+            table
+                .columns(2)
+                .search(this.value)
+                .draw();
         });
 
         // Change the fixed ordering when the data source is updated

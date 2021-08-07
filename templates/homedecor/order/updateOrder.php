@@ -82,7 +82,7 @@ for ($i = 0; $i < count($productIds); $i++) {
     // Count the items
     $orderItemId = $orderItemIds[$i];
     $productId = $productIds[$i];
-    $productItemId = $productItemIds[$i];
+    // $productItemId = $productItemIds[$i];
     $itemId = $itemIds[$i];
     $quantity = $quantities[$i];
     $productPrice = $productPrices[$i];
@@ -91,7 +91,7 @@ for ($i = 0; $i < count($productIds); $i++) {
     // Check if id already existed. If id existed, update the product. Else insert a new item with new id.
     if ($orderItemId) {
         // Update into order details
-        $updateOrderDetails = "UPDATE homedecor_order_item SET productId = '$productId', itemId = '$productItemId', productPrice = '$productPrice', productDiscount = '$discountItem', quantity = '$quantity', modified = '$modified' WHERE id = '$orderItemId'";
+        $updateOrderDetails = "UPDATE homedecor_order_item SET productId = '$productId', itemId = '$itemId', productPrice = '$productPrice', productDiscount = '$discountItem', quantity = '$quantity', modified = '$modified' WHERE id = '$orderItemId'";
         $resultUpdateOrderDetails = mysqli_query($conn, $updateOrderDetails);
 
         if ($resultUpdateOrderDetails) {
