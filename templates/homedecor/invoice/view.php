@@ -39,6 +39,7 @@ homedecor_order_item.productId,
 homedecor_order_item.itemId,
 homedecor_order_item.productPrice,
 homedecor_order_item.productDiscount,
+homedecor_order_item.discount,
 homedecor_order_item.quantity,
 homedecor_product2.id,
 homedecor_product2.name,
@@ -52,7 +53,6 @@ JOIN homedecor_order2
 ON homedecor_order2.id = '$id'
 HAVING homedecor_order2.id = homedecor_order_item.orderId";
 $resultItems = mysqli_query($conn, $items);
-// $rowItems = mysqli_fetch_assoc($resultItems);
 ?>
 <!-- Body -->
 <div class="container-fluid">
@@ -112,8 +112,8 @@ $resultItems = mysqli_query($conn, $items);
                                         Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
                                         <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
                                         <span class="text-left">Invoice Date</span>: <?php
-                                                                                        if ($rowInvoicee['invoice_date'] != '') : echo '<span class="font-weight-bold">' . date("d/m/Y", strtotime($rowInvoicee['invoice_date'])) . '</span> <input name="invoiceDate" type="" value="' . $rowInvoicee['invoice_date'] . '" class="d-none">';
-                                                                                        else : echo '<input type="date" class="border-0 input-sm" name="invoiceDate">';
+                                                                                        if ($rowInvoicee['invoice_date'] != '') : echo '<span class="font-weight-bold text-right">' . date("d/m/Y", strtotime($rowInvoicee['invoice_date'])) . '</span> <input name="invoiceDate" type="" value="' . $rowInvoicee['invoice_date'] . '" class="d-none">';
+                                                                                        else : echo '<input type="date" class="border-0 input-sm text-right" name="invoiceDate">';
                                                                                         endif;
                                                                                         ?>
                                     </p>
@@ -126,9 +126,9 @@ $resultItems = mysqli_query($conn, $items);
                                     <thead class="thead-dark">
                                         <tr>
                                             <th class="align-middle">Description</th>
-                                            <th class="align-middle text-center">Product ID</th>
-                                            <th class="align-middle text-center">Quantity</th>
+                                            <th class="align-middle text-left">Product ID</th>
                                             <th class="align-middle text-right">Price/Unit</th>
+                                            <th class="align-middle text-right">Quantity</th>
                                             <th class="align-middle text-right">Discount</th>
                                             <th class="align-middle text-right">Amount</th>
                                         </tr>
@@ -142,20 +142,21 @@ $resultItems = mysqli_query($conn, $items);
                                                     <?= $rowOrderItem['name']; ?>
                                                 </td>
                                                 <!-- Product ID -->
-                                                <td class="align-middle text-center">
+                                                <td class="align-middle text-left">
                                                     <?= $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId']; ?>
-                                                </td>
-                                                <!-- Product Quantity -->
-                                                <td class="align-middle text-center">
-                                                    <?= $rowOrderItem['quantity']; ?>
                                                 </td>
                                                 <!-- Selling Price -->
                                                 <td class="align-middle text-right">
+                                                    <?php $sellingPrice = $rowOrderItem['productPrice'] ?>
                                                     RM <?= number_format($rowOrderItem['productPrice'], 2, '.', ''); ?>
+                                                </td>
+                                                <!-- Product Quantity -->
+                                                <td class="align-middle text-right">
+                                                    <?= $rowOrderItem['quantity']; ?>
                                                 </td>
                                                 <!-- Discount -->
                                                 <td class="align-middle text-right">
-                                                    <?= (($rowOrderItem['productPrice'] - $rowOrderItem['productDiscount']) * 100) / 100; ?>%
+                                                    <?= $rowOrderItem['discount']; ?>%
                                                 </td>
                                                 <!-- Amount -->
                                                 <td class="align-middle text-right">
@@ -163,6 +164,12 @@ $resultItems = mysqli_query($conn, $items);
                                                 </td>
                                             </tr>
                                         <?php endwhile ?>
+                                        <tr class="">
+                                            <td colspan="5" class="align-middle font-weight-light text-right ">Subtotal</td>
+                                            <td class="align-middle text-right ">
+                                                RM <?= number_format($rowOrder['itemDiscount'], 2, '.', ','); ?>
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td colspan="5" class="align-middle text-right font-weight-light">
                                                 Shipping
@@ -171,18 +178,12 @@ $resultItems = mysqli_query($conn, $items);
                                                 RM <?= number_format($rowOrder['shipping'], 2, '.', ''); ?>
                                             </td>
                                         </tr>
-                                        <tr class="">
-                                            <td colspan="5" class="align-middle font-weight-light text-right ">Subtotal</td>
-                                            <td class="align-middle text-right ">
-                                                RM <?= number_format($rowOrder['discount'], 2, '.', ','); ?>
-                                            </td>
-                                        </tr>
-                                        <!-- Promo -->
-                                        <?php if ($rowOrderItem['promo'] != 0) : ?>
+                                        <!-- Voucher -->
+                                        <?php if ($rowOrder['voucher'] != 0) : ?>
                                             <tr class="">
-                                                <td colspan="5" class="align-middle font-weight-light text-right ">Promo</td>
+                                                <td colspan="5" class="align-middle font-weight-light text-right ">Voucher</td>
                                                 <td class="align-middle text-right ">
-                                                    RM <?= number_format($rowOrder['promo'], 2, '.', ','); ?>
+                                                    - RM <?= number_format($rowOrder['voucher'], 2, '.', ','); ?>
                                                 </td>
                                             </tr>
                                         <?php endif; ?>
@@ -233,7 +234,7 @@ $resultItems = mysqli_query($conn, $items);
                         <div class="row mt-4 d-print-none">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="col-lg-4 float-right text-right">
-                                    <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
+                                    <a href="print?id=<?= $rowOrder['id']; ?>" target="_blank" class="btn btn-info float-right"><i class="fas fa-print"></i> Print</a>
                                 </div>
                             </div>
                         </div>
@@ -302,13 +303,13 @@ $resultItems = mysqli_query($conn, $items);
                                                 <tr>
                                                     <th class="align-middle text-left">#</th>
                                                     <th class="align-middle text-left">Receipt Num</th>
-                                                    <th class="align-middle text-left">Date</th>
-                                                    <th class="align-middle text-left">Amount</th>
+                                                    <th class="align-middle text-center">Date</th>
+                                                    <th class="align-middle text-right">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php $asd = 1;
-                                                while ($asd <= 10) : ?>
+                                                while ($asd <= 5) : ?>
                                                     <tr>
                                                         <td class="text-left align-middle">
                                                             <?= $asd++; ?>
@@ -316,10 +317,10 @@ $resultItems = mysqli_query($conn, $items);
                                                         <td class="align-middle text-left">
                                                             <a href="#">0455</a>
                                                         </td>
-                                                        <td class="align-middle text-left">
+                                                        <td class="align-middle text-center">
                                                             04/08/2021
                                                         </td>
-                                                        <td class="align-middle text-left">
+                                                        <td class="align-middle text-right">
                                                             RM200.00
                                                         </td>
                                                     </tr>

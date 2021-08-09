@@ -25,26 +25,31 @@ $productIds = $_POST['productId'];
 $quantities = $_POST['quantity'];
 $productPrices = $_POST['productPrice'];
 $discountItems = $_POST['discountItem'];
-$promo = 0;
+$discounts = $_POST['discount'];
+if ($_POST['voucher'] != '') {
+    $voucher = $_POST['voucher'];
+} else {
+    $voucher = 0;
+}
 $subTotal = array_sum($_POST['productPrice']);
 $itemDiscount = array_sum($_POST['discountItem']);
 
 // Total include shipping
 $total = array_sum($discountItems) + $shipping;
 
-// Total discount after promo
-if ($promo != 0) {
+// Total discount after voucher
+if ($voucher != '') {
     // Calculate total discount
-    $discAfterPromo = $total - $promo;
+    $discAfterVoucher = $total - $voucher;
 
     // Calculate grandtotal
-    $grandTotal = $discAfterPromo;
+    $grandTotal = $discAfterVoucher;
 } else {
     // Calculate total discount
-    $discAfterPromo = $total;
+    $discAfterVoucher = $total;
 
     // Calculate grandtotal
-    $grandTotal = $discAfterPromo;
+    $grandTotal = $discAfterVoucher;
 }
 
 
@@ -65,7 +70,7 @@ if ($resultInsertCustomer) {
 }
 
 // Insert order details 2nd
-$insertOrder = "INSERT INTO homedecor_order2 (customerId, status, subTotal,  itemDiscount, shipping, total, promo, discount, grandTotal, created) VALUES ('$lastInsertCustomer', '$status', '$subTotal', '$itemDiscount', '$shipping', '$total', '$promo', '$discAfterPromo','$grandTotal', '$created')";
+$insertOrder = "INSERT INTO homedecor_order2 (customerId, status, subTotal,  itemDiscount, shipping, total, voucher, discount, grandTotal, created) VALUES ('$lastInsertCustomer', '$status', '$subTotal', '$itemDiscount', '$shipping', '$total', '$voucher', '$discAfterVoucher','$grandTotal', '$created')";
 $resultInsertOrder = mysqli_query($conn, $insertOrder);
 $lastInsertId = mysqli_insert_id($conn);
 
@@ -82,11 +87,12 @@ for ($i = 0; $i < count($productIds); $i++) {
     $productId = $productIds[$i];
     $itemId = $itemIds[$i];
     $quantity = $quantities[$i];
+    $discount = $discounts[$i];
     $productPrice = $productPrices[$i];
     $discountItem = $discountItems[$i];
 
     // Insert into order details
-    $insertOrderItems = "INSERT INTO homedecor_order_item (orderId, productId, itemId, productPrice, productDiscount, quantity, created) VALUES ('$lastInsertId', '$productId', '$itemId', '$productPrice', '$discountItem', '$quantity', '$created')";
+    $insertOrderItems = "INSERT INTO homedecor_order_item (orderId, productId, itemId, productPrice, discount, productDiscount, quantity, created) VALUES ('$lastInsertId', '$productId', '$itemId', '$productPrice', '$discount', '$discountItem', '$quantity', '$created')";
     $resultOrderItems = mysqli_query($conn, $insertOrderItems);
 
     if ($resultOrderItems) {

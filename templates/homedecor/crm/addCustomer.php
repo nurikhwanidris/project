@@ -219,8 +219,9 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                             <th class="align-middle text-center">/</th>
                                             <th class="align-middle text-center">Code</th>
                                             <th class="align-middle" style="width: 60%;">Product Name</th>
-                                            <th class="align-middle text-center">Quantity</th>
                                             <th class="align-middle text-right">Unit Price</th>
+                                            <th class="align-middle text-center">Quantity</th>
+                                            <th class="align-middle text-right">Discount</th>
                                             <th class="align-middle text-right">Amount</th>
                                         </tr>
                                     </thead>
@@ -240,6 +241,18 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                         <span class="input-group-text">RM</span>
                                     </div>
                                     <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)" value="20">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="">Voucher</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">RM</span>
+                                    </div>
+                                    <input type="text" name="voucher" class="form-control" aria-label="Amount (to the nearest ringgit)" value="" data-toggle="tooltip" data-placement="top" title="Only if voucher redeemed">
                                     <div class="input-group-append">
                                         <span class="input-group-text">.00</span>
                                     </div>
@@ -373,7 +386,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             }
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemIds[]' value='" + itemId + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-right p-0 m-0 border-0 form-control' value='" + productSellingMYR.toFixed(2) + "'></td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-right p-0 m-0 border-0 form-control' value='" + amount.toFixed(2) + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemIds[]' value='" + itemId + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-right p-0 m-0 border-0 form-control' value='" + productSellingMYR.toFixed(2) + "'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='discount[]' class='d-none' value='" + discountItem + "'>" + discountItem + "%</td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-right p-0 m-0 border-0 form-control' value='" + amount.toFixed(2) + "'></td></tr>";
             $("table tbody").append(markup);
         });
 
