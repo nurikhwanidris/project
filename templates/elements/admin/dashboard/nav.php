@@ -118,7 +118,8 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                 <div id="collapseInvoice" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Invoice Management</h6>
-                        <a class="collapse-item" href="/project/templates/homedecor/invoice/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/invoice/newList">New List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/invoice/oldList">Old List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/invoice/report">Report</a>
                     </div>
                 </div>

@@ -281,7 +281,19 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">RM</span>
                                             </div>
-                                            <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)" value="20">
+                                            <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)" value="15">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label for="">Voucher</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">RM</span>
+                                            </div>
+                                            <input type="text" name="voucher" class="form-control" aria-label="Amount (to the nearest ringgit)" value="">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">.00</span>
                                             </div>

@@ -31,6 +31,11 @@ $order = "SELECT * FROM homedecor_order2 WHERE id = '$id'";
 $resultOrder = mysqli_query($conn, $order);
 $rowOrder = mysqli_fetch_assoc($resultOrder);
 
+// Get invoice details
+$invoice = "SELECT * FROM homedecor_invoice2 WHERE orderId = '$id'";
+$resultInvoice = mysqli_query($conn, $invoice);
+$rowInvoice = mysqli_fetch_assoc($resultInvoice);
+
 // Get ordered items
 $items = "SELECT
 homedecor_order2.id,
@@ -41,6 +46,7 @@ homedecor_order_item.productPrice,
 homedecor_order_item.productDiscount,
 homedecor_order_item.discount,
 homedecor_order_item.quantity,
+homedecor_item2.itemAvailable,
 homedecor_product2.id,
 homedecor_product2.name,
 homedecor_product2.supplier,
@@ -49,15 +55,21 @@ homedecor_product2.itemCode
 FROM homedecor_order_item
 JOIN homedecor_product2
 ON homedecor_order_item.productId = homedecor_product2.id
+JOIN homedecor_item2
+ON homedecor_order_item.productId = homedecor_item2.productId
 JOIN homedecor_order2
 ON homedecor_order2.id = '$id'
 HAVING homedecor_order2.id = homedecor_order_item.orderId";
 $resultItems = mysqli_query($conn, $items);
+
+// Get receipt
+$receipt = "SELECT * FROM homedecor_receipt2 WHERE orderId = '$id'";
+$resultReceipt = mysqli_query($conn, $receipt);
 ?>
 <!-- Body -->
 <div class="container-fluid">
-    <form action="save-invoice.php" method="POST" enctype="multipart/form-data">
-        <input type="text" name="poID" id="" class="form-control d-none" value="<?= $id; ?>">
+    <form action="saveInvoice.php" method="POST" enctype="multipart/form-data">
+        <input type="text" name="orderId" id="" class="form-control d-none" value="<?= $id; ?>">
         <input type="text" name="invoiceID" id="" class="form-control d-none" value="<?= $id; ?>">
         <?php if (isset($_GET['msg']) == 'success') : ?>
             <div class="row">
@@ -109,10 +121,9 @@ $resultItems = mysqli_query($conn, $items);
                                 </div>
                                 <div class="col-3 float-right text-right">
                                     <p>
-                                        Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span>
-                                        <input type="text" name="invoiceNum" id="" class="form-control d-none" value="<?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?>"><br>
+                                        Invoice # : <span class="font-weight-bold"><?= date("Ym") . str_pad($id, 4, 0, STR_PAD_LEFT); ?></span><br>
                                         <span class="text-left">Invoice Date</span>: <?php
-                                                                                        if ($rowInvoicee['invoice_date'] != '') : echo '<span class="font-weight-bold text-right">' . date("d/m/Y", strtotime($rowInvoicee['invoice_date'])) . '</span> <input name="invoiceDate" type="" value="' . $rowInvoicee['invoice_date'] . '" class="d-none">';
+                                                                                        if ($rowInvoice['invoiceDate'] != '') : echo '<span class="font-weight-bold text-right">' . date("d/m/Y", strtotime($rowInvoice['invoiceDate'])) . '</span> <input name="invoiceDate" type="" value="' . $rowInvoice['invoiceDate'] . '" class="d-none">';
                                                                                         else : echo '<input type="date" class="border-0 input-sm text-right" name="invoiceDate">';
                                                                                         endif;
                                                                                         ?>
@@ -139,7 +150,11 @@ $resultItems = mysqli_query($conn, $items);
                                             <tr>
                                                 <!-- Item description -->
                                                 <td class="align-middle">
-                                                    <?= $rowOrderItem['name']; ?>
+                                                    <?php if ($rowOrderItem['itemAvailable'] <= 0) : ?>
+                                                        <?= $rowOrderItem['name']; ?> [Pre-order]
+                                                    <?php else : ?>
+                                                        <?= $rowOrderItem['name']; ?>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <!-- Product ID -->
                                                 <td class="align-middle text-left">
@@ -178,6 +193,14 @@ $resultItems = mysqli_query($conn, $items);
                                                 RM <?= number_format($rowOrder['shipping'], 2, '.', ''); ?>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="5" class="align-middle text-right font-weight-light">
+                                                Total
+                                            </td>
+                                            <td class="align-middle text-right">
+                                                RM <?= number_format($rowOrder['total'], 2, '.', ''); ?>
+                                            </td>
+                                        </tr>
                                         <!-- Voucher -->
                                         <?php if ($rowOrder['voucher'] != 0) : ?>
                                             <tr class="">
@@ -189,12 +212,13 @@ $resultItems = mysqli_query($conn, $items);
                                         <?php endif; ?>
                                         <tr>
                                             <td colspan="5" class="align-middle text-right ">
-                                                <h3 class="align-middle font-weight-bold">Total</h3>
+                                                <h3 class="align-middle font-weight-bold">Grand Total</h3>
                                             </td>
                                             <td class="align-middle text-right ">
                                                 <h3 class="align-middle font-weight-bold">
                                                     RM <?= number_format($rowOrder['grandTotal'], 2, '.', ','); ?>
                                                 </h3>
+                                                <input type="text" name="grandTotal" id="" class="d-none" value="<?= number_format($rowOrder['grandTotal'], 2, '.', ''); ?>">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -301,27 +325,22 @@ $resultItems = mysqli_query($conn, $items);
                                         <table class="table table-bordered table-sm">
                                             <thead>
                                                 <tr>
-                                                    <th class="align-middle text-left">#</th>
                                                     <th class="align-middle text-left">Receipt Num</th>
                                                     <th class="align-middle text-center">Date</th>
                                                     <th class="align-middle text-right">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $asd = 1;
-                                                while ($asd <= 5) : ?>
+                                                <?php while ($rowReceipt = mysqli_fetch_assoc($resultReceipt)) : ?>
                                                     <tr>
-                                                        <td class="text-left align-middle">
-                                                            <?= $asd++; ?>
-                                                        </td>
                                                         <td class="align-middle text-left">
-                                                            <a href="#">0455</a>
+                                                            <a href="receipt.php?id=<?= $rowReceipt['id']; ?>"><?= str_pad($rowReceipt['id'], 4, '0', STR_PAD_LEFT); ?></a>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            04/08/2021
+                                                            <?= $rowReceipt['invoiceDate']; ?>
                                                         </td>
                                                         <td class="align-middle text-right">
-                                                            RM200.00
+                                                            RM <?= number_format($rowReceipt['amountPaid'], 2, '.', ''); ?>
                                                         </td>
                                                     </tr>
                                                 <?php endwhile; ?>

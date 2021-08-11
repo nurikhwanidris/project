@@ -20,6 +20,7 @@ homedecor_order_item.productPrice,
 homedecor_order_item.productDiscount,
 homedecor_order_item.discount,
 homedecor_order_item.quantity,
+homedecor_item2.itemAvailable,
 homedecor_product2.id,
 homedecor_product2.name,
 homedecor_product2.supplier,
@@ -28,13 +29,15 @@ homedecor_product2.itemCode
 FROM homedecor_order_item
 JOIN homedecor_product2
 ON homedecor_order_item.productId = homedecor_product2.id
+JOIN homedecor_item2
+ON homedecor_order_item.productId = homedecor_item2.productId
 JOIN homedecor_order2
 ON homedecor_order2.id = '$id'
 HAVING homedecor_order2.id = homedecor_order_item.orderId";
 $resultItems = mysqli_query($conn, $items);
 
 // Get the invoice data
-$sqlInvoice = "SELECT * FROM homedecor_invoice WHERE id ='$id'";
+$sqlInvoice = "SELECT * FROM homedecor_invoice2 WHERE orderId ='$id'";
 $resInvoice = mysqli_query($conn, $sqlInvoice);
 $rowInvoice = mysqli_fetch_assoc($resInvoice);
 
@@ -44,18 +47,8 @@ $resultCustomer = mysqli_query($conn, $customer);
 $rowCustomer = mysqli_fetch_array($resultCustomer);
 
 // Get receipt info if exist
-$selectReceipt = "SELECT * FROM homedecor_receipt WHERE customerID = '" . $rowOrder['customerId'] . "' 
--- AND orderId = '$id'";
+$selectReceipt = "SELECT * FROM homedecor_receipt2 WHERE orderId = '$id'";
 $resultReceipt = mysqli_query($conn, $selectReceipt);
-
-// Get invoice id if exist
-$invoicee = "SELECT * FROM homedecor_invoice where customer_id = '" . $rowOrder['customerId'] . "'";
-$resultInvoicee = mysqli_query($conn, $invoicee);
-
-if (mysqli_num_rows($resultInvoicee) > 0) {
-    $rowInvoicee = mysqli_fetch_assoc($resultInvoicee);
-    $date =  $rowInvoicee['invoice_date'];
-}
 
 // Include the main TCPDF library (search for installation path).
 require_once($_SERVER['DOCUMENT_ROOT'] . '/project/assets/vendor/pdf/tcpdf.php');
@@ -136,11 +129,10 @@ $pdf->AddPage();
 
 // Create cells
 $pdf->MultiCell(90, 10, 'Invoice For', 0, 'L', 0, 0);
-$pdf->MultiCell(90, 5, 'INV-' . $rowInvoice['invoice_num'], 0, 'R', 0, 0);
+$pdf->MultiCell(90, 5, 'INV-' . str_pad($id, 6, '0', STR_PAD_LEFT), 0, 'R', 0, 0);
 $pdf->Ln();
 $pdf->setFont('Helvetica', 'B', 8);
-$pdf->Cell(90, 5, '', 0, 'L', 0, 0);
-// $pdf->Cell(162, 5, $rowInvoicee['invoice_date'], 0, 'R', 0, 0);
+$pdf->Cell(180, 5, $rowInvoice['invoiceDate'], 0, false, 'R', 0, '', 0, false, 'T', 'M');
 $pdf->Ln();
 $pdf->Ln();
 
@@ -165,23 +157,27 @@ $pdf->Ln();
 
 // Table header
 $pdf->setFont('Helvetica', 'B', 9);
-$pdf->Cell(70, 8, 'Description', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(83, 8, 'Description', 1, false, 'L', 0, '', 0, false, 'T', 'M');
 $pdf->Cell(25, 8, 'Product ID', 1, false, 'L', 0, '', 0, false, 'T', 'M');
 $pdf->Cell(20, 8, 'Price/Unit', 1, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(20, 8, 'Quantity', 1, false, 'C', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(20, 8, 'Discount', 1, false, 'C', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(25, 8, 'Amount', 1, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(16, 8, 'Quantity', 1, false, 'C', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(16, 8, 'Discount', 1, false, 'C', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(20, 8, 'Amount', 1, false, 'R', 0, '', 0, false, 'T', 'M');
 $pdf->Ln();
 
 $pdf->setFont('Helvetica', '', 9);
 while ($rowOrderItem = mysqli_fetch_assoc($resultItems)) :
     // $pdf->MultiCell(90, 10, $rowOrderItem['name'], 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
-    $pdf->Cell(70, 6, $rowOrderItem['name'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    if ($rowOrderItem['itemAvailable'] <= 0) :
+        $pdf->Cell(83, 6, $rowOrderItem['name'] . ' [Pre-order]', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    else :
+        $pdf->Cell(83, 6, $rowOrderItem['name'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    endif;
     $pdf->Cell(25, 6, $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->Cell(20, 6, 'RM ' . number_format($rowOrderItem['productPrice'], 2, '.', ','), 1, false, 'R', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(20, 6, $rowOrderItem['quantity'], 1, false, 'C', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(20, 6, $rowOrderItem['discount'] . '%', 1, false, 'C', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(25, 6, 'RM ' . number_format($rowOrderItem['productDiscount'], 2, '.', ','), 1, false, 'R', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(16, 6, $rowOrderItem['quantity'], 1, false, 'C', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(16, 6, $rowOrderItem['discount'] . '%', 1, false, 'C', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(20, 6, 'RM ' . number_format($rowOrderItem['productDiscount'], 2, '.', ','), 1, false, 'R', 0, '', 0, false, 'T', 'M');
     $pdf->Ln();
 endwhile;
 $pdf->Cell(155, 6, 'Subtotal :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
@@ -218,24 +214,26 @@ $pdf->Ln();
 $pdf->Ln();
 
 // Receipt
-$pdf->setFont('Helvetica', 'U', 8);
-$pdf->Cell(64, 3, 'Receipt(s)', 0, 'C', 0);
+$pdf->setFont('Helvetica', '', 8);
+$pdf->Cell(64, 3, 'Receipt(s)', 0, false, 'L', 0, '', 0, false, 'T', 'M');
 $pdf->Ln();
+$pdf->setFont('Helvetica', 'B', 8);
 $pdf->Cell(14, 5, 'No.', 1, false, 'L', 0, '', 0, false, 'T', 'M');
 $pdf->Cell(30, 5, 'Date', 1, false, 'L', 0, '', 0, false, 'T', 'M');
 $pdf->Cell(20, 5, 'Amount', 1, false, 'L', 0, '', 0, false, 'T', 'M');
 $pdf->Ln();
+$pdf->setFont('Helvetica', '', 8);
 while ($rowReceipt = mysqli_fetch_array($resultReceipt)) :
     // No receipt
-    $pdf->Cell(14, 5, str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT), 1, 'C', 0);
+    $pdf->Cell(14, 5, str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT), 1, false, 'L', 0, '', 0, false, 'T', 'M');
 
     // Date
     $s = $rowReceipt['invoiceDate'];
     $dt = new DateTime($s);
-    $pdf->Cell(30, 5, $date = $dt->format('d/m/Y'), 1, 'C', 0);
+    $pdf->Cell(30, 5, $date = $dt->format('d/m/Y'), 1, false, 'L', 0, '', 0, false, 'T', 'M');
 
     // Amount
-    $pdf->Cell(20, 5, 'RM' . $rowReceipt['amountPaid'], 1, 'C', 0);
+    $pdf->Cell(20, 5, 'RM' . number_format($rowReceipt['amountPaid'], 2, '.', ''), 1, false, 'L', 0, '', 0, false, 'T', 'M');
     $pdf->Ln();
 endwhile;
 $pdf->Ln();
@@ -265,4 +263,4 @@ $pdf->Cell(100, 5, '3. Balance payment must be made within 2 days after the invo
 $pdf->Ln();
 
 // Result
-$pdf->Output($rowInvoice['invoice_num'] . '.pdf');
+$pdf->Output('INV-' . str_pad($id, 6, '0', STR_PAD_LEFT) . '.pdf');
