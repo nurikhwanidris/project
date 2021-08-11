@@ -60,8 +60,8 @@ $result = mysqli_query($conn, $sql);
                     <div class="table-responsive">
                         <div class="my-2">
                             <a class="group-by btn btn-success btn-sm mx-2 float-right" id="exportCSV"><i class="fas fa-file-excel"></i></a>
-                            <a class="group-by btn btn-info btn-sm float-right" data-column="2">Supplier</a>
-                            <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
+                            <a class="group-by btn btn-info btn-sm float-right" data-column="3">Supplier</a>
+                            <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="4">Category</a>
                             <input type="text" name="searchCode" id="searchCode" class="float-right" placeholder="Search by item code">
                         </div>
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
