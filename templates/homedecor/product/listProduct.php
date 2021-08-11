@@ -137,10 +137,7 @@ $result = mysqli_query($conn, $sql);
 <script>
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
-            "paging": true,
-            "info": true,
-            // "searching": true,
-
+            dom: 'ltipr',
             buttons: [{
                 extend: 'csv',
             }],

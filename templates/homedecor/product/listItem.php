@@ -80,6 +80,7 @@ $result = mysqli_query($conn, $sql);
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="my-2">
+                            <a class="group-by btn btn-success btn-sm mx-2 float-right" id="exportCSV"><i class="fas fa-file-excel"></i></a>
                             <a class="group-by btn btn-info btn-sm float-right" data-column="2">Supplier</a>
                             <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
                             <input type="text" name="searchCode" id="searchCode" class="float-right" placeholder="Search by item code">
@@ -107,7 +108,7 @@ $result = mysqli_query($conn, $sql);
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
                                         <td class="text-left align-middle">
-                                            <a href="viewItem.php?id=<?= $rowItem['id']; ?>" id="editItem">
+                                            <a href="viewItem.php?id=<?= $rowItem['id']; ?>" id="editItem" target="_blank">
                                                 <?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
                                             </a>
                                         </td>
@@ -170,6 +171,9 @@ $result = mysqli_query($conn, $sql);
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
             dom: 'ltipr',
+            buttons: [{
+                extend: 'csv',
+            }],
             orderFixed: [
                 [3, 'asc']
             ],
@@ -178,12 +182,18 @@ $result = mysqli_query($conn, $sql);
             }
         });
 
+        $("#exportCSV").on("click", function() {
+            table.button('.buttons-csv').trigger();
+        });
+
         $('#searchCode').on('keyup', function() {
             table
                 .columns(2)
                 .search(this.value)
                 .draw();
         });
+
+
 
         // Change the fixed ordering when the data source is updated
         table.on('rowgroup-datasrc', function(e, dt, val) {
