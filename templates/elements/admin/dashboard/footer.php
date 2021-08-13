@@ -51,6 +51,7 @@
 <!-- Page level plugins -->
 <script src="/project/assets/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/project/assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/project/assets/js/addons/html2pdf/html2pdf.bundle.min.js"></script>
 
 <!-- Datatable Scripts -->
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>

@@ -13,6 +13,7 @@
 <?php
 $receiptId = $_GET['id'];
 
+// Select receipt
 $selectReceipt = "SELECT * FROM homedecor_receipt2 WHERE id = '$receiptId'";
 $resultReceipt = mysqli_query($conn, $selectReceipt);
 $rowReceipt = mysqli_fetch_assoc($resultReceipt);
@@ -28,9 +29,9 @@ $resultCustomer = mysqli_query($conn, $selectCustomer);
 $customer = mysqli_fetch_array($resultCustomer);
 
 // Return receipt data
-// $receipt = "SELECT * FROM homedecor_receipt2 ORDER BY id DESC";
-// $resultReceipt = mysqli_query($conn, $receipt);
-// $rowReceipt = mysqli_fetch_assoc($resultReceipt);
+$invoice = "SELECT * FROM homedecor_invoice2 WHERE orderId = '" . $rowReceipt['orderId'] . "'";
+$resultInvoice = mysqli_query($conn, $invoice);
+$rowInvoice = mysqli_fetch_assoc($resultInvoice);
 ?>
 
 <div class="container">
@@ -46,7 +47,7 @@ $customer = mysqli_fetch_array($resultCustomer);
             </div>
         </div>
     <?php endif; ?>
-    <div class="row mt-3">
+    <div class="row mt-3" id="printReceipt">
         <div class="col-lg-12 col-xl-12">
             <div class="card mb-4">
                 <div class="card-body border">
@@ -58,14 +59,14 @@ $customer = mysqli_fetch_array($resultCustomer);
                             </div>
                             <div class="col-4 float-right text-right">
                                 <h5 class=""><span class="font-weight-bold">No :</span> <u><?= str_pad($rowReceipt['id'], 6, 0, STR_PAD_LEFT); ?></u></h5>
-                                <h5 class=""><span class="font-weight-bold">Date :</span> <u><?= $invoiceDate; ?></u></h5>
+                                <h5 class=""><span class="font-weight-bold">Date :</span> <u><?= $rowInvoice['invoiceDate']; ?></u></h5>
                                 <h5 class=""><span class="font-weight-bold">Payment Method :</span><u>
-                                        <?= $paymentType; ?>
+                                        <?= $rowInvoice['paymentType']; ?>
                                     </u>
                                 </h5>
                                 <h5 class=""><span class="font-weight-bold">Amount :</span>
                                     <u>
-                                        RM<?= $amountPaid; ?>
+                                        RM<?= number_format($rowInvoice['amountPaid'], 2, '.', ''); ?>
                                     </u>
                                 </h5>
                             </div>
@@ -86,7 +87,7 @@ $customer = mysqli_fetch_array($resultCustomer);
                                 <h5 class="font-weight-bold">For : </h5>
                             </div>
                             <div class="col-10 border-bottom float-right">
-                                Payment for Invoice Number - <?= str_pad($rowReceipt['id'], 6, 0, STR_PAD_LEFT); ?>
+                                Payment for Invoice Number - INV<?= date("Ym", strtotime($rowInvoice['invoiceDate'])) . str_pad($rowReceipt['orderId'], 4, 0, STR_PAD_LEFT); ?>
                             </div>
                         </div>
                     </div>
@@ -103,7 +104,7 @@ $customer = mysqli_fetch_array($resultCustomer);
                     <div class="row my-2 d-print-none">
                         <div class="col-lg-12">
                             <div class="col-2 float-right text-right">
-                                <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
+                                <a class="btn btn-info" id="printThis"><i class="fas fa-print"></i> Print</a>
                             </div>
                         </div>
                     </div>
@@ -115,3 +116,33 @@ $customer = mysqli_fetch_array($resultCustomer);
 
 <!-- Footer -->
 <?php include('../../elements/admin/dashboard/footer.php') ?>
+
+<script>
+    $(document).ready(function() {
+        $("#printThis").click(function() {
+            var element = document.getElementById('printReceipt');
+            var opt = {
+                margin: 1,
+                filename: '<?= str_pad($rowReceipt['id'], 6, 0, STR_PAD_LEFT); ?>.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+                html2canvas: {
+                    scale: 2
+                },
+                jsPDF: {
+                    unit: 'in',
+                    format: 'A4',
+                    orientation: 'landscape'
+                }
+            };
+
+            // New Promise-based usage:
+            html2pdf().set(opt).from(element).save();
+
+            // Old monolithic-style usage:
+            html2pdf(element, opt);
+        });
+    });
+</script>

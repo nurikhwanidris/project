@@ -74,6 +74,20 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             </li>
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="true" aria-controls="collapseOrder">
+                    <i class="fas fa-meteor"></i>
+                    <span>Customer Order</span>
+                </a>
+                <div id="collapseOrder" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Order Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/order/orderList">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/order/report">Report</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="true" aria-controls="collapseProduct">
                     <i class="fas fa-meteor"></i>
                     <span>Products</span>
@@ -97,20 +111,6 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             </li>
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="true" aria-controls="collapseOrder">
-                    <i class="fas fa-meteor"></i>
-                    <span>Customer Order</span>
-                </a>
-                <div id="collapseOrder" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Order Management</h6>
-                        <a class="collapse-item" href="/project/templates/homedecor/order/orderList">List</a>
-                        <a class="collapse-item" href="/project/templates/homedecor/order/report">Report</a>
-                    </div>
-                </div>
-            </li>
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInvoice" aria-expanded="true" aria-controls="collapseInvoice">
                     <i class="fas fa-meteor"></i>
                     <span>Invoice</span>
@@ -121,6 +121,21 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <a class="collapse-item" href="/project/templates/homedecor/invoice/newList">New List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/invoice/oldList">Old List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/invoice/report">Report</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Utilities Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePO" aria-expanded="true" aria-controls="collapsePO">
+                    <i class="fas fa-meteor"></i>
+                    <span>Purchase Order</span>
+                </a>
+                <div id="collapsePO" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">PO Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/purchaseorder/addPo">Add PO</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/purchaseorder/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/purchaseorder/report">Report</a>
                     </div>
                 </div>
             </li>
