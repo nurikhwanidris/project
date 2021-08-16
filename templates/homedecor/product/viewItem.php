@@ -175,15 +175,15 @@ $rowItem = mysqli_fetch_assoc($resultSelectItem);
                                     </div>
                                 </div>
                                 <div class="row form-group d-none">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-6"></div>
+                                    <div class="col-sm-6">
                                         <input type="hidden" name="productImgValue" value="<?= $rowProduct['img']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6"></div>
                                     <div class="col-sm-6">
-                                        <input type='file' id="productUpdateImg" name="productUpdateImg" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="">
+                                        <input type='file' id="productImgUpdate" name="productImgUpdate" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="">
                                     </div>
                                 </div>
                             <?php endif; ?>
