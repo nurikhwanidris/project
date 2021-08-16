@@ -13,24 +13,46 @@ $productCostTHB = $_POST['productCostTHB'];
 $productAfterDiscTHB = $_POST['productAfterDiscTHB'];
 $productCostMYR = $_POST['productCostMYR'];
 $productSellingMYR = $_POST['productSellingMYR'];
-$productImg = $_FILES['productImg']['name'];
+if (empty($_FILES['productImg']['name'])) {
+    $productImg = 'Empty';
+} else {
+    $productImg = $_FILES['productImg']['name'];
+}
 
-// Image folder
-$productImgPath = '../../../upload/img/product/2021/' . $productImg;
+if ((!empty($_FILES['productImgUpdate']['name']))) {
+    // Get img value
+    $productImgUpdate = $_FILES['productImgUpdate']['name'];
 
-// Temp Image name
-$tmp_name = $_FILES['productImg']['tmp_name'];
+    // Image folder
+    $productImgPath = '../../../upload/img/product/2021/';
 
-// Move uploaded file
-move_uploaded_file($tmp_name, $productImgPath);
+    // Change image file name
+    $temp = explode(".", $_FILES['productImgUpdate']['name']);
+    $newfilename = $id . '.' . end($temp);
 
-// Date created and modified
-date_default_timezone_set("Asia/Kuala_Lumpur");
-$modified = date('Y-m-d H:i:s');
+    // Move uploaded file
+    move_uploaded_file($_FILES["productImgUpdate"]["tmp_name"], $productImgPath . $newfilename);
 
-// Update the thing
-$update = "UPDATE homedecor_product2 SET itemId  = '$productId', name = '$productName', category = '$productCategory', itemCode = '$productCategoryCode', size = '$productSize', supplier = '$productSupplier', variation = '$productVariation', costTHB = '$productCostTHB', discTHB = '$productAfterDiscTHB', costMYR = '$productCostMYR', sellingMYR = '$productSellingMYR', img = '$productImg',modified = '$modified' WHERE id = '$id'";
-$result = mysqli_query($conn, $update);
+    // Date created and modified
+    date_default_timezone_set("Asia/Kuala_Lumpur");
+    $modified = date('Y-m-d H:i:s');
+
+    // Update the thing
+    $update = "UPDATE homedecor_product2 SET itemId  = '$productId', name = '$productName', category = '$productCategory', itemCode = '$productCategoryCode', size = '$productSize', supplier = '$productSupplier', variation = '$productVariation', costTHB = '$productCostTHB', discTHB = '$productAfterDiscTHB', costMYR = '$productCostMYR', sellingMYR = '$productSellingMYR', img = '$newfilename',modified = '$modified' WHERE id = '$id'";
+    $result = mysqli_query($conn, $update);
+} else if ($_POST['productImgValue'] && empty($_FILES['productImgUpdate']['name'])) {
+    // Get img value
+    $productImgValue = $_POST['productImgValue'];
+
+    // Date created and modified
+    date_default_timezone_set("Asia/Kuala_Lumpur");
+    $modified = date('Y-m-d H:i:s');
+
+    // Update the thing
+    $update = "UPDATE homedecor_product2 SET itemId  = '$productId', name = '$productName', category = '$productCategory', itemCode = '$productCategoryCode', size = '$productSize', supplier = '$productSupplier', variation = '$productVariation', costTHB = '$productCostTHB', discTHB = '$productAfterDiscTHB', costMYR = '$productCostMYR', sellingMYR = '$productSellingMYR', img = '$productImgValue',modified = '$modified' WHERE id = '$id'";
+    $result = mysqli_query($conn, $update);
+} else {
+}
 
 // if ($result) {
 //     echo "Berjaya simpan semua benda";

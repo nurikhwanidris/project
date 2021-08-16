@@ -146,14 +146,14 @@ $rowProduct = mysqli_fetch_assoc($resultSelectProduct);
                             </div>
                             <?php if ($rowProduct['img'] == '') : ?>
                                 <div class="form-group row" id="productImg-group">
-                                    <label for="" class="col-sm-2">Product Image</label>
-                                    <div class="col-sm-2">
+                                    <label for="" class="col-sm-6">Product Image</label>
+                                    <div class="col-sm-6">
                                         <input type='file' id="productImg" name="productImg" class="form-control" accept="image/x-png,image/gif,image/jpeg">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-2"></div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-6"></div>
+                                    <div class="col-sm-6">
                                         <img id="preview" src="#" alt="image will display here" class="img-thumbnail" style="margin-bottom: 10px;">
                                     </div>
                                 </div>
@@ -162,6 +162,18 @@ $rowProduct = mysqli_fetch_assoc($resultSelectProduct);
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-2">
                                         <img id="preview" src="/project/upload/img/product/2021/<?= $rowProduct['img']; ?>" alt="image will display here" class="img-thumbnail" style="margin-bottom: 10px;">
+                                    </div>
+                                </div>
+                                <div class="row form-group d-none">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="productImgValue" value="<?= $rowProduct['img']; ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-2">
+                                        <input type='file' id="productImgUpdate" name="productImgUpdate" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="">
                                     </div>
                                 </div>
                             <?php endif; ?>

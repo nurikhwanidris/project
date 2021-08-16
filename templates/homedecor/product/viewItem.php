@@ -174,10 +174,16 @@ $rowItem = mysqli_fetch_assoc($resultSelectItem);
                                         <img id="preview" src="/project/upload/img/product/2021/<?= $rowProduct['img']; ?>" alt="image will display here" class="img-thumbnail" style="margin-bottom: 10px;">
                                     </div>
                                 </div>
+                                <div class="row form-group d-none">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="productImgValue" value="<?= $rowProduct['img']; ?>">
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6"></div>
                                     <div class="col-sm-6">
-                                        <input type='file' id="productImg" name="productImg" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="<?= (empty($rowProduct['img'])) ? '' : $rowProduct['img']; ?>">
+                                        <input type='file' id="productUpdateImg" name="productUpdateImg" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="">
                                     </div>
                                 </div>
                             <?php endif; ?>
