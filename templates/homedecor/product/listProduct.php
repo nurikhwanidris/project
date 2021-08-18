@@ -63,6 +63,7 @@ $result = mysqli_query($conn, $sql);
                             <a class="group-by btn btn-info btn-sm float-right" data-column="3">Supplier</a>
                             <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="4">Category</a>
                             <input type="text" name="searchCode" id="searchCode" class="float-right" placeholder="Search by item code">
+                            <input type="text" name="searchName" id="searchName" class="float-right mr-2" placeholder="Search by item name">
                         </div>
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
@@ -85,7 +86,7 @@ $result = mysqli_query($conn, $sql);
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
                                         <td class="text-left align-middle">
-                                            <a href="viewProduct?id=<?= $rowItem['id']; ?>" target="_blank"><?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?></a>
+                                            <a href="viewProduct?id=<?= $rowItem['id']; ?>" target="_blank"><?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId'] . $rowItem['replacementPart'] = (!is_null($rowItem['replacementPart'])) ? '-1' : ''; ?></a>
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['name']; ?>
@@ -156,6 +157,12 @@ $result = mysqli_query($conn, $sql);
         $('#searchCode').on('keyup', function() {
             table
                 .columns(2)
+                .search(this.value)
+                .draw();
+        });
+        $('#searchName').on('keyup', function() {
+            table
+                .columns(1)
                 .search(this.value)
                 .draw();
         });

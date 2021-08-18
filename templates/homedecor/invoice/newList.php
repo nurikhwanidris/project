@@ -184,7 +184,7 @@ $balance = $rowSales['balance'];
                                     <tr>
                                         <td class="align-middle text-center ">
                                             <a href="/project/templates/homedecor/invoice/view?id=<?= $rowInvoice['orderId']; ?>" target="_blank">
-                                                INV<?= str_pad($rowInvoice['orderId'], 6, '0', STR_PAD_LEFT); ?>
+                                                INV<?= str_pad(date('Ym', strtotime($rowInvoice['invoiceDate'])) . $rowInvoice['orderId'], 6, '0', STR_PAD_LEFT); ?>
                                             </a>
                                         </td>
                                         <td class="align-middle">

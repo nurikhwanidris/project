@@ -23,6 +23,7 @@ homedecor_display_product.uniqueId AS uniqueId,
 homedecor_display_product.productName AS productName,
 homedecor_display_product.productQty AS productQty,
 homedecor_display_product.productRemarks AS productRemarks,
+homedecor_display_product.productSet AS productSet,
 homedecor_display_product.created AS created,
 -- homedecor_product2.id AS productId,
 homedecor_product2.itemId AS itemId,
@@ -49,6 +50,12 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
 }
 ?>
 
+<!-- Get all the sets -->
+<?php
+$selectSet = "SELECT productSet FROM homedecor_display_product GROUP BY productSet";
+$resultSet = mysqli_query($conn, $selectSet);
+?>
+
 <style>
     tfoot input {
         width: 100%;
@@ -64,10 +71,19 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     <div class="row my-4">
         <div class="col-lg-12">
             <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#displayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
-            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="3">Supplier</a>
-            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="4">Category</a>
-            <input type="text" name="searchCode" id="searchCode" class="float-right mx-2 searchCode" placeholder="Search by code">
-            <input type="text" name="searchName" id="searchName" class="float-right mx-2 searchName" placeholder="Search by name">
+            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="4">Supplier</a>
+            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="5">Category</a>
+            <select name="" id="searchSet" class="shadow-sm btn-sm float-right mx-2">
+                <?php while ($set = mysqli_fetch_assoc($resultSet)) : ?>
+                    <?php if (empty($set['productSet'])) : ?>
+                        <option value="<?= $set['productSet']; ?>">Search set</option>
+                    <?php else : ?>
+                        <option value="<?= $set['productSet']; ?>"><?= $set['productSet']; ?></option>
+                    <?php endif ?>
+                <?php endwhile; ?>
+            </select>
+            <input type="text" name="searchCode" id="searchCode" class="float-right mx-2 searchCode" style="width: 100px;" placeholder="Search code">
+            <input type="text" name="searchName" id="searchName" class="float-right mx-2 searchName" style="width: 150px;" placeholder="Search name">
         </div>
     </div>
     <div class="row">
@@ -104,6 +120,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                                     <th class="text-left align-center">ID</th>
                                     <th class="text-center align-center">Image</th>
                                     <th class="text-left align-center">Name</th>
+                                    <th class="text-left align-center">Set</th>
                                     <th class="text-center align-center">Supplier</th>
                                     <th class="text-center align-center">Category</th>
                                     <th class="text-center align-center">Size</th>
@@ -123,6 +140,9 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['productName']; ?>
+                                        </td>
+                                        <td class="text-left align-middle">
+                                            <?= $rowItem['productSet']; ?>
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['productSupplier']; ?>
@@ -197,6 +217,12 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
+                            <label for="">Product Set</label>
+                            <input type="text" name="productSet" id="productSet" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
                             <label for="">Quantity</label>
                             <input type="text" name="productQty" id="productQty" class="form-control">
                         </div>
@@ -230,10 +256,10 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 extend: 'csv',
             }],
             orderFixed: [
-                [3, 'asc']
+                [4, 'asc']
             ],
             rowGroup: {
-                dataSrc: 3
+                dataSrc: 4
             }
         });
 
@@ -247,9 +273,17 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 .search(this.value)
                 .draw();
         });
+
         $('#searchName').on('keyup', function() {
             table
                 .columns(2)
+                .search(this.value)
+                .draw();
+        });
+
+        $('#searchSet').on('change', function() {
+            table
+                .columns(3)
                 .search(this.value)
                 .draw();
         });
@@ -298,6 +332,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
         var uniqueId = $("#uniqueId").val();
         var productId = $("#productDisplay").val();
         var productName = $("#productName").val();
+        var productSet = $("#productSet").val();
         var productQty = $("#productQty").val();
         var productRemarks = $("#productRemarks").val();
 
@@ -309,6 +344,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 uniqueId: $("#uniqueId").val(),
                 productId: $("#productDisplay").val(),
                 productName: $("#productName").val(),
+                productSet: $("#productSet").val(),
                 productQty: $("#productQty").val(),
                 productRemarks: $("#productRemarks").val(),
             };

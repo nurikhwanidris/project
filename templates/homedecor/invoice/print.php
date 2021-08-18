@@ -132,7 +132,12 @@ $pdf->MultiCell(90, 10, 'Invoice For', 0, 'L', 0, 0);
 $pdf->MultiCell(90, 5, 'INV-' . str_pad($id, 6, '0', STR_PAD_LEFT), 0, 'R', 0, 0);
 $pdf->Ln();
 $pdf->setFont('Helvetica', 'B', 8);
-$pdf->Cell(180, 5, $rowInvoice['invoiceDate'], 0, false, 'R', 0, '', 0, false, 'T', 'M');
+if (!is_null($rowInvoice)) {
+    $pdf->Cell(180, 5, $rowInvoice['invoiceDate'], 0, false, 'R', 0, '', 0, false, 'T', 'M');
+} else {
+    $pdf->Cell(180, 5, 'dd/mm/yyyy', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+}
+// $pdf->Cell(180, 5, 'dd/mm/yyyy', 0, false, 'R', 0, '', 0, false, 'T', 'M');
 $pdf->Ln();
 $pdf->Ln();
 

@@ -153,7 +153,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                         <hr>
                         <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
                         <div class="row my-4">
-                            <div class="col-lg-7">
+                            <div class="col-lg-5">
                                 <label for="">Product</label>
                                 <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
                                     <option value=""></option>
@@ -172,14 +172,31 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 </div>
                             </div>
                             <div class="col-lg-2">
-                                <label for="">Discount</label>
+                                <label for="">Discount RM</label>
                                 <div class="input-group mb-3">
-                                    <input type="number" name="" id="discountItem" class="form-control text-center" placeholder="Discount" value="0">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">RM</span>
+                                    </div>
+                                    <input type="number" name="" id="discountRinggit" class="form-control text-center" placeholder="Discount" value="0">
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="">Discount %</label>
+                                <div class="input-group mb-3">
+                                    <input type="number" name="" id="discountItem" class="form-control text-center" placeholder="Discount" value="0" step="any" min="0">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-1">
+                                <div class="row">
+                                    <label for="">&nbsp;</label>
+                                </div>
+                                <button type="button" class="btn btn-primary float-right add-row"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="row my-2">
                             <div class="col-lg-12 d-none">
                                 <label for="">product id</label>
                                 <input type="text" id="productId" />
@@ -203,12 +220,6 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <input type="text" id="itemSold" />
                                 <label for="">selling myr</label>
                                 <input type="text" id="productSellingMYR" />
-                            </div>
-                            <div class="col-lg-1">
-                                <div class="row">
-                                    <label for="">&nbsp;</label>
-                                </div>
-                                <button type="button" class="btn btn-primary float-right add-row"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                         <div class="row my-2">
@@ -365,6 +376,17 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 
 <script>
     $(document).ready(function() {
+        $("#discountRinggit").change(function() {
+            // Get the discount percentage
+            var discountRinggit = parseInt($("#discountRinggit").val());
+            var productSellingMYR = parseFloat($("#productSellingMYR").val());
+
+            // Calculate the discount
+            var discountedPrice = ((discountRinggit / productSellingMYR) * 100).toFixed(2);
+
+            // Relay the price
+            $("#discountItem").val(discountedPrice);
+        })
 
         $(".add-row").click(function() {
             var e = $("#product");
@@ -374,8 +396,9 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(3, '0') + '-' + $("#productId").val();
             var productOrderNo = $("#productOrderNo").val();
             var quantity = parseInt($("#quantity").val());
-            var discountItem = parseInt($("#discountItem").val());
+            var discountItem = parseFloat($("#discountItem").val());
             var productSellingMYR = parseFloat($("#productSellingMYR").val());
+
 
             // Calculate the price
             if (discountItem !== 0) {
