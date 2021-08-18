@@ -57,12 +57,12 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                         <input type="text" name="poBatch" id="poBatch" class="form-control">
                                     </div>
                                 </div>
-                                <div class="row form-group">
+                                <!-- <div class="row form-group">
                                     <label for="poCreated" class="col-sm-2 col-form-label">Date Created</label>
                                     <div class="col-sm-2">
                                         <input type="date" name="poCreated" id="poCreated" class="form-control">
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row form-group">
                                     <label for="poExpectedDelivery" class="col-sm-2 col-form-label">Expected Delivery Date</label>
                                     <div class="col-sm-2">

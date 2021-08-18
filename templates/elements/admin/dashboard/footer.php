@@ -52,6 +52,9 @@
 <script src="/project/assets/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/project/assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="/project/assets/js/addons/html2pdf/html2pdf.bundle.min.js"></script>
+<!-- <script src="https://unpkg.com/jspdf@2.3.1/dist/jspdf.es.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.15/jspdf.plugin.autotable.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script> -->
 
 <!-- Datatable Scripts -->
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>

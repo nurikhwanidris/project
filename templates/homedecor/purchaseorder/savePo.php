@@ -9,6 +9,11 @@ $poBatch = $_POST['poBatch'];
 $poCreated = $_POST['poCreated'];
 $poExpectedDelivery = $_POST['poExpectedDelivery'];
 $poExpectedArrival = $_POST['poExpectedArrival'];
+$poStatus = "New Order";
+
+// Date created
+date_default_timezone_set("Asia/Kuala_Lumpur");
+$created = date('Y-m-d H:i:s');
 
 // Product details
 $productIds = $_POST['productId'];
@@ -24,6 +29,28 @@ echo "PO ExpectedDeliveryDate = " . $poExpectedDelivery . "<br>";
 echo "PO ExpectedArrivalDate = " . $poExpectedArrival . "<br>";
 echo "<hr>";
 
+// Get total quantity ordered
+$totalQuantity = array_sum($poQuantities);
+echo "Total items ordered are = " . $totalQuantity . "<br>";
+
+// Get total amount ordered
+$totalAmount = array_sum($poAmounts);
+echo "Total amount ordered are = " . $totalAmount . "<br>";
+echo "<hr>";
+
+// Insert into PO table
+$insertPO = "INSERT INTO homedecor_po (supplier, batch, expectedDeliveryDate, expectedArrivalDate, totalQuantity, totalAmount, poStatus, created) VALUES ('$poSupplier', '$poBatch', '$poExpectedDelivery', '$poExpectedArrival', '$totalQuantity', '$totalAmount', '$poStatus', '$created')";
+$resultInsertPO = mysqli_query($conn, $insertPO);
+$insertId = mysqli_insert_id($conn);
+
+// // Error check
+// if ($resultInsertPO) {
+//     echo "Succesfully inserted into the homedecor_po. <br>";
+// } else {
+//     echo mysqli_error($conn);
+// }
+
+// Recursive insert for each PO items
 for ($i = 0; $i < count($productIds); $i++) {
     $productId = $productIds[$i];
     $poCostTHB = $poCostTHBs[$i];
@@ -33,18 +60,25 @@ for ($i = 0; $i < count($productIds); $i++) {
     echo "Product Cost THB = " . $poCostTHB . "<br>";
     echo "Product Quantity = " . $poQuantity . "<br>";
     echo "Product Amount = " . $poAmount . "<br>";
-    echo "<hr>";
+
+    $insertItems = "INSERT INTO homedecor_po_items (poId, productId, costTHB, quantity, amount, created) VALUES ('$insertId', '$productId', '$poCostTHB', '$poQuantity', '$poAmount', '$created')";
+    $resultInsertItems = mysqli_query($conn, $insertItems);
+
+    // Error check
+    if ($resultInsertItems) {
+        echo "Succesfully inserted into the homedecor_po_items. <br>";
+        echo "<hr>";
+    } else {
+        echo mysqli_error($conn);
+    }
 }
 
-// Get total quantity ordered
-$totalQuantity = array_sum($poQuantities);
-echo "Total items ordered are = " . $totalQuantity . "<br>";
-
-// Get total amount ordered
-$totalAmount = array_sum($poAmounts);
-echo "Total amount ordered are = " . $totalAmount . "<br>";
-
-// Create table utk benda alah ni
-// 2 tables
-// 1. homedecor_po
-// 2. homedecor_po_item
+if ($resultInsertPO) {
+    $_SESSION['alert'] = 'success';
+    $_SESSION['status'] = "Data succesfully updated.";
+    header('Location: listPo');
+} else {
+    $_SESSION['alert'] = 'danger';
+    $_SESSION['status'] =  mysqli_error($conn);
+    header('Location: listPo');
+}

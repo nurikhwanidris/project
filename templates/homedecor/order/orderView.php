@@ -246,7 +246,6 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                                     <tr>
                                                         <td class="text-center align-middle">
                                                             <input type='checkbox' name='record'>
-                                                            <input type="text" class="form-control d-none" value="<?= $rowOrderItem['orderItemId']; ?>" name="orderItemId">
                                                         </td>
                                                         <td class="text-center align-middle">
                                                             <?= $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['productItemId']; ?>
@@ -254,7 +253,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                                         </td>
                                                         <td class="text-left align-middle">
                                                             <?= $rowOrderItem['name']; ?>
-                                                            <input type="text" name="productId[]" value="<?= $rowOrderItem['productId']; ?>" class="d-none"><input type="text" name="itemIds[]" value="<?= $rowOrderItem['productItemId']; ?>" class="d-none">
+                                                            <input type="text" name="productId[]" value="<?= $rowOrderItem['productId']; ?>" class="d-none">
                                                         </td>
                                                         <td class="text-center align-middle">
                                                             <input type="text" name="quantity[]" class="text-center p-0 border-0 form-control" value="<?= $rowOrderItem['quantity']; ?>">

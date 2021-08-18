@@ -23,11 +23,15 @@ homedecor_display_product.uniqueId AS uniqueId,
 homedecor_display_product.productName AS productName,
 homedecor_display_product.productQty AS productQty,
 homedecor_display_product.productRemarks AS productRemarks,
+homedecor_display_product.created AS created,
+-- homedecor_product2.id AS productId,
+homedecor_product2.itemId AS itemId,
 homedecor_product2.itemCode AS productitemCode,
 homedecor_product2.supplier AS productSupplier,
 homedecor_product2.category AS productCategory,
 homedecor_product2.size AS productSize,
-homedecor_product2.variation AS productVariation
+homedecor_product2.variation AS productVariation,
+homedecor_product2.img AS img
 FROM homedecor_display_product
 JOIN homedecor_product2
 ON homedecor_display_product.uniqueId = homedecor_product2.id
@@ -60,9 +64,10 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     <div class="row my-4">
         <div class="col-lg-12">
             <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#displayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
-            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="2">Supplier</a>
-            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="3">Category</a>
-            <input type="text" name="searchCode" id="searchCode" class="float-right mx-2 searchCode">
+            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="3">Supplier</a>
+            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="4">Category</a>
+            <input type="text" name="searchCode" id="searchCode" class="float-right mx-2 searchCode" placeholder="Search by code">
+            <input type="text" name="searchName" id="searchName" class="float-right mx-2 searchName" placeholder="Search by name">
         </div>
     </div>
     <div class="row">
@@ -97,19 +102,24 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                             <thead>
                                 <tr>
                                     <th class="text-left align-center">ID</th>
+                                    <th class="text-center align-center">Image</th>
                                     <th class="text-left align-center">Name</th>
                                     <th class="text-center align-center">Supplier</th>
                                     <th class="text-center align-center">Category</th>
                                     <th class="text-center align-center">Size</th>
                                     <th class="text-center align-center">Variation</th>
                                     <th class="text-left align-center">Remarks</th>
+                                    <th class="text-center align-center">Created</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
                                         <td class="text-left align-middle">
-                                            <?= $rowItem['productSupplier'] . '-' . str_pad($rowItem['productitemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['productId']; ?>
+                                            <?= $rowItem['productSupplier'] . '-' . str_pad($rowItem['productitemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <img src="/project/upload/img/product/2021/<?= $rowItem['img']; ?>" alt="" style="width:100px; height:100px;">
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['productName']; ?>
@@ -128,6 +138,9 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['productRemarks']; ?>
+                                        </td>
+                                        <td class="text-created align-middle">
+                                            <?= $rowItem['created']; ?>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -212,7 +225,10 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     // Datatables
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
-            searching: false,
+            dom: 'ltipr',
+            buttons: [{
+                extend: 'csv',
+            }],
             orderFixed: [
                 [3, 'asc']
             ],
@@ -221,11 +237,19 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
             }
         });
 
-        // #columnSearch is a <input type="text"> element
+        $("#exportCSV").on("click", function() {
+            table.button('.buttons-csv').trigger();
+        });
+
         $('#searchCode').on('keyup', function() {
-            // var searchCode = $("#searchCode").val();
             table
-                .columns(1)
+                .columns(0)
+                .search(this.value)
+                .draw();
+        });
+        $('#searchName').on('keyup', function() {
+            table
+                .columns(2)
                 .search(this.value)
                 .draw();
         });

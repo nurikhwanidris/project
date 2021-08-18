@@ -1,7 +1,7 @@
 <!-- Check for session -->
 <?php
 if (!isset($_SESSION['id'])) {
-    header('Location:/user/login?msg=Please login first.&alert=info');
+    header('Location:/project/user/login?msg=Please login first.&alert=info');
 }
 ?>
 
@@ -103,6 +103,10 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                         <a class="collapse-item" href="/project/templates/homedecor/product/categoryProduct">Product Category</a>
                         <!-- Divider -->
                         <hr class="sidebar-divider my-0">
+                        <h6 class="collapse-header">Display Item Management</h6>
+                        <a class="collapse-item" href="/project/templates/homedecor/product/listDisplay">Display List</a>
+                        <!-- Divider -->
+                        <hr class="sidebar-divider my-0">
                         <h6 class="collapse-header">Item Management</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/product/addItem">Add Item</a>
                         <a class="collapse-item" href="/project/templates/homedecor/product/listItem">Item List</a>
@@ -134,7 +138,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">PO Management</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/purchaseorder/addPo">Add PO</a>
-                        <a class="collapse-item" href="/project/templates/homedecor/purchaseorder/list">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/purchaseorder/listPo">List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/purchaseorder/report">Report</a>
                     </div>
                 </div>
