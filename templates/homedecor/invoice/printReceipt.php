@@ -137,22 +137,41 @@ $pdf->Ln();
 
 // Create something for recipient
 $pdf->SetFont('courier', '', 12, '', true);
-$pdf->MultiCell(45, 5, 'Received From :', 0, 'L', 0, 0);
+$pdf->MultiCell(45, 5, 'Received From', 0, 'L', 0, 0);
 $pdf->SetFont('courierB', '', 12, '', true);
-$pdf->MultiCell(135, 5, $customer['customerName'], 0, 'L', 0, 0);
+$pdf->MultiCell(15, 5, ':', 0, 'C', 0, 0);
+$pdf->MultiCell(120, 5, $customer['customerName'], 0, 'L', 0, 0);
 $pdf->Ln();
 
 $pdf->SetFont('courier', '', 12, '', true);
-$pdf->MultiCell(45, 5, 'Address :', 0, 'L', 0, 0);
+$pdf->MultiCell(45, 5, 'Address', 0, 'L', 0, 0);
+$pdf->MultiCell(15, 5, ':', 0, 'C', 0, 0);
 $pdf->SetFont('courierB', '', 12, '', true);
-$pdf->MultiCell(135, 5, $customer['address1'], 0, 'L', 0, 0);
+$pdf->MultiCell(120, 5, $customer['address1'], 0, 'L', 0, 0);
 $pdf->Ln();
 
 $pdf->SetFont('courier', '', 12, '', true);
-$pdf->MultiCell(40, 5, '', 0, 'L', 0, 0);
+$pdf->MultiCell(45, 5, '', 0, 'L', 0, 0);
+$pdf->MultiCell(15, 5, '', 0, 'C', 0, 0);
 $pdf->SetFont('courierB', '', 12, '', true);
 $pdf->MultiCell(140, 5, $customer['city'] . ', ' . $customer['postcode'] . ', ' . $customer['state'], 0, 'L', 0, 0);
 $pdf->Ln();
+$pdf->Ln();
+$pdf->Ln();
+
+$pdf->SetFont('courier', '', 12, '', true);
+$pdf->MultiCell(45, 5, 'Details', 0, 'L', 0, 0);
+$pdf->MultiCell(15, 5, ':', 0, 'C', 0, 0);
+$pdf->SetFont('courierB', '', 12, '', true);
+$pdf->MultiCell(140, 5, 'Being payment for invoice number - INV' . date("Ym", strtotime($rowInvoice['invoiceDate'])) . str_pad($rowReceipt['orderId'], 4, 0, STR_PAD_LEFT), 0, 'L', 0, 0);
+$pdf->Ln();
+
+$pdf->SetFont('courier', '', 12, '', true);
+$pdf->MultiCell(45, 5, 'Received by', 0, 'L', 0, 0);
+$pdf->MultiCell(15, 5, ':', 0, 'C', 0, 0);
+$pdf->SetFont('courierB', '', 12, '', true);
+$pdf->MultiCell(140, 5, 'Arzu Home and Living Empire', 0, 'L', 0, 0);
+$pdf->Ln();
 
 // Result
-$pdf->Output('INV-' . str_pad($id, 6, '0', STR_PAD_LEFT) . '.pdf');
+$pdf->Output(str_pad($id, 6, '0', STR_PAD_LEFT) . '.pdf');
