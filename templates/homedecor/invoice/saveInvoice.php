@@ -145,7 +145,8 @@ $rowReceipt = mysqli_fetch_assoc($resultReceipt);
                     <div class="row my-2 d-print-none">
                         <div class="col-lg-12">
                             <div class="col-2 float-right text-right">
-                                <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a>
+                                <!-- <a class="btn btn-info" onclick="window.print();"><i class="fas fa-print"></i> Print</a> -->
+                                <a href="printReceipt?id=<?= $rowReceipt['id']; ?>" target="_blank" class="btn btn-primary">Print</a>
                             </div>
                         </div>
                     </div>

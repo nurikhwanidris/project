@@ -105,7 +105,7 @@ $rowInvoice = mysqli_fetch_assoc($resultInvoice);
                         <div class="col-lg-12">
                             <div class="col-2 float-right text-right">
                                 <a class="btn btn-info" id="printThis"><i class="fas fa-print"></i> Print</a>
-                                <a href="printReceipt.php?id=<?= $receiptId; ?>" class="btn btn-warning">Print</a>
+                                <a href="printReceipt.php?id=<?= $receiptId; ?>" class="btn btn-primary" target="_blank">Print</a>
                             </div>
                         </div>
                     </div>

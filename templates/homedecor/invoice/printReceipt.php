@@ -147,16 +147,22 @@ $pdf->SetFont('courier', '', 12, '', true);
 $pdf->MultiCell(45, 5, 'Address', 0, 'L', 0, 0);
 $pdf->MultiCell(15, 5, ':', 0, 'C', 0, 0);
 $pdf->SetFont('courierB', '', 12, '', true);
-$pdf->MultiCell(120, 5, $customer['address1'], 0, 'L', 0, 0);
+if ($customer['address1'] != '') {
+    $pdf->MultiCell(120, 5, $customer['address1'], 0, 'L', 0, 0);
+} else {
+    $pdf->MultiCell(120, 5, 'N/a', 0, 'L', 0, 0);
+}
 $pdf->Ln();
 
 $pdf->SetFont('courier', '', 12, '', true);
 $pdf->MultiCell(45, 5, '', 0, 'L', 0, 0);
 $pdf->MultiCell(15, 5, '', 0, 'C', 0, 0);
 $pdf->SetFont('courierB', '', 12, '', true);
-$pdf->MultiCell(140, 5, $customer['city'] . ', ' . $customer['postcode'] . ', ' . $customer['state'], 0, 'L', 0, 0);
-$pdf->Ln();
-$pdf->Ln();
+if ($customer['city'] != '') {
+    $pdf->MultiCell(140, 5, $customer['city'] . ', ' . $customer['postcode'] . ', ' . $customer['state'], 0, 'L', 0, 0);
+    $pdf->Ln();
+    $pdf->Ln();
+}
 $pdf->Ln();
 
 $pdf->SetFont('courier', '', 12, '', true);
