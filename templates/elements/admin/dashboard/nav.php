@@ -47,7 +47,8 @@ $rowLeave = mysqli_fetch_array($resultLeave);
             <li class="nav-item active">
                 <a class="nav-link" href="/project/templates/homedecor/dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
 
             <!-- Divider -->

@@ -27,6 +27,7 @@ if (array_key_exists('product', $_POST)) {
     homedecor_item2.id AS itemId,
     homedecor_item2.productId AS itemProductId,
     homedecor_item2.itemAvailable AS itemAvailable,
+    homedecor_item2.itemDefective AS itemDefect,
     homedecor_item2.itemSold As itemSold
     FROM homedecor_item2
     WHERE homedecor_item2.productId = '$product'";
@@ -46,6 +47,7 @@ if (array_key_exists('product', $_POST)) {
     $response['itemId'] = $rowItem['itemId'];
     $response['itemProductId'] = $rowItem['itemProductId'];
     $response['itemAvailable'] = $rowItem['itemAvailable'];
+    $response['itemDefect'] = $rowItem['itemDefect'];
     $response['itemSold'] = $rowItem['itemSold'];
 }
 

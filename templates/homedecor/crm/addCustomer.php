@@ -153,13 +153,20 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                         <hr>
                         <h6 class="font-weight-bold text-info"><u>Product Details</u></h6>
                         <div class="row my-4">
-                            <div class="col-lg-5">
+                            <div class="col-lg-3">
                                 <label for="">Product</label>
                                 <select name="product" id="product" class="selectpicker form-control" data-live-search="true">
                                     <option value=""></option>
                                     <?php foreach ($productSelectOptions as $val => $text) : ?>
                                         <option value="<?= $val; ?>"><?= $text; ?></option>
                                     <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="">Sell Defect?</label>
+                                <select name="sellDefect" id="sellDefect" class="form-control">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
                                 </select>
                             </div>
                             <div class="col-lg-2">
@@ -196,8 +203,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <button type="button" class="btn btn-primary float-right add-row"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
-                        <div class="row my-2">
-                            <div class="col-lg-12 d-none">
+                        <div class="row my-2 d-none">
+                            <div class="col-lg-12">
                                 <label for="">product id</label>
                                 <input type="text" id="productId" />
                                 <label for="">product name</label>
@@ -214,7 +221,9 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <input type="text" id="itemId" />
                                 <label for="">item available</label>
                                 <input type="text" id="itemAvailable" />
-                                item code
+                                <label for="">item defect</label>
+                                <input type="text" id="itemDefect" />
+                                item sold
                                 <input type="text" id="itemProductId" />
                                 <label for="">item sold</label>
                                 <input type="text" id="itemSold" />
@@ -344,6 +353,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     var $productSellingMYR = $("#productSellingMYR");
     var $itemId = $("#itemId");
     var $itemAvailable = $("#itemAvailable");
+    var $itemDefect = $("#itemDefect");
     var $itemProductId = $("#itemProductId");
     var $itemSold = $("#itemSold");
 
@@ -361,6 +371,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             $productVariation.val(r.productVariation);
             $itemId.val(r.itemId);
             $itemAvailable.val(r.itemAvailable);
+            $itemDefect.val(r.itemDefect);
             $itemProductId.val(r.itemProductId);
             $productSellingMYR.val(r.productSellingMYR);
             $itemSold.val(r.itemSold);
@@ -398,18 +409,29 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             var quantity = parseInt($("#quantity").val());
             var discountItem = parseFloat($("#discountItem").val());
             var productSellingMYR = parseFloat($("#productSellingMYR").val());
-
+            var sellDefect = $("#sellDefect").val();
 
             // Calculate the price
             if (discountItem !== 0) {
-                var discount = (discountItem / 100) * productSellingMYR;
-                var amount = Math.round((productSellingMYR - discount) * quantity);
+                if (sellDefect == 'yes') {
+                    var discount = ((discountItem / 100) * productSellingMYR);
+                    var amount = Math.round((((productSellingMYR) - discount) - 5) * quantity);
+                } else {
+                    var discount = (discountItem / 100) * productSellingMYR;
+                    var amount = Math.round((productSellingMYR - discount) * quantity);
+                }
             } else {
-                var amount = productSellingMYR * quantity;
+                // If selling defect item, deduct 5 ringgit
+                if (sellDefect == 'yes') {
+                    var amount = (productSellingMYR - 5) * quantity;
+                    var discountItem = ((5 / productSellingMYR) * 100).toFixed(2);
+                } else {
+                    var amount = productSellingMYR * quantity;
+                }
             }
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemIds[]' value='" + itemId + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-right p-0 m-0 border-0 form-control' value='" + productSellingMYR.toFixed(2) + "'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='discount[]' class='d-none' value='" + discountItem + "'>" + discountItem + "%</td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-right p-0 m-0 border-0 form-control' value='" + amount.toFixed(2) + "'></td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemIds[]' value='" + itemId + "' class='d-none'><input type='text' name='sellDefect[]' value='" + sellDefect + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-right p-0 m-0 border-0 form-control' value='" + productSellingMYR.toFixed(2) + "'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control' value='" + quantity + "'></td><td class='text-center align-middle'><input type='text' name='discount[]' class='d-none' value='" + discountItem + "'>" + discountItem + "%</td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-right p-0 m-0 border-0 form-control' value='" + amount.toFixed(2) + "'></td></tr>";
             $("table tbody").append(markup);
         });
 

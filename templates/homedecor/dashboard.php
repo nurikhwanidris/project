@@ -9,7 +9,7 @@
 
 <?php
 // Fetch number of enquiry
-$enq = "SELECT id FROM homedecor_order GROUP BY id";
+$enq = "SELECT id FROM homedecor_customer GROUP BY id";
 $resEnq = mysqli_query($conn, $enq);
 $numOfEnq = mysqli_num_rows($resEnq);
 
@@ -19,16 +19,17 @@ $resCust = mysqli_query($conn, $cust);
 $numOfCust = mysqli_num_rows($resCust);
 
 // Fetch amount of sales made in a month
-$sales = "SELECT SUM(amount_paid) AS salesMade, SUM(remaining_amount) AS balance FROM homedecor_invoice";
+$sales = "SELECT SUM(homedecor_invoice.total_amount) AS salesMade, SUM(amount_paid) AS amountPaid, SUM(remaining_amount) AS balance FROM (SELECT total_amount, amount_paid, remaining_amount FROM homedecor_invoice WHERE invoice_status != 'Cancelled' UNION ALL SELECT grandTotal, amountPaid, remainingAmount FROM homedecor_invoice2) homedecor_invoice WHERE YEAR(NOW()) ";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
 
 // Bar Chart
-$chartRevenue = "SELECT SUM(amount_paid) AS totalAmount FROM homedecor_invoice GROUP BY MONTH(created)";
+$chartRevenue = "SELECT SUM(homedecor_invoice.amount_paid) AS totalAmount, created FROM (SELECT amount_paid, created FROM homedecor_invoice WHERE invoice_status != 'Cancelled' UNION ALL SELECT amountPaid, created FROM homedecor_invoice2) homedecor_invoice GROUP BY MONTH(created)";
 $resultRevenue = mysqli_query($conn, $chartRevenue);
 
 // Bar Chart
-$chartBalance = "SELECT SUM(remaining_amount) AS sumBalance FROM homedecor_invoice GROUP BY MONTH(created)";
+// $chartBalance = "SELECT SUM(remaining_amount) AS sumBalance FROM homedecor_invoice GROUP BY MONTH(created)";
+$chartBalance = "SELECT SUM(homedecor_invoice.remaining_amount) AS sumBalance, created FROM (SELECT remaining_amount, created FROM homedecor_invoice WHERE invoice_status != 'Cancelled' UNION ALL SELECT remainingAmount, created FROM homedecor_invoice2) homedecor_invoice GROUP BY MONTH(created)";
 $resultBalance = mysqli_query($conn, $chartBalance);
 
 // Pie Chart
@@ -42,7 +43,6 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
 }
 
 ?>
-
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -52,7 +52,7 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
 
     <div class="row">
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -72,7 +72,7 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -92,14 +92,34 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Sales</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                RM <?= number_format($rowSales['salesMade'], 2, '.', ','); ?>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-2 col-md-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Earnings (Monthly)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($rowSales['salesMade'], 2, '.', ','); ?></div>
+                                Earnings (Cumulative)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($rowSales['amountPaid'], 2, '.', ','); ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -110,13 +130,13 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
         </div>
 
         <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Total Balance Due (Monthly)</div>
+                                Balance (Cumulative)</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 RM <?= number_format($rowSales['balance'], 2, '.', ','); ?>
                             </div>
@@ -136,7 +156,7 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
                     <h6 class="m-0 font-weight-bold text-primary">Report</h6>
                 </div>
                 <div class="card-body">
-                    Test
+                    <h4 class="font-weight-bold">Welcome to Neurali!</h4>
                 </div>
             </div>
         </div>

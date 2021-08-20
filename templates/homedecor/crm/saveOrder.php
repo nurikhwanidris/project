@@ -25,6 +25,7 @@ $productIds = $_POST['productId'];
 $quantities = $_POST['quantity'];
 $productPrices = $_POST['productPrice'];
 $discountItems = $_POST['discountItem'];
+$sellDefects = $_POST['sellDefect'];
 $discounts = $_POST['discount'];
 if ($_POST['voucher'] != '') {
     $voucher = $_POST['voucher'];
@@ -89,6 +90,7 @@ for ($i = 0; $i < count($productIds); $i++) {
     $quantity = $quantities[$i];
     $discount = $discounts[$i];
     $productPrice = $productPrices[$i];
+    $sellDefect = $sellDefects[$i];
     $discountItem = $discountItems[$i];
 
     // Insert into order details
@@ -101,14 +103,26 @@ for ($i = 0; $i < count($productIds); $i++) {
         echo mysqli_error($conn) . '<br>';
     }
 
-    // Update the quantity
-    $updateOrderItems = "UPDATE homedecor_item2 SET itemAvailable = itemAvailable - '$quantity', itemSold = itemSold + '$quantity' WHERE productId = '$productId'";
-    $resultUpdateItems = mysqli_query($conn, $updateOrderItems);
+    if ($sellDefect == 'yes') {
+        // Update the quantity
+        $updateOrderItems = "UPDATE homedecor_item2 SET itemDefective = itemDefective - '$quantity', itemSold = itemSold + '$quantity' WHERE productId = '$productId'";
+        $resultUpdateItems = mysqli_query($conn, $updateOrderItems);
 
-    if ($resultUpdateItems) {
-        echo "Succesfully updated the order with item details <br>";
+        if ($resultUpdateItems) {
+            echo "Succesfully updated the order with item details <br>";
+        } else {
+            echo mysqli_error($conn) . '<br>';
+        }
     } else {
-        echo mysqli_error($conn) . '<br>';
+        // Update the quantity
+        $updateOrderItems = "UPDATE homedecor_item2 SET itemAvailable = itemAvailable - '$quantity', itemSold = itemSold + '$quantity' WHERE productId = '$productId'";
+        $resultUpdateItems = mysqli_query($conn, $updateOrderItems);
+
+        if ($resultUpdateItems) {
+            echo "Succesfully updated the order with item details <br>";
+        } else {
+            echo mysqli_error($conn) . '<br>';
+        }
     }
 
     $_SESSION['items'] = 'Successfully created the order and update item details';

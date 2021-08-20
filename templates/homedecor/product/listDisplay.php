@@ -46,7 +46,7 @@ $product = "SELECT * FROM homedecor_product2";
 $resultproduct = mysqli_query($conn, $product);
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
-    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'] . ' - ' . $rowProduct['itemId'];
+    $productSelectOptions[$rowProduct['id']] = $rowProduct['name'] . '- ' . $rowProduct['supplier'] . ' - ' . $rowProduct['itemId'];
 }
 ?>
 

@@ -39,16 +39,28 @@ $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
 
 // Calculate sales generated monthly
-$sales = "SELECT SUM(amount_paid) AS totalSales, SUM(remaining_amount) AS balance FROM homedecor_invoice WHERE MONTH(created) = MONTH(NOW()) AND YEAR(created) = YEAR(NOW())";
+$sales = "SELECT 
+SUM(amount_paid) AS totalSales, 
+SUM(remaining_amount) AS balance 
+FROM homedecor_invoice 
+WHERE MONTH(created) = MONTH(NOW()) 
+AND YEAR(created) = YEAR(NOW())";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
 $sumSales = $rowSales['totalSales'];
 $balance = $rowSales['balance'];
 
-// Count Pending
-// $pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
-// $resultPending = mysqli_query($conn, $pending);
-// $rowCountPending = mysqli_num_rows($resultPending);
+// Calculate sales generated monthly
+$sales2 = "SELECT
+SUM(amountPaid) AS totalSales2,
+SUM(remainingAmount) AS balance2
+FROM homedecor_invoice2
+WHERE MONTH(created) = MONTH(NOW())
+AND YEAR(created) = YEAR(NOW())";
+$resSales2 = mysqli_query($conn, $sales2);
+$rowSales2 = mysqli_fetch_assoc($resSales2);
+$sumSales2 = $rowSales2['totalSales2'];
+$balance2 = $rowSales2['balance2'];
 ?>
 
 <div class="container-fluid">
@@ -104,7 +116,7 @@ $balance = $rowSales['balance'];
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Earnings (Monthly)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($sumSales, 2, '.', ','); ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($sumSales + $sumSales2, 2, '.', ','); ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -123,7 +135,7 @@ $balance = $rowSales['balance'];
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Deposit (Monthly)</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                RM <?= number_format($balance, 2, '.', ','); ?>
+                                RM <?= number_format($balance + $balance2, 2, '.', ','); ?>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -184,7 +196,7 @@ $balance = $rowSales['balance'];
                                 <?php while ($rowInvoice = mysqli_fetch_array($resultinvoice)) : ?>
                                     <tr>
                                         <td class="align-middle text-center ">
-                                            <a href="/project/templates/homedecor/invoice/view?id=<?= $rowInvoice['id']; ?>" target="_blank">
+                                            <a href="/templates/homedecor/invoice2/view?id=<?= $rowInvoice['id']; ?>" target="_blank">
                                                 INV<?= $rowInvoice['invoiceNum']; ?>
                                             </a>
                                         </td>

@@ -11,6 +11,23 @@
 <?php include('../../elements/admin/dashboard/nav.php') ?>
 
 <?php
+// Fetch customer
+$invoice = "SELECT 
+homedecor_customer.customerName AS customerName,
+homedecor_invoice.id AS id,
+homedecor_invoice.customer_id AS customerID,
+homedecor_invoice.invoice_num AS invoiceNum,
+homedecor_invoice.invoice_date AS invoiceDate,
+homedecor_invoice.total_amount AS invoiceTotal,
+homedecor_invoice.invoice_status AS invoiceStatus,
+homedecor_invoice.remaining_amount AS balanceDue,
+homedecor_invoice.amount_paid AS amountPaid,
+homedecor_invoice.modified AS modified
+FROM homedecor_invoice
+JOIN homedecor_customer
+ON homedecor_invoice.customer_id = homedecor_customer.id";
+$resultinvoice = mysqli_query($conn, $invoice);
+
 $invoice = "SELECT 
 homedecor_invoice2.orderId,
 homedecor_invoice2.invoiceDate,
@@ -25,7 +42,7 @@ JOIN homedecor_order2
 ON homedecor_invoice2.orderId = homedecor_order2.id
 JOIN homedecor_customer
 ON homedecor_order2.customerId = homedecor_customer.id";
-$resultInvoice = mysqli_query($conn, $invoice);
+$resultInvoice2 = mysqli_query($conn, $invoice);
 
 // Count invoice created
 $fetchInvoice = "SELECT id FROM homedecor_invoice";
@@ -38,11 +55,28 @@ $resultCst = mysqli_query($conn, $selectCustomer);
 $rowCountCust = mysqli_num_rows($resultCst);
 
 // Calculate sales generated monthly
-$sales = "SELECT SUM(amount_paid) AS totalSales, SUM(remaining_amount) AS balance FROM homedecor_invoice WHERE MONTH(created) = MONTH(NOW()) AND YEAR(created) = YEAR(NOW())";
+$sales = "SELECT 
+SUM(amount_paid) AS totalSales, 
+SUM(remaining_amount) AS balance 
+FROM homedecor_invoice 
+WHERE MONTH(created) = MONTH(NOW()) 
+AND YEAR(created) = YEAR(NOW())";
 $resSales = mysqli_query($conn, $sales);
 $rowSales = mysqli_fetch_assoc($resSales);
 $sumSales = $rowSales['totalSales'];
 $balance = $rowSales['balance'];
+
+// Calculate sales generated monthly
+$sales2 = "SELECT
+SUM(amountPaid) AS totalSales2,
+SUM(remainingAmount) AS balance2
+FROM homedecor_invoice2
+WHERE MONTH(created) = MONTH(NOW())
+AND YEAR(created) = YEAR(NOW())";
+$resSales2 = mysqli_query($conn, $sales2);
+$rowSales2 = mysqli_fetch_assoc($resSales2);
+$sumSales2 = $rowSales2['totalSales2'];
+$balance2 = $rowSales2['balance2'];
 
 // Count Pending
 // $pending = "SELECT status FROM homedecor_order WHERE status = 'Pending'";
@@ -103,7 +137,7 @@ $balance = $rowSales['balance'];
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Earnings (Monthly)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($sumSales, 2, '.', ','); ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($sumSales + $sumSales2, 2, '.', ','); ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -122,7 +156,7 @@ $balance = $rowSales['balance'];
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Deposit (Monthly)</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                RM <?= number_format($balance, 2, '.', ','); ?>
+                                RM <?= number_format($balance + $balance2, 2, '.', ','); ?>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -180,7 +214,7 @@ $balance = $rowSales['balance'];
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($rowInvoice = mysqli_fetch_array($resultInvoice)) : ?>
+                                <?php while ($rowInvoice = mysqli_fetch_array($resultInvoice2)) : ?>
                                     <tr>
                                         <td class="align-middle text-center ">
                                             <a href="/project/templates/homedecor/invoice/view?id=<?= $rowInvoice['orderId']; ?>" target="_blank">
