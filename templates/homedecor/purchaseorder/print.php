@@ -26,6 +26,9 @@ class MYPDF extends TCPDF
 // create new PDF document
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
+// create new PDF document
+$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
 // set document information
 // $pdf->SetCreator(PDF_CREATOR);
 // $pdf->SetAuthor('Arzu Home & Living');
@@ -79,78 +82,146 @@ $pdf->SetFont('dejavusans', '', 12, '', true);
 // Add a page
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
-// set JPEG quality
-$pdf->setJPEGQuality(75);
 
-// Image method signature:
-// Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
+// Create cells
+$pdf->MultiCell(90, 10, 'Invoice For', 0, 'L', 0, 0);
+$pdf->MultiCell(90, 5, 'INV-' . str_pad($id, 6, '0', STR_PAD_LEFT), 0, 'R', 0, 0);
+$pdf->Ln();
+$pdf->setFont('Helvetica', 'B', 8);
+if (!is_null($rowInvoice)) {
+    $pdf->Cell(180, 5, $rowInvoice['invoiceDate'], 0, false, 'R', 0, '', 0, false, 'T', 'M');
+} else {
+    $pdf->Cell(180, 5, 'dd/mm/yyyy', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+}
+// $pdf->Cell(180, 5, 'dd/mm/yyyy', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Ln();
+$pdf->Ln();
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Pay to whom?
+$pdf->setFont('Helvetica', 'B', 11);
+$pdf->Cell(100, 5, $rowCustomer['customerName']);
+$pdf->Ln();
 
-// // Example of Image from data stream ('PHP rules')
-// $imgdata = base64_decode('iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABlBMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDrEX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==');
+// Address
+$pdf->setFont('Helvetica', 0, 8);
+$pdf->Cell(100, 5, $rowCustomer['address1'] . ',');
+$pdf->Ln();
+$pdf->Cell(100, 5, $rowCustomer['city'] . ',');
+$pdf->Ln();
+$pdf->Cell(160, 5, $rowCustomer['postcode'] . ", " . $rowCustomer['state']);
+$pdf->Ln();
+// Contact?
+$pdf->setFont('Helvetica', 'B', 8);
+$pdf->Cell(120, 5, $rowCustomer['customerPhone']);
+$pdf->Ln();
+$pdf->Ln();
 
-// // The '@' character is used to indicate that follows an image data stream and not an image file name
-// $pdf->Image('@' . $imgdata);
+// Table header
+$pdf->setFont('Helvetica', 'B', 9);
+$pdf->Cell(83, 8, 'Description', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(25, 8, 'Product ID', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(20, 8, 'Price/Unit', 1, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(16, 8, 'Quantity', 1, false, 'C', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(16, 8, 'Discount', 1, false, 'C', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(20, 8, 'Amount', 1, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Ln();
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$pdf->setFont('Helvetica', '', 9);
+while ($rowOrderItem = mysqli_fetch_assoc($resultItems)) :
+    // $pdf->MultiCell(90, 10, $rowOrderItem['name'], 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
+    if ($rowOrderItem['itemAvailable'] <= 0) :
+        $pdf->Cell(83, 6, $rowOrderItem['name'] . ' [Pre-order]', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    else :
+        $pdf->Cell(83, 6, $rowOrderItem['name'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    endif;
+    $pdf->Cell(25, 6, $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(20, 6, 'RM ' . number_format($rowOrderItem['productPrice'], 2, '.', ','), 1, false, 'R', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(16, 6, $rowOrderItem['quantity'], 1, false, 'C', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(16, 6, $rowOrderItem['discount'] . '%', 1, false, 'C', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(20, 6, 'RM ' . number_format($rowOrderItem['productDiscount'], 2, '.', ','), 1, false, 'R', 0, '', 0, false, 'T', 'M');
+    $pdf->Ln();
+endwhile;
+$pdf->Cell(155, 6, 'Subtotal :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(25, 6, 'RM ' . number_format($rowOrder['itemDiscount'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Ln();
 
-// Image example with resizing
-$pdf->Image('/project/upload/img/product/2021/10-20210805.JPG', 15, 140, 75, 113, 'JPG', 'http://www.tcpdf.org', '', true, 150, '', false, false, 1, false, false, false);
+$pdf->Cell(155, 6, 'Shipping :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(25, 6, 'RM ' . number_format($rowOrder['shipping'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Ln();
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$pdf->Cell(155, 6, 'Total :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(25, 6, 'RM ' . number_format($rowOrder['total'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+$pdf->Ln();
 
-// test fitbox with all alignment combinations
+// Check for voucher
+if ($rowOrder['voucher'] != 0) {
+    $pdf->Cell(155, 6, 'Voucher :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
+    $pdf->Cell(25, 6, '- RM ' . number_format($rowOrder['voucher'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+    $pdf->Ln();
 
-$horizontal_alignments = array('L', 'C', 'R');
-$vertical_alignments = array('T', 'M', 'B');
-
-$x = 15;
-$y = 35;
-$w = 30;
-$h = 30;
-// test all combinations of alignments
-for ($i = 0; $i < 3; ++$i) {
-    $fitbox = $horizontal_alignments[$i] . ' ';
-    $x = 15;
-    for ($j = 0; $j < 3; ++$j) {
-        $fitbox[1] = $vertical_alignments[$j];
-        $pdf->Rect($x, $y, $w, $h, 'F', array(), array(128, 255, 128));
-        $pdf->Image('/project/upload/img/product/2021/10-20210805.JPG', $x, $y, $w, $h, 'JPG', '', '', false, 300, '', false, false, 0, $fitbox, false, false);
-        $x += 32; // new column
-    }
-    $y += 32; // new row
+    $pdf->setFont('Helvetica', 'B', 12);
+    $pdf->Cell(155, 8, 'Grand Total :', 0, false, 'R', 0, '', 0, false, 'T', 'T');
+    $pdf->Cell(25, 8, 'RM ' . number_format($rowOrder['grandTotal'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'T');
+    $pdf->Ln();
+} else {
+    $pdf->setFont('Helvetica', 'B', 12);
+    $pdf->Cell(155, 8, 'Grand Total :', 0, false, 'R', 0, '', 0, false, 'T', 'T');
+    $pdf->setFont('Helvetica', 'B', 12);
+    $pdf->Cell(25, 8, 'RM ' . number_format($rowOrder['grandTotal'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'T');
+    $pdf->Ln();
 }
 
-$x = 115;
-$y = 35;
-$w = 25;
-$h = 50;
-for ($i = 0; $i < 3; ++$i) {
-    $fitbox = $horizontal_alignments[$i] . ' ';
-    $x = 115;
-    for ($j = 0; $j < 3; ++$j) {
-        $fitbox[1] = $vertical_alignments[$j];
-        $pdf->Rect($x, $y, $w, $h, 'F', array(), array(128, 255, 255));
-        $pdf->Image('/project/upload/img/product/2021/10-20210805.JPG', $x, $y, $w, $h, 'JPG', '', '', false, 300, '', false, false, 0, $fitbox, false, false);
-        $x += 27; // new column
-    }
-    $y += 52; // new row
-}
+$pdf->Ln();
+$pdf->Ln();
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Receipt
+$pdf->setFont('Helvetica', '', 8);
+$pdf->Cell(64, 3, 'Receipt(s)', 0, false, 'L', 0, '', 0, false, 'T', 'M');
+$pdf->Ln();
+$pdf->setFont('Helvetica', 'B', 8);
+$pdf->Cell(14, 5, 'No.', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(30, 5, 'Date', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+$pdf->Cell(20, 5, 'Amount', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+$pdf->Ln();
+$pdf->setFont('Helvetica', '', 8);
+while ($rowReceipt = mysqli_fetch_array($resultReceipt)) :
+    // No receipt
+    $pdf->Cell(14, 5, str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT), 1, false, 'L', 0, '', 0, false, 'T', 'M');
 
-// Stretching, position and alignment example
+    // Date
+    $s = $rowReceipt['invoiceDate'];
+    $dt = new DateTime($s);
+    $pdf->Cell(30, 5, $date = $dt->format('d/m/Y'), 1, false, 'L', 0, '', 0, false, 'T', 'M');
 
-$pdf->SetXY(110, 200);
-$pdf->Image('/project/upload/img/product/2021/10-20210805.JPG', '', '', 40, 40, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
-$pdf->Image('/project/upload/img/product/2021/10-20210805.JPG', '', '', 40, 40, '', '', '', false, 300, '', false, false, 1, false, false, false);
+    // Amount
+    $pdf->Cell(20, 5, 'RM' . number_format($rowReceipt['amountPaid'], 2, '.', ''), 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    $pdf->Ln();
+endwhile;
+$pdf->Ln();
+$pdf->Ln();
 
-// -------------------------------------------------------------------
+// Pay to?
+$pdf->setFont('Helvetica', '', 10);
+$pdf->Cell(40, 5, 'Pay to');
+$pdf->Ln();
+$pdf->setFont('Helvetica', 'B', 10);
+$pdf->Cell(100, 5, 'Arzu Home Living Empire');
+$pdf->Ln();
+$pdf->setFont('Helvetica', 'B', 10);
+$pdf->Cell(100, 5, 'Maybank - 5622 0966 6454');
+$pdf->Ln();
+$pdf->Ln();
 
-//Close and output PDF document
-$pdf->Output('example_009.pdf', 'I');
+// Terms
+$pdf->setFont('Helvetica', '', 10);
+$pdf->Cell(100, 5, 'Terms and Conditions');
+$pdf->Ln();
+$pdf->Cell(100, 5, '1. Price will be rounded up to the nearest ringgit.');
+$pdf->Ln();
+$pdf->Cell(100, 5, '2. Please include the payment slips after the payment was made.');
+$pdf->Ln();
+$pdf->Cell(100, 5, '3. Balance payment must be made within 2 days after the invoice billed to you.');
+$pdf->Ln();
 
-//============================================================+
-// END OF FILE
-//============================================================+
+// Result
+$pdf->Output('INV-' . str_pad($id, 6, '0', STR_PAD_LEFT) . '.pdf');
