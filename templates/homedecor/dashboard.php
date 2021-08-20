@@ -28,123 +28,166 @@ $chartRevenue = "SELECT SUM(homedecor_invoice.amount_paid) AS totalAmount, creat
 $resultRevenue = mysqli_query($conn, $chartRevenue);
 
 // Bar Chart
-// $chartBalance = "SELECT SUM(remaining_amount) AS sumBalance FROM homedecor_invoice GROUP BY MONTH(created)";
 $chartBalance = "SELECT SUM(homedecor_invoice.remaining_amount) AS sumBalance, created FROM (SELECT remaining_amount, created FROM homedecor_invoice WHERE invoice_status != 'Cancelled' UNION ALL SELECT remainingAmount, created FROM homedecor_invoice2) homedecor_invoice GROUP BY MONTH(created)";
 $resultBalance = mysqli_query($conn, $chartBalance);
 
 // Pie Chart
-$pieChart = "SELECT COUNT(source) AS countSource, source FROM homedecor_customer GROUP BY source";
-$resultPie = mysqli_query($conn, $pieChart);
-
-// Create the loop
-$dataRow = array();
-while ($rowPie = mysqli_fetch_assoc($resultPie)) {
-    $dataRow = $rowPie;
-}
-
+$pieChart = "SELECT homedecor_invoice.invoice_status, COUNT(*) AS countStatus FROM (SELECT invoice_status FROM homedecor_invoice UNION ALL SELECT invoiceStatus FROM homedecor_invoice2) homedecor_invoice GROUP BY invoice_status";
+$resultPieChart = mysqli_query($conn, $pieChart);
 ?>
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Arzu Home Dashboard</h1>
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-
     <div class="row">
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
+        <div class="col-lg-6 col-xl-6 mb-4 ">
+
+            <div class="card shadow mb-4 h-100">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Sales Status</h6>
+                </div>
+                <!-- Card Body -->
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Enquiries Inserted</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= $numOfEnq; ?>
+                    <div class="chart-pie pt-4">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
+                            </div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <i class="fas fa-id-card fa-2x text-gray-300"></i>
+                        <canvas id="myPieChart" style="display: block; width: 486px; height: 253px;" class="chartjs-render-monitor" width="486" height="253"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-xl-6 mb-4">
+            <div class="card shadow mb-4 h-100">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Sales Summary</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 w-70 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Enquiries Inserted</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <?= $numOfEnq; ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-id-card fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 w-70 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Total Customers</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <?= $numOfCust; ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 w-70 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Balance (Cumulative)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                RM <?= number_format($rowSales['balance'], 2, '.', ','); ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-6 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 w-70 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Earnings (Cumulative)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($rowSales['amountPaid'], 2, '.', ','); ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-xl-6 col-md-6 mb-4 mx-auto">
+                            <div class="card border-left-info shadow h-100 w-70 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Total Sales</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                RM <?= number_format($rowSales['salesMade'], 2, '.', ','); ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Total Customers</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <?= $numOfCust; ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-users fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-lg-12 col-xl-12 col-md-12">
+            <!-- Bar Chart -->
+            <div class="card shadow mb-4 h-100">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Sales Chart</h6>
                 </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Total Sales</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                RM <?= number_format($rowSales['salesMade'], 2, '.', ','); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
+                    <div class="chart-bar">
+                        <canvas id="myBarChart"></canvas>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Earnings (Cumulative)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">RM <?= number_format($rowSales['amountPaid'], 2, '.', ','); ?></div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pending Requests Card Example -->
-        <div class="col-xl-2 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Balance (Cumulative)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                RM <?= number_format($rowSales['balance'], 2, '.', ','); ?>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
+                    <hr>
+                    <!-- Styling for the bar chart can be found in the
+                    <code>/js/demo/chart-bar-demo.js</code> file. -->
                 </div>
             </div>
         </div>
@@ -157,24 +200,6 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
                 </div>
                 <div class="card-body">
                     <h4 class="font-weight-bold">Welcome to Neurali!</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 col-xl-12">
-            <!-- Bar Chart -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Yearly Revenue</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-bar">
-                        <canvas id="myBarChart"></canvas>
-                    </div>
-                    <hr>
-                    <!-- Styling for the bar chart can be found in the
-                    <code>/js/demo/chart-bar-demo.js</code> file. -->
                 </div>
             </div>
         </div>
@@ -219,7 +244,7 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
     var myBarChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
             datasets: [{
                     label: "Revenue",
                     backgroundColor: "#4e73df",
@@ -227,6 +252,7 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
                     borderColor: "#4e73df",
                     data: [
                         <?php
+                        echo "'','',";
                         while ($rowData1 = mysqli_fetch_array($resultRevenue)) :
                             echo $rowData1['totalAmount'] . ",";
                         endwhile;
@@ -240,6 +266,7 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
                     borderColor: "#df534e",
                     data: [
                         <?php
+                        echo "'','',";
                         while ($rowData2 = mysqli_fetch_array($resultBalance)) :
                             echo $rowData2['sumBalance'] . ",";
                         endwhile;
@@ -315,5 +342,52 @@ while ($rowPie = mysqli_fetch_assoc($resultPie)) {
                 }
             },
         }
+    });
+
+    // Pie Chart Example
+    var ctx = document.getElementById("myPieChart");
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: [
+                <?php while ($rowPie = mysqli_fetch_assoc($resultPieChart)) {
+                    $pieData[] = $rowPie['countStatus'];
+                    echo '"' . $rowPie['invoice_status'] . '",';
+                } ?>
+            ],
+            datasets: [{
+                data: [
+                    <?php for ($i = 0; $i < count($pieData); $i++) {
+                        echo $pieData[$i] . ',';
+                    } ?>
+                ],
+                backgroundColor: ['#fa7e99', '#2e59d9', '#6ac9c9', '#fad273'],
+                hoverBackgroundColor: ['#d9392e', '#2e59d9', '#2c9faf', '#FFFF00'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Pie Chart'
+                }
+            },
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+            },
+        },
     });
 </script>
