@@ -9,11 +9,6 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/project/assets/vendor/pdf/tcpdf.php')
 // create new PDF document
 $pdf = new TCPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-// set document information
-// $pdf->SetCreator(PDF_CREATOR);
-// $pdf->SetAuthor('Arzu Home & Living');
-// $pdf->SetTitle($rowOrder['pvNum']);
-
 // Business name
 define('BUSINESS', 'Arzu Home & Living Empire');
 
@@ -53,19 +48,13 @@ $rowPO = mysqli_fetch_assoc($resultPO);
 $poItems = "SELECT * FROM homedecor_po_items WHERE poId = '" . $_GET['id'] . "'";
 $resultPOItems = mysqli_query($conn, $poItems);
 
-// ---------------------------------------------------------
-
 // set default font subsetting mode
 $pdf->setFontSubsetting(true);
 
 // Set font
-// dejavusans is a UTF-8 Unicode font, if you only need to
-// print standard ASCII chars, you can use core fonts like
-// helvetica or times to reduce file size.
 $pdf->SetFont('dejavusans', '', 10, '', true);
 
 // Add a page
-// This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
 $html = '<h4>Purchase Order Number : ' . $rowPO['id'] . '</h4>
 <h4>Supplier : ' . $rowPO['supplier'] . '</h4>
