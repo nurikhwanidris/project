@@ -227,7 +227,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     <div class="row my-3">
         <div class="col-lg-12">
             <!-- <button href="#" class="btn btn-primary float-right" id="printPO"><i class="fas fa-print"></i> Print</button> -->
-            <a href="print.php?id=<?= $_GET['id']; ?>" class="btn btn-primary float-right" id=""><i class="fas fa-print"></i> Print</a>
+            <a href="print.php?id=<?= $_GET['id']; ?>" class="btn btn-primary float-right" id="" target="_blank"><i class="fas fa-print"></i> Print</a>
         </div>
     </div>
 </div>

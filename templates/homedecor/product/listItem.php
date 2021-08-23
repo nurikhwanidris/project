@@ -80,6 +80,7 @@ $result = mysqli_query($conn, $sql);
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="my-2">
+                            <a class="group-by btn btn-primary btn-sm mr-2 float-right" id="exportPDF"><i class="fas fa-file-pdf"></i></a>
                             <a class="group-by btn btn-success btn-sm mx-2 float-right" id="exportCSV"><i class="fas fa-file-excel"></i></a>
                             <a class="group-by btn btn-info btn-sm float-right" data-column="4">Supplier</a>
                             <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
@@ -172,14 +173,24 @@ $result = mysqli_query($conn, $sql);
         var table = $('#myTable').DataTable({
             dom: 'ltipr',
             buttons: [{
-                extend: 'csv',
-            }],
+                    extend: 'csv',
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                }
+            ],
             orderFixed: [
                 [3, 'asc']
             ],
             rowGroup: {
                 dataSrc: 3
             }
+        });
+
+        $("#exportPDF").on("click", function() {
+            table.button('.buttons-pdf').trigger();
         });
 
         $("#exportCSV").on("click", function() {
