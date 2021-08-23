@@ -22,12 +22,8 @@ class MYPDF extends TCPDF
     }
 }
 
-
 // create new PDF document
-$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-// create new PDF document
-$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf = new MYPDF("L", PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 // set document information
 // $pdf->SetCreator(PDF_CREATOR);
@@ -68,6 +64,14 @@ if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
     $pdf->setLanguageArray($l);
 }
 
+// Get the po details
+$purchaseOrder = "SELECT * FROM homedecor_po WHERE id = '" . $_GET['id'] . "'";
+$resultPO = mysqli_query($conn, $purchaseOrder);
+$rowPO = mysqli_fetch_assoc($resultPO);
+
+$poItems = "SELECT * FROM homedecor_po_items WHERE poId = '" . $_GET['id'] . "'";
+$resultPOItems = mysqli_query($conn, $poItems);
+
 // ---------------------------------------------------------
 
 // set default font subsetting mode
@@ -77,151 +81,63 @@ $pdf->setFontSubsetting(true);
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
-$pdf->SetFont('dejavusans', '', 12, '', true);
+$pdf->SetFont('dejavusans', '', 10, '', true);
 
 // Add a page
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
+$html = '<h4>Purchase Order Number : ' . $rowPO['id'] . '</h4><br>
+<h4>Supplier : ' . $rowPO['supplier'] . '</h4><br>
+<h4>Batch Number : ' . $rowPO['batch'] . '</h4><br>
+<h4>Date Created : ' . $rowPO['created'] . '</h4><br>
+<h4>Expected Delivery Date : ' . $rowPO['expectedDeliveryDate'] . '</h4><br>
+<h4>Expected Arrival Date : ' . $rowPO['expectedArrivalDate'] . '</h4><br>';
 
-// Create cells
-$pdf->MultiCell(90, 10, 'Invoice For', 0, 'L', 0, 0);
-$pdf->MultiCell(90, 5, 'INV-' . str_pad($id, 6, '0', STR_PAD_LEFT), 0, 'R', 0, 0);
-$pdf->Ln();
-$pdf->setFont('Helvetica', 'B', 8);
-if (!is_null($rowInvoice)) {
-    $pdf->Cell(180, 5, $rowInvoice['invoiceDate'], 0, false, 'R', 0, '', 0, false, 'T', 'M');
-} else {
-    $pdf->Cell(180, 5, 'dd/mm/yyyy', 0, false, 'R', 0, '', 0, false, 'T', 'M');
-}
-// $pdf->Cell(180, 5, 'dd/mm/yyyy', 0, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Ln();
-$pdf->Ln();
-
-// Pay to whom?
-$pdf->setFont('Helvetica', 'B', 11);
-$pdf->Cell(100, 5, $rowCustomer['customerName']);
-$pdf->Ln();
-
-// Address
-$pdf->setFont('Helvetica', 0, 8);
-$pdf->Cell(100, 5, $rowCustomer['address1'] . ',');
-$pdf->Ln();
-$pdf->Cell(100, 5, $rowCustomer['city'] . ',');
-$pdf->Ln();
-$pdf->Cell(160, 5, $rowCustomer['postcode'] . ", " . $rowCustomer['state']);
-$pdf->Ln();
-// Contact?
-$pdf->setFont('Helvetica', 'B', 8);
-$pdf->Cell(120, 5, $rowCustomer['customerPhone']);
-$pdf->Ln();
-$pdf->Ln();
-
-// Table header
-$pdf->setFont('Helvetica', 'B', 9);
-$pdf->Cell(83, 8, 'Description', 1, false, 'L', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(25, 8, 'Product ID', 1, false, 'L', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(20, 8, 'Price/Unit', 1, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(16, 8, 'Quantity', 1, false, 'C', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(16, 8, 'Discount', 1, false, 'C', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(20, 8, 'Amount', 1, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Ln();
-
-$pdf->setFont('Helvetica', '', 9);
-while ($rowOrderItem = mysqli_fetch_assoc($resultItems)) :
-    // $pdf->MultiCell(90, 10, $rowOrderItem['name'], 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
-    if ($rowOrderItem['itemAvailable'] <= 0) :
-        $pdf->Cell(83, 6, $rowOrderItem['name'] . ' [Pre-order]', 1, false, 'L', 0, '', 0, false, 'T', 'M');
-    else :
-        $pdf->Cell(83, 6, $rowOrderItem['name'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
-    endif;
-    $pdf->Cell(25, 6, $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(20, 6, 'RM ' . number_format($rowOrderItem['productPrice'], 2, '.', ','), 1, false, 'R', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(16, 6, $rowOrderItem['quantity'], 1, false, 'C', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(16, 6, $rowOrderItem['discount'] . '%', 1, false, 'C', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(20, 6, 'RM ' . number_format($rowOrderItem['productDiscount'], 2, '.', ','), 1, false, 'R', 0, '', 0, false, 'T', 'M');
-    $pdf->Ln();
-endwhile;
-$pdf->Cell(155, 6, 'Subtotal :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(25, 6, 'RM ' . number_format($rowOrder['itemDiscount'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Ln();
-
-$pdf->Cell(155, 6, 'Shipping :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(25, 6, 'RM ' . number_format($rowOrder['shipping'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Ln();
-
-$pdf->Cell(155, 6, 'Total :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(25, 6, 'RM ' . number_format($rowOrder['total'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
-$pdf->Ln();
-
-// Check for voucher
-if ($rowOrder['voucher'] != 0) {
-    $pdf->Cell(155, 6, 'Voucher :', 0, false, 'R', 0, '', 0, false, 'T', 'M');
-    $pdf->Cell(25, 6, '- RM ' . number_format($rowOrder['voucher'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'M');
-    $pdf->Ln();
-
-    $pdf->setFont('Helvetica', 'B', 12);
-    $pdf->Cell(155, 8, 'Grand Total :', 0, false, 'R', 0, '', 0, false, 'T', 'T');
-    $pdf->Cell(25, 8, 'RM ' . number_format($rowOrder['grandTotal'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'T');
-    $pdf->Ln();
-} else {
-    $pdf->setFont('Helvetica', 'B', 12);
-    $pdf->Cell(155, 8, 'Grand Total :', 0, false, 'R', 0, '', 0, false, 'T', 'T');
-    $pdf->setFont('Helvetica', 'B', 12);
-    $pdf->Cell(25, 8, 'RM ' . number_format($rowOrder['grandTotal'], 2, '.', ','), 0, false, 'R', 0, '', 0, false, 'T', 'T');
-    $pdf->Ln();
+// Set some content to print
+$html .= '<table cellspacing="0" cellpadding="1" border="1" style="border-color:gray;">
+    <tr style="background-color:green;color:white;">
+        <th rowspan="2" style="text-align:center; vertical-align: middle;">Picture</th>
+        <th rowspan="2" style="text-align:center; vertical-align: middle;">Item Code</th>
+        <th rowspan="2">Product Desc</th>
+        <th rowspan="2" style="text-align:center; vertical-align: middle;">Size</th>
+        <th rowspan="2" style="text-align:center; vertical-align: middle;">Unit Price</th>
+        <th rowspan="2" style="text-align:center; vertical-align: middle;">Qty.</th>
+        <th rowspan="2" style="text-align:center; vertical-align: middle;">Amount</th>
+        <th colspan="2" style="text-align:center; vertical-align: middle;">Available (Supplier)</th>
+        <th colspan="3" style="text-align:center; vertical-align: middle;">Received (Arzu Home)</th>
+    </tr>
+    <tr>
+        <td>Yes</td>
+        <td>No</td>
+        <td>Qty</td>
+        <td>Extra</td>
+        <td>Broken</td>
+    </tr>';
+while ($rowItems = mysqli_fetch_array($resultPOItems)) {
+    $selectProduct2 = "SELECT * FROM homedecor_product2 WHERE id = '" . $_GET['id'] . "'";
+    $resultProduct2 = mysqli_query($conn, $selectProduct2);
+    $rowProduct2 = mysqli_fetch_assoc($resultProduct2);
+    $html .= '<tr nobr="true">
+    <td><img src="' . $_SERVER['DOCUMENT_ROOT'] . '/project/upload/img/product/2021/' . $rowProduct2['img'] . '" alt="" srcset="" height="200px" width="200px"></td>
+    <td>' . $rowProduct2['supplier'] . '-' . str_pad($rowProduct2['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowProduct2['itemId'] . '</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    </tr>';
 }
 
-$pdf->Ln();
-$pdf->Ln();
+$html .= '</table>';
 
-// Receipt
-$pdf->setFont('Helvetica', '', 8);
-$pdf->Cell(64, 3, 'Receipt(s)', 0, false, 'L', 0, '', 0, false, 'T', 'M');
-$pdf->Ln();
-$pdf->setFont('Helvetica', 'B', 8);
-$pdf->Cell(14, 5, 'No.', 1, false, 'L', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(30, 5, 'Date', 1, false, 'L', 0, '', 0, false, 'T', 'M');
-$pdf->Cell(20, 5, 'Amount', 1, false, 'L', 0, '', 0, false, 'T', 'M');
-$pdf->Ln();
-$pdf->setFont('Helvetica', '', 8);
-while ($rowReceipt = mysqli_fetch_array($resultReceipt)) :
-    // No receipt
-    $pdf->Cell(14, 5, str_pad($rowReceipt['id'], 4, 0, STR_PAD_LEFT), 1, false, 'L', 0, '', 0, false, 'T', 'M');
-
-    // Date
-    $s = $rowReceipt['invoiceDate'];
-    $dt = new DateTime($s);
-    $pdf->Cell(30, 5, $date = $dt->format('d/m/Y'), 1, false, 'L', 0, '', 0, false, 'T', 'M');
-
-    // Amount
-    $pdf->Cell(20, 5, 'RM' . number_format($rowReceipt['amountPaid'], 2, '.', ''), 1, false, 'L', 0, '', 0, false, 'T', 'M');
-    $pdf->Ln();
-endwhile;
-$pdf->Ln();
-$pdf->Ln();
-
-// Pay to?
-$pdf->setFont('Helvetica', '', 10);
-$pdf->Cell(40, 5, 'Pay to');
-$pdf->Ln();
-$pdf->setFont('Helvetica', 'B', 10);
-$pdf->Cell(100, 5, 'Arzu Home Living Empire');
-$pdf->Ln();
-$pdf->setFont('Helvetica', 'B', 10);
-$pdf->Cell(100, 5, 'Maybank - 5622 0966 6454');
-$pdf->Ln();
-$pdf->Ln();
-
-// Terms
-$pdf->setFont('Helvetica', '', 10);
-$pdf->Cell(100, 5, 'Terms and Conditions');
-$pdf->Ln();
-$pdf->Cell(100, 5, '1. Price will be rounded up to the nearest ringgit.');
-$pdf->Ln();
-$pdf->Cell(100, 5, '2. Please include the payment slips after the payment was made.');
-$pdf->Ln();
-$pdf->Cell(100, 5, '3. Balance payment must be made within 2 days after the invoice billed to you.');
-$pdf->Ln();
+// Print text using writeHTMLCell()
+$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // Result
-$pdf->Output('INV-' . str_pad($id, 6, '0', STR_PAD_LEFT) . '.pdf');
+$pdf->Output('INV-' . str_pad($_GET['id'], 6, '0', STR_PAD_LEFT) . '.pdf');
