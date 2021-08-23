@@ -83,6 +83,7 @@ $rowLeave = mysqli_fetch_array($resultLeave);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Order Management</h6>
                         <a class="collapse-item" href="/project/templates/homedecor/order/orderList">List</a>
+                        <a class="collapse-item" href="/project/templates/homedecor/order2/list">Old List</a>
                         <a class="collapse-item" href="/project/templates/homedecor/order/report">Report</a>
                     </div>
                 </div>
