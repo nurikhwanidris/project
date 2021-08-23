@@ -86,58 +86,79 @@ $pdf->SetFont('dejavusans', '', 10, '', true);
 // Add a page
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
-$html = '<h4>Purchase Order Number : ' . $rowPO['id'] . '</h4><br>
-<h4>Supplier : ' . $rowPO['supplier'] . '</h4><br>
-<h4>Batch Number : ' . $rowPO['batch'] . '</h4><br>
-<h4>Date Created : ' . $rowPO['created'] . '</h4><br>
-<h4>Expected Delivery Date : ' . $rowPO['expectedDeliveryDate'] . '</h4><br>
-<h4>Expected Arrival Date : ' . $rowPO['expectedArrivalDate'] . '</h4><br>';
+$html = '<h4>Purchase Order Number : ' . $rowPO['id'] . '</h4>
+<h4>Supplier : ' . $rowPO['supplier'] . '</h4>
+<h4>Batch Number : ' . $rowPO['batch'] . '</h4>
+<h4>Date Created : ' . $rowPO['created'] . '</h4>
+<h4>Expected Delivery Date : ' . $rowPO['expectedDeliveryDate'] . '</h4>
+<h4>Expected Arrival Date : ' . $rowPO['expectedArrivalDate'] . '</h4>';
 
 // Set some content to print
 $html .= '<table cellspacing="0" cellpadding="1" border="1" style="border-color:gray;">
     <tr style="background-color:green;color:white;">
         <th rowspan="2" style="text-align:center; vertical-align: middle;">Picture</th>
         <th rowspan="2" style="text-align:center; vertical-align: middle;">Item Code</th>
-        <th rowspan="2">Product Desc</th>
-        <th rowspan="2" style="text-align:center; vertical-align: middle;">Size</th>
+        <th rowspan="2" style="width: 150px;"> Product Desc</th>
+        <th rowspan="2" style="width: 50px; text-align:center; vertical-align: middle;">Size</th>
         <th rowspan="2" style="text-align:center; vertical-align: middle;">Unit Price</th>
-        <th rowspan="2" style="text-align:center; vertical-align: middle;">Qty.</th>
-        <th rowspan="2" style="text-align:center; vertical-align: middle;">Amount</th>
+        <th rowspan="2" style="width: 50px; text-align:center; vertical-align: middle;">Qty.</th>
+        <th rowspan="2" style="width: 70px; text-align:center; vertical-align: middle;">Amount</th>
         <th colspan="2" style="text-align:center; vertical-align: middle;">Available (Supplier)</th>
         <th colspan="3" style="text-align:center; vertical-align: middle;">Received (Arzu Home)</th>
     </tr>
     <tr>
-        <td>Yes</td>
-        <td>No</td>
-        <td>Qty</td>
-        <td>Extra</td>
-        <td>Broken</td>
+        <th style="text-align:center; vertical-align: middle;">Yes</th>
+        <th style="text-align:center; vertical-align: middle;">No</th>
+        <th style="text-align:center; vertical-align: middle;">Qty</th>
+        <th style="text-align:center; vertical-align: middle;">Extra</th>
+        <th style="text-align:center; vertical-align: middle;">Broken</th>
     </tr>';
 while ($rowItems = mysqli_fetch_array($resultPOItems)) {
-    $selectProduct2 = "SELECT * FROM homedecor_product2 WHERE id = '" . $_GET['id'] . "'";
+    $selectProduct2 = "SELECT * FROM homedecor_product2 WHERE id = '" . $rowItems['productId'] . "'";
     $resultProduct2 = mysqli_query($conn, $selectProduct2);
     $rowProduct2 = mysqli_fetch_assoc($resultProduct2);
-    $html .= '<tr nobr="true">
-    <td><img src="' . $_SERVER['DOCUMENT_ROOT'] . '/project/upload/img/product/2021/' . $rowProduct2['img'] . '" alt="" srcset="" height="200px" width="200px"></td>
-    <td>' . $rowProduct2['supplier'] . '-' . str_pad($rowProduct2['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowProduct2['itemId'] . '</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    $html .=
+        '<tr style="height: 200px;" nobr="true">
+        <td height="50" style="text-align:center">
+            <img src="' . $_SERVER['DOCUMENT_ROOT'] . '/project/upload/img/product/2021/' . $rowProduct2['img'] . '" alt="" srcset="" height="200px" width="200px">
+        </td>
+        <td height="50" style="text-align:center">
+            ' . $rowProduct2['supplier'] . '-' . str_pad($rowProduct2['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowProduct2['itemId'] . '
+        </td>
+        <td height="50" style="text-align:left"> ' . $rowProduct2['name'] . '</td>
+        <td height="50" style="text-align:center">' . $rowProduct2['size'] . '</td>
+        <td height="50" style="text-align:center; vertical-align: middle;">' . $rowItems['costTHB'] . '</td>
+        <td height="50" style="text-align:center; vertical-align: middle;">' . $rowItems['quantity'] . '</td>
+        <td height="50" style="text-align:center; vertical-align: middle;">' . $rowItems['amount'] . '</td>
+        <td height="50"></td>
+        <td height="50"></td>
+        <td height="50"></td>
+        <td height="50"></td>
+        <td height="50"></td>
     </tr>';
 }
-
+$html .= '<tr>
+    <td colspan="11">Total Items Ordered</td>
+    <td style="text-align: right;">' . $rowPO['totalQuantity'] . '</td>
+</tr>';
+$html .= '<tr>
+    <td colspan="11">Discount</td>
+    <td style="text-align: right;">' . number_format($rowPO['totalAmount'], 2, '.', ',') . '</td>
+</tr>';
+$html .= '<tr>
+    <td colspan="11">Discount</td>
+    <td style="text-align: right;">' . number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ',') . '</td>
+</tr>';
+$discount = $rowPO['totalAmount'] * .22;
+$afterDiscount = $rowPO['totalAmount'] - $discount;
+$html .= '<tr>
+    <td colspan="11">After Discount</td>
+    <td style="text-align: right;">' . number_format($afterDiscount, 2, '.', ',') . '</td>
+</tr>';
 $html .= '</table>';
 
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // Result
-$pdf->Output('INV-' . str_pad($_GET['id'], 6, '0', STR_PAD_LEFT) . '.pdf');
+$pdf->Output('PO-' . str_pad($_GET['id'], 6, '0', STR_PAD_LEFT) . '.pdf');
