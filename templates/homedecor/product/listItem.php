@@ -92,8 +92,8 @@ $result = mysqli_query($conn, $sql);
                                     <th class="text-left align-middle">Item Code</th>
                                     <th class="align-middle">Name</th>
                                     <th class="d-none text-center align-middle">Item ID</th>
-                                    <th class="text-center align-middle d-none">Category</th>
-                                    <th class="text-center align-middle d-none">Supplier</th>
+                                    <th class="d-none text-center align-middle">Category</th>
+                                    <th class="d-none text-center align-middle">Supplier</th>
                                     <th class="text-center align-middle">Variation</th>
                                     <th class="text-center align-middle">Cost THB</th>
                                     <th class="text-center align-middle">Cost MYR</th>
@@ -172,6 +172,9 @@ $result = mysqli_query($conn, $sql);
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
             dom: 'ltipr',
+            "order": [
+                [2, "asc"]
+            ],
             buttons: [{
                     extend: 'csv',
                 },

@@ -173,7 +173,7 @@ $rowProduct = mysqli_fetch_assoc($resultSelectProduct);
                                 <div class="form-group row">
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-2">
-                                        <input type='file' id="productImgUpdate" name="productImgUpdate" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="">
+                                        <input type='file' id="productImgUpdate" name="productImgUpdate" class="form-control" accept="image/jpeg" value="">
                                     </div>
                                 </div>
                             <?php endif; ?>

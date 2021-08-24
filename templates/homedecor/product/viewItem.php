@@ -183,7 +183,7 @@ $rowItem = mysqli_fetch_assoc($resultSelectItem);
                                 <div class="form-group row">
                                     <div class="col-sm-6"></div>
                                     <div class="col-sm-6">
-                                        <input type='file' id="productImgUpdate" name="productImgUpdate" class="form-control" accept="image/x-png,image/gif,image/jpeg" value="">
+                                        <input type='file' id="productImgUpdate" name="productImgUpdate" class="form-control" accept="image/jpeg" value="">
                                     </div>
                                 </div>
                             <?php endif; ?>

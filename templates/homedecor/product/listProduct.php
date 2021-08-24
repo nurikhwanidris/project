@@ -144,6 +144,9 @@ $result = mysqli_query($conn, $sql);
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
             dom: 'ltipr',
+            "order": [
+                [2, "asc"]
+            ],
             buttons: [{
                     extend: 'csv',
                 },
