@@ -118,7 +118,8 @@ $resultPO = mysqli_query($conn, $selectPO);
                                         </td>
                                         <td class="align-middle text-center">
                                             <a href="viewPO?id=<?= $rowPO['id']; ?>" target="_blank" class="btn btn-sm btn-info mx-2" rel="noopener noreferrer"><i class="far fa-eye"></i></a>
-                                            <a href="viewPO?id=<?= $rowPO['id']; ?>" target="_blank" class="btn btn-sm btn-danger mx-2" id="deletePO" rel="noopener noreferrer"><i class="fas fa-minus-circle"></i></a>
+                                            <a href="print.php?id=<?= $rowPO['id']; ?>" class="btn btn-sm btn-primary mx-2" id="" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                                            <!-- <a href="viewPO?id=<?= $rowPO['id']; ?>" target="_blank" class="btn btn-sm btn-danger mx-2" id="deletePO" rel="noopener noreferrer"><i class="fas fa-minus-circle"></i></a> -->
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
