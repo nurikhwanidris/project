@@ -81,6 +81,7 @@ $result = mysqli_query($conn, $sql);
                                     <th class="text-center align-middle">Cost MYR</th>
                                     <th class="text-center align-middle">Selling Price</th>
                                     <th class="text-center align-middle">Profit MYR</th>
+                                    <th class="text-center align-middle">Picture</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -121,6 +122,9 @@ $result = mysqli_query($conn, $sql);
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['sellingMYR'] - $rowItem['costMYR']; ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <img src="/project/upload/img/product/2021/<?= $rowItem['img']; ?>" alt="" srcset="" width="100" height="100" class="img-thumbnail">
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -189,7 +193,6 @@ $result = mysqli_query($conn, $sql);
 
         $('a.group-by').on('click', function(e) {
             e.preventDefault();
-
             table.rowGroup().dataSrc($(this).data('column'));
         });
     });

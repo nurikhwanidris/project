@@ -1,5 +1,5 @@
 <!-- Title -->
-<?php $title = 'Product Listing'; ?>
+<?php $title = 'Item Listing'; ?>
 
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
@@ -52,7 +52,7 @@ $result = mysqli_query($conn, $sql);
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Product List</h1>
+        <h1 class="h3 mb-0 text-gray-800">Item List</h1>
         <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#displayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
     </div>
 
@@ -62,7 +62,7 @@ $result = mysqli_query($conn, $sql);
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Item List</h6>
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
