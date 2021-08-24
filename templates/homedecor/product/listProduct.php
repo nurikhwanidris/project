@@ -124,7 +124,7 @@ $result = mysqli_query($conn, $sql);
                                             <?= $rowItem['sellingMYR'] - $rowItem['costMYR']; ?>
                                         </td>
                                         <td class="text-center align-middle">
-                                            <img src="/project/upload/img/product/2021/<?= $rowItem['img']; ?>" alt="" srcset="" width="100" height="100" class="img-thumbnail">
+                                            <img src="/project/upload/img/product/2021/<?= $rowItem['img']; ?>" alt="" srcset="" style="width:100px; height:auto;" class="img-thumbnail">
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

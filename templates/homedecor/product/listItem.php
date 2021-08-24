@@ -185,10 +185,10 @@ $result = mysqli_query($conn, $sql);
                 }
             ],
             orderFixed: [
-                [3, 'asc']
+                [4, 'asc']
             ],
             rowGroup: {
-                dataSrc: 3
+                dataSrc: 4
             }
         });
 

@@ -56,15 +56,25 @@ $pdf->SetFont('dejavusans', '', 10, '', true);
 
 // Add a page
 $pdf->AddPage();
-$html = '<h4>Purchase Order Number : ' . $rowPO['id'] . '</h4>
-<h4>Supplier : ' . $rowPO['supplier'] . '</h4>
-<h4>Batch Number : ' . $rowPO['batch'] . '</h4>
-<h4>Date Created : ' . $rowPO['created'] . '</h4>
-<h4>Expected Delivery Date : ' . $rowPO['expectedDeliveryDate'] . '</h4>
-<h4>Expected Arrival Date : ' . $rowPO['expectedArrivalDate'] . '</h4>';
 
-// Set some content to print
-$html .= '<table cellspacing="0" cellpadding="1" border="1" style="border-color:gray;">
+$pdf->MultiCell(80, 5, 'Purchase Order Number : ' . $rowPO['id'], 0, 'L', 0, 0);
+$pdf->MultiCell(80, 5, 'Created : ' . $rowPO['created'], 0, 'L', 0, 0);
+$pdf->Ln();
+$pdf->MultiCell(80, 5, 'Supplier : ' . $rowPO['supplier'], 0, 'L', 0, 0);
+$pdf->MultiCell(80, 5, 'Expected Delivery Date : ' . $rowPO['expectedDeliveryDate'], 0, 'L', 0, 0);
+$pdf->Ln();
+$pdf->MultiCell(80, 5, 'Batch Number : ' . $rowPO['batch'], 0, 'L', 0, 0);
+$pdf->MultiCell(80, 5, 'Expected Arrival Date : ' . $rowPO['expectedArrivalDate'], 0, 'L', 0, 0);
+$pdf->Ln();
+// $html = '<h4>Purchase Order Number : ' . $rowPO['id'] . '</h4>
+// <h4>Supplier : ' . $rowPO['supplier'] . '</h4>
+// <h4>Batch Number : ' . $rowPO['batch'] . '</h4>
+// <h4>Date Created : ' . $rowPO['created'] . '</h4>
+// <h4>Expected Delivery Date : ' . $rowPO['expectedDeliveryDate'] . '</h4>
+// <h4>Expected Arrival Date : ' . $rowPO['expectedArrivalDate'] . '</h4>';
+
+// Html table starts
+$html = '<table cellspacing="0" cellpadding="1" border="1" style="border-color:gray;">
     <tr style="background-color:green;color:white;">
         <th rowspan="2" style="text-align:center; vertical-align: middle;">Picture</th>
         <th rowspan="2" style="text-align:center; vertical-align: middle;">Item Code</th>
@@ -74,7 +84,7 @@ $html .= '<table cellspacing="0" cellpadding="1" border="1" style="border-color:
         <th rowspan="2" style="width: 50px; text-align:center; vertical-align: middle;">Qty.</th>
         <th rowspan="2" style="width: 70px; text-align:center; vertical-align: middle;">Amount</th>
         <th colspan="2" style="text-align:center; vertical-align: middle;">Available (Supplier)</th>
-        <th rowspan="2" style="text-align:center; vertical-align: middle;">Modified</th>
+        <th rowspan="2" style="text-align:center; vertical-align: middle;">Last Updated</th>
     </tr>
     <tr>
         <th style="text-align:center; vertical-align: middle;">Yes</th>
@@ -95,26 +105,26 @@ while ($rowItems = mysqli_fetch_array($resultPOItems)) {
         <td height="50" style="text-align:center; vertical-align: middle;">' . $rowItems['amount'] . '</td>
         <td height="50"></td>
         <td height="50"></td>
-        <td height="50" style="text-align:center; vertical-align:middle;">0000/00/00</td>
+        <td height="50" style="text-align:center; vertical-align:middle;">' . $rowItems['modified'] . '</td>
     </tr>';
 }
 $html .= '<tr>
     <td colspan="9">Total Items Ordered</td>
-    <td style="text-align: right;">' . $rowPO['totalQuantity'] . '</td>
+    <td style="text-align: left;">' . $rowPO['totalQuantity'] . '</td>
 </tr>';
 $html .= '<tr>
     <td colspan="9">Discount</td>
-    <td style="text-align: right;">' . number_format($rowPO['totalAmount'], 2, '.', ',') . '</td>
+    <td style="text-align: left;">' . number_format($rowPO['totalAmount'], 2, '.', ',') . '</td>
 </tr>';
 $html .= '<tr>
     <td colspan="9">Discount</td>
-    <td style="text-align: right;">' . number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ',') . '</td>
+    <td style="text-align: left;">' . number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ',') . '</td>
 </tr>';
 $discount = $rowPO['totalAmount'] * .22;
 $afterDiscount = $rowPO['totalAmount'] - $discount;
 $html .= '<tr>
     <td colspan="9">After Discount</td>
-    <td style="text-align: right;">' . number_format($afterDiscount, 2, '.', ',') . '</td>
+    <td style="text-align: left;">' . number_format($afterDiscount, 2, '.', ',') . '</td>
 </tr>';
 $html .= '</table>';
 
