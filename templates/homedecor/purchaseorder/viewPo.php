@@ -30,6 +30,9 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     $productSelectOptions[$rowProduct['id']] = $rowProduct['name'] . ' | ' . $rowProduct['itemId'];
 }
 
+// Get items that needs to be ordered
+$needOrder = "SELECT * FROM homedecor_item2 WHERE itemAvailable <= 0";
+$resultOrder = mysqli_query($conn, $needOrder);
 ?>
 
 <div class="container-fluid">
@@ -37,184 +40,181 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Purchase Order Management</h1>
     </div>
-    <div class="row" id="print">
-        <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">New Purchase Order</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row my-2">
-                        <div class="col-lg-12">
-                            <div class="row form-group">
-                                <label for="poNumber" class="col-sm-2 col-form-label">Purchase Order Number</label>
-                                <div class="col-sm-3">
-                                    <input type="text" name="poNumber" id="poNumber" class="form-control" value="<?= $rowPO['id']; ?>">
+    <form action="updatePO.php" method="POST">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Purchase Order #<?= $rowPO['id']; ?></h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row my-2">
+                            <div class="col-lg-12">
+                                <div class="row form-group">
+                                    <label for="poNumber" class="col-sm-2 col-form-label">Purchase Order Number</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" name="poNumber" id="poNumber" class="form-control" value="<?= $rowPO['id']; ?>">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-group">
-                                <label for="poSupplier" class=" col-sm-2 col-form-label">Supplier</label>
-                                <div class="col-sm-3">
-                                    <input type="text" name="poSupplier" id="poSupplier" class="form-control" value="<?= $rowPO['supplier']; ?>" required>
+                                <div class="row form-group">
+                                    <label for="poSupplier" class=" col-sm-2 col-form-label">Supplier</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" name="poSupplier" id="poSupplier" class="form-control" value="<?= $rowPO['supplier']; ?>" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-group">
-                                <label for="" class="col-sm-2 col-form-label">Batch Number</label>
-                                <div class="col-sm-3">
-                                    <input type="text" name="poBatch" id="poBatch" class="form-control" value="<?= $rowPO['batch']; ?>">
+                                <div class="row form-group">
+                                    <label for="" class="col-sm-2 col-form-label">Batch Number</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" name="poBatch" id="poBatch" class="form-control" value="<?= $rowPO['batch']; ?>">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-group">
-                                <label for="poCreated" class="col-sm-2 col-form-label">Date Created</label>
-                                <div class="col-sm-2">
-                                    <input type="datetime" name="poCreated" id="poCreated" class="form-control" value="<?= $rowPO['created']; ?>" readonly>
+                                <div class="row form-group">
+                                    <label for="poCreated" class="col-sm-2 col-form-label">Date Created</label>
+                                    <div class="col-sm-2">
+                                        <input type="datetime" name="poCreated" id="poCreated" class="form-control" value="<?= $rowPO['created']; ?>" readonly>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-group">
-                                <label for="poExpectedDelivery" class="col-sm-2 col-form-label">Expected Delivery Date</label>
-                                <div class="col-sm-2">
-                                    <input type="date" name="poExpectedDelivery" id="poExpectedDelivery" class="form-control" value="<?= $rowPO['expectedDeliveryDate']; ?>">
+                                <div class="row form-group">
+                                    <label for="poExpectedDelivery" class="col-sm-2 col-form-label">Expected Delivery Date</label>
+                                    <div class="col-sm-2">
+                                        <input type="date" name="poExpectedDelivery" id="poExpectedDelivery" class="form-control" value="<?= $rowPO['expectedDeliveryDate']; ?>">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-group">
-                                <label for="poExpectedArrival" class="col-sm-2 col-form-label">Expected Arrival Date</label>
-                                <div class="col-sm-2">
-                                    <input type="date" name="poExpectedArrival" id="poExpectedArrival" class="form-control" value="<?= $rowPO['expectedArrivalDate']; ?>">
+                                <div class="row form-group">
+                                    <label for="poExpectedArrival" class="col-sm-2 col-form-label">Expected Arrival Date</label>
+                                    <div class="col-sm-2">
+                                        <input type="date" name="poExpectedArrival" id="poExpectedArrival" class="form-control" value="<?= $rowPO['expectedArrivalDate']; ?>">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-group d-print-none" id="exclude">
-                                <label for="poProduct" class="col-sm-2 col-form-label">Select Product</label>
-                                <div class="col-sm-3">
-                                    <select name="poProduct" id="poProduct" class="selectpicker form-control" data-live-search="true">
-                                        <option value=""></option>
-                                        <?php foreach ($productSelectOptions as $val => $text) : ?>
-                                            <option value="<?= $val; ?>"><?= $text; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                <div class="row form-group">
+                                    <label for="poProduct" class="col-sm-2 col-form-label">Select Product</label>
+                                    <div class="col-sm-3">
+                                        <select name="poProduct" id="poProduct" class="selectpicker form-control" data-live-search="true">
+                                            <option value=""></option>
+                                            <?php foreach ($productSelectOptions as $val => $text) : ?>
+                                                <option value="<?= $val; ?>"><?= $text; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <button type="button" class="btn btn-primary float-left add-row"><i class="fas fa-plus"></i></button>
+                                        <button type="button" class="btn btn-danger float-right delete-row"><i class="fas fa-trash"></i></button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-7">
-                                    <button type="button" class="btn btn-primary float-left add-row"><i class="fas fa-plus"></i></button>
-                                    <button type="button" class="btn btn-danger float-right delete-row"><i class="fas fa-trash"></i></button>
+                                <div class="row form-group d-none">
+                                    <div class="col-sm-12">
+                                        <label for="">product id</label>
+                                        <input type="text" id="productId" /><br>
+                                        <label for="">product name</label>
+                                        <input type="text" id="productName" /><br>
+                                        <label for="">product supplier</label>
+                                        <input type="text" id="productSupplier" /><br>
+                                        <label for="">product code</label>
+                                        <input type="text" id="productItemCode" /><br>
+                                        <label for="">product size</label>
+                                        <input type="text" id="productSize" /><br>
+                                        <label for="">product category</label>
+                                        <input type="text" id="productCategory" /><br>
+                                        <label for="">product cost thb</label>
+                                        <input type="text" id="productTHB" /><br>
+                                        <label for="">img file name</label>
+                                        <input type="text" id="productImg" /><br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row form-group d-none">
-                                <div class="col-sm-12">
-                                    <label for="">product id</label>
-                                    <input type="text" id="productId" /><br>
-                                    <label for="">product name</label>
-                                    <input type="text" id="productName" /><br>
-                                    <label for="">product supplier</label>
-                                    <input type="text" id="productSupplier" /><br>
-                                    <label for="">product code</label>
-                                    <input type="text" id="productItemCode" /><br>
-                                    <label for="">product size</label>
-                                    <input type="text" id="productSize" /><br>
-                                    <label for="">product category</label>
-                                    <input type="text" id="productCategory" /><br>
-                                    <label for="">product cost thb</label>
-                                    <input type="text" id="productTHB" /><br>
-                                    <label for="">img file name</label>
-                                    <input type="text" id="productImg" /><br>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-sm-12">
-                                    <table class="table table-bordered table-sm" id="purchaseOrder">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th class="align-middle text-center" rowspan="2" style="width: 20px;">/</th>
-                                                <th class="align-middle text-center" rowspan="2">Picture</th>
-                                                <th class="align-middle" rowspan="2">Item Code</th>
-                                                <th class="align-middle" rowspan="2">Product Desc.</th>
-                                                <th class="align-middle text-center" rowspan="2">Size (Inch)</th>
-                                                <th class="align-middle text-center" rowspan="2" style="width: 100px;">Unit Price ฿</th>
-                                                <th class="align-middle text-center" rowspan="2" style="width: 100px;">Qty</th>
-                                                <th class="align-middle text-center" rowspan="2" style="width: 100px;">Amount ฿</th>
-                                                <th class="align-middle text-center text-wrap" colspan="2">Available (Supplier)</th>
-                                                <th class="align-middle text-center text-wrap" colspan="3">Received (Arzu Home)</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="align-middle text-center" style="width: 70px;">Yes</th>
-                                                <th class="align-middle text-center" style="width: 70px;">No</th>
-                                                <th class="align-middle text-center" style="width: 100px;">Qty</th>
-                                                <th class="align-middle text-center" style="width: 100px;">Extra</th>
-                                                <th class="align-middle text-center" style="width: 100px;">Broken</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            while ($rowOrderItems = mysqli_fetch_assoc($resultViewItems)) :
-                                                $selectProduct2 = "SELECT * FROM homedecor_product2 WHERE id = '" . $rowOrderItems['productId'] . "'";
-                                                $resultProduct2 = mysqli_query($conn, $selectProduct2);
-                                                $rowProduct2 = mysqli_fetch_assoc($resultProduct2);
-                                            ?>
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <table class="table table-bordered table-sm" id="purchaseOrder">
+                                            <thead class="thead-dark">
                                                 <tr>
-                                                    <td class="align-middle text-center" style="width: 20px;"><input type="checkbox" class="form-control" name="record" style="width: 20px;"></td>
-                                                    <td class="align-middle text-center" style="width: 200px;">
-                                                        <img src="/project/upload/img/product/2021/<?= $rowProduct2['img']; ?>" alt="" srcset="" height="200px" width="200px">
-                                                        <input type="text" name="productId[]" class="d-none" id="" value="<?= $rowItem['productId']; ?>">
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        <?= $rowProduct2['supplier'] . '-' . str_pad($rowProduct2['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowProduct2['itemId']; ?>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        <?= $rowProduct2['name']; ?>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <?= $rowProduct2['size']; ?>
-                                                    </td>
-                                                    <td class="align-middle text-center" style="width: 100px;">
-                                                        <input type="text" name="poCostTHB[]" id="poCostTHB" class="border-0 text-center" style="width: 100px;" value="<?= $rowOrderItems['costTHB']; ?>" readonly>
-                                                    </td>
-                                                    <td class="align-middle text-center" style="width: 100px;">
-                                                        <input type="number" name="poQuantity[]" id="poQuantity" class="border-0 text-center" style="width: 100px;" value="<?= $rowOrderItems['quantity']; ?>">
-                                                    </td>
-                                                    <td class="align-middle text-center" style="width: 100px;">
-                                                        <input type="text" name="poAmount[]" id="poAmount" class="border-0 text-center" style="width: 100px;" value="<?= $rowOrderItems['amount']; ?>">
-                                                    </td>
-                                                    <td class="align-middle text-center">
-
-                                                    </td>
-                                                    <td class="align-middle text-center">
-
-                                                    </td>
-                                                    <td class="align-middle text-center">
-
-                                                    </td>
-                                                    <td class="align-middle text-center">
-
-                                                    </td>
-                                                    <td class="align-middle text-center">
-
+                                                    <th class="align-middle text-center" style="width: 20px;">/</th>
+                                                    <th class="align-middle text-center">Picture</th>
+                                                    <th class="align-middle">Item Code</th>
+                                                    <th class="align-middle">Product Desc.</th>
+                                                    <th class="align-middle text-center">Size (Inch)</th>
+                                                    <th class="align-middle text-center" style="width: 100px;">Unit Price ฿</th>
+                                                    <th class="align-middle text-center" style="width: 100px;">Qty</th>
+                                                    <th class="align-middle text-center" style="width: 100px;">Amount ฿</th>
+                                                    <th class="align-middle text-center text-wrap">Last Updated</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                while ($rowOrderItems = mysqli_fetch_assoc($resultViewItems)) :
+                                                    $selectProduct2 = "SELECT * FROM homedecor_product2 WHERE id = '" . $rowOrderItems['productId'] . "'";
+                                                    $resultProduct2 = mysqli_query($conn, $selectProduct2);
+                                                    $rowProduct2 = mysqli_fetch_assoc($resultProduct2);
+                                                ?>
+                                                    <tr>
+                                                        <td class="align-middle text-center" style="width: 20px;"><input type="checkbox" class="form-control" name="record" style="width: 20px;"></td>
+                                                        <td class="align-middle text-center" style="width: 200px;">
+                                                            <img src="/project/upload/img/product/2021/<?= $rowProduct2['img']; ?>" alt="" srcset="" height="200px" width="200px">
+                                                            <input type="text" name="productId[]" class="d-none" id="" value="<?= $rowOrderItems['productId']; ?>">
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <?= $rowProduct2['supplier'] . '-' . str_pad($rowProduct2['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowProduct2['itemId']; ?>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <?= $rowProduct2['name']; ?>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <?= $rowProduct2['size']; ?>
+                                                        </td>
+                                                        <td class="align-middle text-center" style="width: 100px;">
+                                                            <input type="text" name="poCostTHB[]" id="poCostTHB" class="border-0 text-center" style="width: 100px;" value="<?= $rowOrderItems['costTHB']; ?>" readonly>
+                                                        </td>
+                                                        <td class="align-middle text-center" style="width: 100px;">
+                                                            <input type="number" name="poQuantity[]" id="poQuantity" class="border-0 text-center" style="width: 100px;" value="<?= $rowOrderItems['quantity']; ?>">
+                                                        </td>
+                                                        <td class="align-middle text-center" style="width: 100px;">
+                                                            <input type="text" name="poAmount[]" id="poAmount" class="border-0 text-center" style="width: 100px;" value="<?= $rowOrderItems['amount']; ?>">
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <?= $rowOrderItems['modified']; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            </tbody>
+                                            <tfoot style="border:none;" class="border-0">
+                                                <tr style="border:none;" class="border-0">
+                                                    <td class="text-right" colspan="7">Total Items Ordered</td>
+                                                    <td class="border-0 font-weight-bold text-right text-primary h5" colspan="2">
+                                                        <?= $rowPO['totalQuantity']; ?>
+                                                        <input type="text" name="totalAmount" id="" class="form-control d-none" value="<?= $rowPO['totalQuantity']; ?>">
                                                     </td>
                                                 </tr>
-                                            <?php endwhile; ?>
-                                        </tbody>
-                                        <tfoot style="border:none;" class="border-0">
-                                            <tr style="border:none;" class="border-0">
-                                                <td class="text-right" colspan="11">Total Items Ordered</td>
-                                                <td class="border-0 font-weight-bold text-right text-primary h5" colspan="2"><?= $rowPO['totalQuantity']; ?></td>
-                                            </tr>
-                                            <tr style="border:none;">
-                                                <td class="text-right" colspan="11">Total Amount</td>
-                                                <td class="font-weight-bold text-right text-white bg-secondary h5" colspan="2">฿ <?= number_format($rowPO['totalAmount'], 2, '.', ','); ?></td>
-                                            </tr>
-                                            <tr style="border:none;">
-                                                <td class="text-right" colspan="11">Discount</td>
-                                                <td class="font-weight-bold text-right text-white bg-info h5" colspan="2">- ฿ <?= number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ','); ?></td>
-                                            </tr>
-                                            <tr style="border:none;">
-                                                <td class="text-right" colspan="11">After Discount</td>
-                                                <td class="font-weight-bold text-right text-white bg-success h5" colspan="2">฿
-                                                    <?php
-                                                    $discount = $rowPO['totalAmount'] * .22;
-                                                    $afterDiscount = $rowPO['totalAmount'] - $discount;
-                                                    echo number_format($afterDiscount, 2, '.', ',');
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                                <tr style="border:none;">
+                                                    <td class="text-right" colspan="7">Total Amount</td>
+                                                    <td class="font-weight-bold text-right text-white bg-secondary h5" colspan="2">
+                                                        ฿ <?= number_format($rowPO['totalAmount'], 2, '.', ','); ?>
+                                                        <input type="text" name="totalQuantity" id="" class="form-control d-none" value="<?= $rowPO['totalQuantity']; ?>">
+                                                    </td>
+                                                </tr>
+                                                <tr style="border:none;">
+                                                    <td class="text-right" colspan="7">Discount</td>
+                                                    <td class="font-weight-bold text-right text-white bg-info h5" colspan="2">
+                                                        - ฿ <?= number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ','); ?>
+                                                        <input type="text" name="totalDiscount" id="" class="form-control d-none" value="<? $rowPO['totalDiscount']; ?>">
+                                                    </td>
+                                                </tr>
+                                                <tr style="border:none;">
+                                                    <td class="text-right" colspan="7">After Discount</td>
+                                                    <td class="font-weight-bold text-right text-white bg-success h5" colspan="2">฿
+                                                        <?php
+                                                        $discount = $rowPO['totalAmount'] * .22;
+                                                        $afterDiscount = $rowPO['totalAmount'] - $discount;
+                                                        echo number_format($afterDiscount, 2, '.', ',');
+                                                        ?>
+                                                        <input type="text" name="totalAmount" id="" class="form-control d-none" value="<?= $afterDiscount; ?>">
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <button type="submit" class="btn btn-info float-right">Submit</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -222,14 +222,7 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row my-3">
-        <div class="col-lg-12">
-            <!-- <button href="#" class="btn btn-primary float-right" id="printPO"><i class="fas fa-print"></i> Print</button> -->
-            <a href="print.php?id=<?= $_GET['id']; ?>" class="btn btn-primary float-right" id="" target="_blank"><i class="fas fa-print"></i> Print</a>
-        </div>
-    </div>
+    </form>
 </div>
 
 <!-- Footer -->
@@ -304,34 +297,6 @@ while ($rowProduct = $resultproduct->fetch_assoc()) {
             var poCostTHB = parseInt(row.find("#poCostTHB").val());
             var poAmount = poQuantity * poCostTHB;
             var getTotal = row.find("#poAmount").val(poAmount);
-        });
-    });
-
-    $(document).ready(function() {
-        $("#printPO").click(function() {
-            var element = document.getElementById('print');
-            var opt = {
-                margin: 1,
-                filename: 'PO-<?= str_pad($rowPO['id'], 6, 0, STR_PAD_LEFT); ?>.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98
-                },
-                html2canvas: {
-                    scale: 2
-                },
-                jsPDF: {
-                    unit: 'in',
-                    format: 'A3',
-                    orientation: 'landscape'
-                }
-            };
-
-            // New Promise-based usage:
-            html2pdf().set(opt).from(element).save();
-
-            // Old monolithic-style usage:
-            html2pdf(element, opt);
         });
     });
 </script>

@@ -38,6 +38,11 @@ $totalAmount = array_sum($poAmounts);
 echo "Total amount ordered are = " . $totalAmount . "<br>";
 echo "<hr>";
 
+// Get total amount ordered
+$totalDiscount = $po;
+echo "Total amount ordered are = " . $totalDiscount . "<br>";
+echo "<hr>";
+
 // Insert into PO table
 $insertPO = "INSERT INTO homedecor_po (supplier, batch, expectedDeliveryDate, expectedArrivalDate, totalQuantity, totalAmount, poStatus, created) VALUES ('$poSupplier', '$poBatch', '$poExpectedDelivery', '$poExpectedArrival', '$totalQuantity', '$totalAmount', '$poStatus', '$created')";
 $resultInsertPO = mysqli_query($conn, $insertPO);
