@@ -46,9 +46,9 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                     </div>
                                 </div>
                                 <div class="row form-group">
-                                    <label for="poNumber" class="col-sm-2 col-form-label">Purchase Order Number</label>
+                                    <label for="poRev" class="col-sm-2 col-form-label">Revision Number</label>
                                     <div class="col-sm-3">
-                                        <input type="text" name="poNumber" id="poNumber" class="form-control">
+                                        <input type="text" name="poRev" id="poRev" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -94,6 +94,8 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                     <div class="col-sm-12">
                                         <label for="">product id</label>
                                         <input type="text" id="productId" /><br>
+                                        <label for="">product item id</label>
+                                        <input type="text" id="productItemId" /><br>
                                         <label for="">product name</label>
                                         <input type="text" id="productName" /><br>
                                         <label for="">product supplier</label>
@@ -182,6 +184,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
 <script>
     var $productSelect = $("#poProduct");
     var $productId = $("#productId");
+    var $productItemId = $("#productItemId");
     var $productName = $("#productName");
     var $productSupplier = $("#productSupplier");
     var $productItemCode = $("#productItemCode");
@@ -198,6 +201,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
             product: product
         }, function(r) {
             $productId.val(r.productId);
+            $productItemId.val(r.productItemId);
             $productName.val(r.productName);
             $productSupplier.val(r.productSupplier);
             $productItemCode.val(r.productItemCode);
@@ -225,7 +229,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
             var productName = $("#productName").val();
             var productImg = $("#productImg").val();
             var productSize = $("#productSize").val();
-            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(4, '0') + '-' + $("#productId").val();
+            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(4, '0') + '-' + $("#productItemId").val();
             var productTHB = parseFloat($("#productTHB").val());
 
             // Create table rows

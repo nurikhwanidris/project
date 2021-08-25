@@ -10,6 +10,7 @@ if (array_key_exists('product', $_POST)) {
 
     $selectProduct = "SELECT
     homedecor_product2.id,
+    homedecor_product2.itemId,
     homedecor_product2.name,
     homedecor_product2.supplier,
     homedecor_product2.itemCode,
@@ -26,6 +27,7 @@ if (array_key_exists('product', $_POST)) {
 
     // Relate the rows
     $response['productId'] = $rowProduct['id'];
+    $response['productItemId'] = $rowProduct['itemId'];
     $response['productName'] = $rowProduct['name'];
     $response['productSupplier'] = $rowProduct['supplier'];
     $response['productItemCode'] = $rowProduct['itemCode'];

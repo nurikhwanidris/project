@@ -3,7 +3,7 @@
 include('../../../src/model/dbconn.php');
 
 // Purchase order details
-$poNumber = $_POST['poNumber'];
+$poRev = $_POST['poRev'];
 $poSupplier = $_POST['poSupplier'];
 $poBatch = $_POST['poBatch'];
 $poCreated = $_POST['poCreated'];
@@ -21,7 +21,7 @@ $poCostTHBs = $_POST['poCostTHB'];
 $poQuantities = $_POST['poQuantity'];
 $poAmounts = $_POST['poAmount'];
 
-echo "PO Number = " . $poNumber . "<br>";
+echo "PO Revision = " . $poRev . "<br>";
 echo "PO Supplier = " . $poSupplier . "<br>";
 echo "PO Batch = " . $poBatch . "<br>";
 echo "PO Created = " . $poCreated . "<br>";
@@ -32,6 +32,7 @@ echo "<hr>";
 // Get total quantity ordered
 $totalQuantity = array_sum($poQuantities);
 echo "Total items ordered are = " . $totalQuantity . "<br>";
+echo "<hr>";
 
 // Get total amount ordered
 $totalAmount = array_sum($poAmounts);
@@ -39,12 +40,13 @@ echo "Total amount ordered are = " . $totalAmount . "<br>";
 echo "<hr>";
 
 // Get total amount ordered
-$totalDiscount = $_POST['totalDiscount'];
+$discount = $totalAmount * .22;
+$totalDiscount = $totalAmount - $discount;
 echo "Total amount ordered are = " . $totalDiscount . "<br>";
 echo "<hr>";
 
 // Insert into PO table
-$insertPO = "INSERT INTO homedecor_po (supplier, batch, expectedDeliveryDate, expectedArrivalDate, totalQuantity, totalAmount, poStatus, created) VALUES ('$poSupplier', '$poBatch', '$poExpectedDelivery', '$poExpectedArrival', '$totalQuantity', '$totalAmount', '$poStatus', '$created')";
+$insertPO = "INSERT INTO homedecor_po (supplier, batch, expectedDeliveryDate, expectedArrivalDate, totalQuantity, totalAmount, totalDiscount, poStatus, created) VALUES ('$poSupplier', '$poBatch', '$poExpectedDelivery', '$poExpectedArrival', '$totalQuantity', '$totalAmount', '$totalDiscount', '$poStatus', '$created')";
 $resultInsertPO = mysqli_query($conn, $insertPO);
 $insertId = mysqli_insert_id($conn);
 

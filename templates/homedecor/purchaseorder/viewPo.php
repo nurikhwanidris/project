@@ -106,6 +106,8 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                     <div class="col-sm-12">
                                         <label for="">product id</label>
                                         <input type="text" id="productId" /><br>
+                                        <label for="">product item id</label>
+                                        <input type="text" id="productItemId" /><br>
                                         <label for="">product name</label>
                                         <input type="text" id="productName" /><br>
                                         <label for="">product supplier</label>
@@ -135,7 +137,6 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                                     <th class="align-middle text-center" style="width: 100px;">Unit Price ฿</th>
                                                     <th class="align-middle text-center" style="width: 100px;">Qty</th>
                                                     <th class="align-middle text-center" style="width: 100px;">Amount ฿</th>
-                                                    <th class="align-middle text-center text-wrap">Last Updated</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -169,36 +170,33 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                                         <td class="align-middle text-center" style="width: 100px;">
                                                             <input type="text" name="poAmount[]" id="poAmount" class="border-0 text-center" style="width: 100px;" value="<?= $rowOrderItems['amount']; ?>">
                                                         </td>
-                                                        <td class="align-middle text-center">
-                                                            <?= $rowOrderItems['modified']; ?>
-                                                        </td>
                                                     </tr>
                                                 <?php endwhile; ?>
                                             </tbody>
                                             <tfoot style="border:none;" class="border-0">
                                                 <tr style="border:none;" class="border-0">
-                                                    <td class="text-right" colspan="7">Total Items Ordered</td>
+                                                    <td class="text-right" colspan="6">Total Items Ordered</td>
                                                     <td class="border-0 font-weight-bold text-right text-primary h5" colspan="2">
                                                         <?= $rowPO['totalQuantity']; ?>
                                                         <input type="text" name="totalAmount" id="" class="form-control d-none" value="<?= $rowPO['totalQuantity']; ?>">
                                                     </td>
                                                 </tr>
                                                 <tr style="border:none;">
-                                                    <td class="text-right" colspan="7">Total Amount</td>
+                                                    <td class="text-right" colspan="6">Total Amount</td>
                                                     <td class="font-weight-bold text-right text-white bg-secondary h5" colspan="2">
                                                         ฿ <?= number_format($rowPO['totalAmount'], 2, '.', ','); ?>
                                                         <input type="text" name="totalQuantity" id="" class="form-control d-none" value="<?= $rowPO['totalQuantity']; ?>">
                                                     </td>
                                                 </tr>
                                                 <tr style="border:none;">
-                                                    <td class="text-right" colspan="7">Discount</td>
+                                                    <td class="text-right" colspan="6">Discount</td>
                                                     <td class="font-weight-bold text-right text-white bg-info h5" colspan="2">
                                                         - ฿ <?= number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ','); ?>
                                                         <input type="text" name="totalDiscount" id="" class="form-control d-none" value="<? $rowPO['totalDiscount']; ?>">
                                                     </td>
                                                 </tr>
                                                 <tr style="border:none;">
-                                                    <td class="text-right" colspan="7">After Discount</td>
+                                                    <td class="text-right" colspan="6">After Discount</td>
                                                     <td class="font-weight-bold text-right text-white bg-success h5" colspan="2">฿
                                                         <?php
                                                         $discount = $rowPO['totalAmount'] * .22;
@@ -232,6 +230,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
 <script>
     var $productSelect = $("#poProduct");
     var $productId = $("#productId");
+    var $productItemId = $("#productItemId");
     var $productName = $("#productName");
     var $productSupplier = $("#productSupplier");
     var $productItemCode = $("#productItemCode");
@@ -248,6 +247,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
             product: product
         }, function(r) {
             $productId.val(r.productId);
+            $productItemId.val(r.productItemId);
             $productName.val(r.productName);
             $productSupplier.val(r.productSupplier);
             $productItemCode.val(r.productItemCode);
@@ -275,7 +275,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
             var productName = $("#productName").val();
             var productImg = $("#productImg").val();
             var productSize = $("#productSize").val();
-            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(4, '0') + '-' + $("#productId").val();
+            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(4, '0') + '-' + $("#productItemId").val();
             var productTHB = parseFloat($("#productTHB").val());
 
             // Create table rows
