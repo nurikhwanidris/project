@@ -123,16 +123,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                                     <th class="align-middle text-center" rowspan="2" style="width: 100px;">Unit Price ฿</th>
                                                     <th class="align-middle text-center" rowspan="2" style="width: 100px;">Qty</th>
                                                     <th class="align-middle text-center" rowspan="2" style="width: 100px;">Amount ฿</th>
-                                                    <!-- <th class="align-middle text-center text-wrap" colspan="2">Available (Supplier)</th>
-                                                <th class="align-middle text-center text-wrap" colspan="3">Received (Arzu Home)</th> -->
                                                 </tr>
-                                                <!-- <tr>
-                                                <th class="align-middle text-center" style="width: 70px;">Yes</th>
-                                                <th class="align-middle text-center" style="width: 70px;">No</th>
-                                                <th class="align-middle text-center" style="width: 100px;">Quantity</th>
-                                                <th class="align-middle text-center" style="width: 100px;">Extra</th>
-                                                <th class="align-middle text-center" style="width: 100px;">Broken</th>
-                                            </tr> -->
                                             </thead>
                                             <tbody>
                                                 <?php
@@ -165,18 +156,6 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                                         <td class="align-middle text-center" style="width: 100px;">
                                                             <input type="text" name="poAmount[]" id="poAmount" class="border-0 text-center" style="width: 100px;" value="<?= abs($rowItem['itemAvailable']) * $rowProduct2['costTHB']; ?>">
                                                         </td>
-                                                        <!-- <td class="align-middle text-center">
-                                                        <input type="checkbox" name="poCheck" id="" class="form-control">
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <input type="checkbox" name="poCheck" id="" class="form-control">
-                                                    </td>
-                                                    <td class="align-middle text-center">
-
-                                                    </td>
-                                                    <td class="align-middle text-center">
-
-                                                    </td> -->
                                                     </tr>
                                                 <?php endwhile; ?>
                                             </tbody>
