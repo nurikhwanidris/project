@@ -42,7 +42,7 @@ echo "Total amount ordered are = " . $totalAmount . "<br>";
 echo "<hr>";
 
 // Get total amount ordered
-$discount = intval($totalAmount * .22);
+$discount = round($totalAmount * .22);
 $totalDiscount = $totalAmount - $discount;
 echo "Total amount ordered are = " . $totalDiscount . "<br>";
 echo "<hr>";
