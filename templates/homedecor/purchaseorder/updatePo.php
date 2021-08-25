@@ -4,7 +4,8 @@ include('../../../src/model/dbconn.php');
 // $id = $_POST['id'];
 
 // Purchase order details
-$poNumber = $_POST['poNumber'];
+$poId = $_POST['poId'];
+$poRev = $_POST['poRev'];
 $poSupplier = $_POST['poSupplier'];
 $poBatch = $_POST['poBatch'];
 $poCreated = $_POST['poCreated'];
@@ -22,7 +23,7 @@ $poCostTHBs = $_POST['poCostTHB'];
 $poQuantities = $_POST['poQuantity'];
 $poAmounts = $_POST['poAmount'];
 
-echo "PO Number = " . $poNumber . "<br>";
+echo "PO Revision = " . $poRev . "<br>";
 echo "PO Supplier = " . $poSupplier . "<br>";
 echo "PO Batch = " . $poBatch . "<br>";
 echo "PO Created = " . $poCreated . "<br>";
@@ -39,7 +40,7 @@ $totalAmount = array_sum($poAmounts);
 echo "Total amount ordered are = " . $totalAmount . "<br>";
 
 // Update the po table
-$updatePo = "UPDATE homedecor_po SET supplier = '$poSupplier', batch = '$poBatch', expextedDeliveryDate = '$poExpectedDelivery', expectedArrivalDate = '$poExpectedDelivery', totalQuantity = '$totalQuantity', totalAmount = '$totalAmount' WHERE id = '$poNumber'";
+$updatePo = "UPDATE homedecor_po SET poRev = '$poRev', supplier = '$poSupplier', batch = '$poBatch', expextedDeliveryDate = '$poExpectedDelivery', expectedArrivalDate = '$poExpectedDelivery', totalQuantity = '$totalQuantity', totalAmount = '$totalAmount', poStatus = '$poStatus' WHERE id = '$poId'";
 $resultupdatePo = mysqli_query($conn, $updatePo);
 
 if ($resultupdatePo) {
@@ -64,7 +65,7 @@ for ($i = 0; $i < count($productIds); $i++) {
     echo "Product Amount = " . $poAmount . "<br>";
 
     // Select using poId and productId
-    $checkExisting = "SELECT * FROM homedecor_po_items WHERE poId = '$poNumber' AND productId = '$productId'";
+    $checkExisting = "SELECT * FROM homedecor_po_items WHERE poId = '$poId' AND productId = '$productId'";
     $resultCheck = mysqli_query($conn, $checkExisting);
 
     if (mysqli_num_rows($resultCheck) > 0) {
@@ -72,7 +73,7 @@ for ($i = 0; $i < count($productIds); $i++) {
         // $_SESSION['items'] = 'Product already existed inside the table. Check next item';
         // header("Location: orderView.php?id=" . $id);
     } else {
-        $insertItems = "INSERT INTO homedecor_po_items (poId, productId, costTHB, quantity, amount, created) VALUES ('$poNumber', '$productId', '$poCostTHB', '$poQuantity', '$poAmount', '$modified')";
+        $insertItems = "INSERT INTO homedecor_po_items (poId, productId, costTHB, quantity, amount, created) VALUES ('$poId', '$productId', '$poCostTHB', '$poQuantity', '$poAmount', '$modified')";
         $resultInsertItems = mysqli_query($conn, $insertItems);
 
         // Error check

@@ -41,31 +41,32 @@ $resultOrder = mysqli_query($conn, $needOrder);
         <h1 class="h3 mb-0 text-gray-800">Purchase Order Management</h1>
     </div>
     <form action="updatePO.php" method="POST">
+        <input type="text" name="poId" id="" class="form-control d-none" value="<?= $rowPO['id']; ?>">
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Purchase Order #<?= $rowPO['id']; ?></h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Purchase Order : Batch <?= $rowPO['batch'] . '/' . $rowPO['poRev']; ?></h6>
                     </div>
                     <div class="card-body">
                         <div class="row my-2">
                             <div class="col-lg-12">
                                 <div class="row form-group">
-                                    <label for="poNumber" class="col-sm-2 col-form-label">Purchase Order Number</label>
+                                    <label for="" class="col-sm-2 col-form-label">Batch Number</label>
                                     <div class="col-sm-3">
-                                        <input type="text" name="poNumber" id="poNumber" class="form-control" value="<?= $rowPO['id']; ?>">
+                                        <input type="text" name="poBatch" id="poBatch" class="form-control" value="<?= $rowPO['batch']; ?>">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="poRev" class="col-sm-2 col-form-label">Revision Number</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" name="poRev" id="poRev" class="form-control" value="<?= $rowPO['poRev']; ?>">
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <label for="poSupplier" class=" col-sm-2 col-form-label">Supplier</label>
                                     <div class="col-sm-3">
                                         <input type="text" name="poSupplier" id="poSupplier" class="form-control" value="<?= $rowPO['supplier']; ?>" required>
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="" class="col-sm-2 col-form-label">Batch Number</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" name="poBatch" id="poBatch" class="form-control" value="<?= $rowPO['batch']; ?>">
                                     </div>
                                 </div>
                                 <div class="row form-group">

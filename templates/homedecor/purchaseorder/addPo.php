@@ -40,6 +40,12 @@ $resultOrder = mysqli_query($conn, $needOrder);
                         <div class="row my-2">
                             <div class="col-lg-12">
                                 <div class="row form-group">
+                                    <label for="" class="col-sm-2 col-form-label">Batch Number</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" name="poBatch" id="poBatch" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
                                     <label for="poNumber" class="col-sm-2 col-form-label">Purchase Order Number</label>
                                     <div class="col-sm-3">
                                         <input type="text" name="poNumber" id="poNumber" class="form-control">
@@ -49,12 +55,6 @@ $resultOrder = mysqli_query($conn, $needOrder);
                                     <label for="poSupplier" class=" col-sm-2 col-form-label">Supplier</label>
                                     <div class="col-sm-3">
                                         <input type="text" name="poSupplier" id="poSupplier" class="form-control" required>
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label for="" class="col-sm-2 col-form-label">Batch Number</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" name="poBatch" id="poBatch" class="form-control">
                                     </div>
                                 </div>
                                 <!-- <div class="row form-group">
