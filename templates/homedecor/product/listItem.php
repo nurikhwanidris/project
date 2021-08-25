@@ -100,6 +100,7 @@ $result = mysqli_query($conn, $sql);
                                     <th class="text-center align-middle">Selling MYR</th>
                                     <th class="text-center align-middle">Quantity</th>
                                     <th class="text-center align-middle">Available</th>
+                                    <th class="text-center align-middle">Defect</th>
                                     <th class="text-center align-middle">Sold</th>
                                     <th class="text-center align-middle">Size</th>
                                     <th class="text-center align-middle">Image</th>
@@ -142,6 +143,9 @@ $result = mysqli_query($conn, $sql);
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['itemAvailable']; ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= $rowItem['itemDefect']; ?>
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['itemSold']; ?>
