@@ -46,7 +46,7 @@ echo "Total amount ordered are = " . $totalDiscount . "<br>";
 echo "<hr>";
 
 // Insert into PO table
-$insertPO = "INSERT INTO homedecor_po (supplier, batch, expectedDeliveryDate, expectedArrivalDate, totalQuantity, totalAmount, totalDiscount, poStatus, created) VALUES ('$poSupplier', '$poBatch', '$poExpectedDelivery', '$poExpectedArrival', '$totalQuantity', '$totalAmount', '$totalDiscount', '$poStatus', '$created')";
+$insertPO = "INSERT INTO homedecor_po (poRev, supplier, batch, expectedDeliveryDate, expectedArrivalDate, totalQuantity, totalAmount, totalDiscount, poStatus, created) VALUES ('$poRev', '$poSupplier', '$poBatch', '$poExpectedDelivery', '$poExpectedArrival', '$totalQuantity', '$totalAmount', '$totalDiscount', '$poStatus', '$created')";
 $resultInsertPO = mysqli_query($conn, $insertPO);
 $insertId = mysqli_insert_id($conn);
 

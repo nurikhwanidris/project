@@ -82,6 +82,9 @@ $resultPO = mysqli_query($conn, $selectPO);
                                         Total Amount
                                     </th>
                                     <th class="align-middle text-center">
+                                        Total Discount
+                                    </th>
+                                    <th class="align-middle text-center">
                                         Status
                                     </th>
                                     <th class="align-middle text-center">
@@ -114,7 +117,17 @@ $resultPO = mysqli_query($conn, $selectPO);
                                             <?= $rowPO['totalAmount']; ?>
                                         </td>
                                         <td class="align-middle text-center">
-                                            <?= $rowPO['poStatus']; ?>
+                                            <?= $rowPO['totalDiscount']; ?>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <?php
+                                            if ($rowPO['poStatus'] == 'New Order') : ?>
+                                                <span class="badge badge-info"><?= $rowPO['poStatus']; ?></span>
+                                            <?php elseif ($rowPO['poStatus'] == 'Updated') : ?>
+                                                <span class="badge badge-primary"><?= $rowPO['poStatus']; ?></span>
+                                            <?php else : ?>
+                                                <span class="badge badge-secondary">Unknown</span>
+                                            <?php endif ?>
                                         </td>
                                         <td class="align-middle text-center">
                                             <a href="viewPO?id=<?= $rowPO['id']; ?>" target="_blank" class="btn btn-sm btn-info mx-2" rel="noopener noreferrer"><i class="far fa-eye"></i></a>
@@ -137,6 +150,6 @@ $resultPO = mysqli_query($conn, $selectPO);
 
 <script>
     $(document).ready(function() {
-        var table = $("myTable").DataTable({});
+        var table = $('#myTable').DataTable();
     })
 </script>

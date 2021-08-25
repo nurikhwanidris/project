@@ -108,21 +108,21 @@ while ($rowItems = mysqli_fetch_array($resultPOItems)) {
 }
 $html .= '<tr>
     <td colspan="8">Total Items Ordered</td>
-    <td style="text-align: left;">' . $rowPO['totalQuantity'] . '</td>
+    <td style="text-align: right;">' . $rowPO['totalQuantity'] . '</td>
 </tr>';
 $html .= '<tr>
     <td colspan="8">Discount</td>
-    <td style="text-align: left;">' . number_format($rowPO['totalAmount'], 2, '.', ',') . '</td>
+    <td style="text-align: right;">' . number_format($rowPO['totalAmount'], 2, '.', ',') . '</td>
 </tr>';
 $html .= '<tr>
     <td colspan="8">Discount</td>
-    <td style="text-align: left;">' . number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ',') . '</td>
+    <td style="text-align: right;">' . number_format(($rowPO['totalAmount']) * 0.22, 2, '.', ',') . '</td>
 </tr>';
 $discount = $rowPO['totalAmount'] * .22;
 $afterDiscount = $rowPO['totalAmount'] - $discount;
 $html .= '<tr>
     <td colspan="8">After Discount</td>
-    <td style="text-align: left;">' . number_format($afterDiscount, 2, '.', ',') . '</td>
+    <td style="text-align: right;">' . number_format($afterDiscount, 2, '.', ',') . '</td>
 </tr>';
 $html .= '</table>';
 

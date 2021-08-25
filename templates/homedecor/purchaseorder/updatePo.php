@@ -37,16 +37,18 @@ $totalQuantity = array_sum($poQuantities);
 echo "Total items ordered are = " . $totalQuantity . "<br>";
 
 // Get total amount ordered
-$totalDiscount = $_POST['totalDiscount'];
-echo "Total amount ordered are = " . $totalDiscount . "<br>";
-
-// Get total amount ordered
 $totalAmount = array_sum($poAmounts);
 echo "Total amount ordered are = " . $totalAmount . "<br>";
 echo "<hr>";
 
+// Get total amount ordered
+$discount = intval($totalAmount * .22);
+$totalDiscount = $totalAmount - $discount;
+echo "Total amount ordered are = " . $totalDiscount . "<br>";
+echo "<hr>";
+
 // Update the po table
-$updatePo = "UPDATE homedecor_po SET poRev = '$poRev', supplier = '$poSupplier', batch = '$poBatch', expectedDeliveryDate = '$poExpectedDelivery', expectedArrivalDate = '$poExpectedDelivery', totalQuantity = '$totalQuantity', totalAmount = '$totalAmount', poStatus = '$poStatus' WHERE id = '$poId'";
+$updatePo = "UPDATE homedecor_po SET poRev = '$poRev', supplier = '$poSupplier', batch = '$poBatch', expectedDeliveryDate = '$poExpectedDelivery', expectedArrivalDate = '$poExpectedDelivery', totalQuantity = '$totalQuantity', totalAmount = '$totalAmount', totalDiscount = '$totalDiscount', poStatus = '$poStatus' WHERE id = '$poId'";
 $resultupdatePo = mysqli_query($conn, $updatePo);
 
 if ($resultupdatePo) {
