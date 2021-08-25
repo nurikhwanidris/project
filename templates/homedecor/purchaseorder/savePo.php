@@ -39,7 +39,7 @@ echo "Total amount ordered are = " . $totalAmount . "<br>";
 echo "<hr>";
 
 // Get total amount ordered
-$totalDiscount = $po;
+$totalDiscount = $_POST['totalDiscount'];
 echo "Total amount ordered are = " . $totalDiscount . "<br>";
 echo "<hr>";
 
