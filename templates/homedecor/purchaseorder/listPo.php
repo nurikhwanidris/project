@@ -51,12 +51,12 @@ $resultPO = mysqli_query($conn, $selectPO);
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="table-responsive">
-                        <div class="my-2">
+                        <!-- <div class="my-2">
                             <a class="group-by btn btn-success btn-sm mx-2 float-right" id="exportCSV"><i class="fas fa-file-excel"></i></a>
                             <a class="group-by btn btn-info btn-sm float-right" data-column="3">Supplier</a>
                             <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="4">Category</a>
                             <input type="text" name="searchCode" id="searchCode" class="float-right" placeholder="Search by item code">
-                        </div>
+                        </div> -->
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
@@ -125,6 +125,8 @@ $resultPO = mysqli_query($conn, $selectPO);
                                                 <span class="badge badge-info"><?= $rowPO['poStatus']; ?></span>
                                             <?php elseif ($rowPO['poStatus'] == 'Updated') : ?>
                                                 <span class="badge badge-primary"><?= $rowPO['poStatus']; ?></span>
+                                            <?php elseif ($rowPO['poStatus'] == 'Delivered') : ?>
+                                                <span class="badge badge-success"><?= $rowPO['poStatus']; ?></span>
                                             <?php else : ?>
                                                 <span class="badge badge-secondary">Unknown</span>
                                             <?php endif ?>

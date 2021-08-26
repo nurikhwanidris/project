@@ -129,5 +129,41 @@ $html .= '</table>';
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
+// Signature
+$sign = "
+<table>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td>Created by : </td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td>Approved by : </td>
+</tr>
+</table>
+";
+
+// Print text using writeHTMLCell()
+$pdf->writeHTMLCell(0, 0, '', '', $sign, 0, 1, 0, true, '', true);
+
+// Print on last page
+$pdf->lastPage();
+
 // Result
 $pdf->Output('PO-' . str_pad($_GET['id'], 6, '0', STR_PAD_LEFT) . '.pdf');
