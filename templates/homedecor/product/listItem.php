@@ -53,7 +53,7 @@ $result = mysqli_query($conn, $sql);
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Item List</h1>
-        <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#displayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
+        <a href="addItem.php" class="btn btn-sm btn-primary shadow-sm float-right mx-2"><i class="fas fa-plus fa-sm text-white-50"></i> Add Item</a>
     </div>
 
     <!-- Content Row -->
@@ -67,7 +67,7 @@ $result = mysqli_query($conn, $sql);
                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-menu dropdown-menu-right shadow animated-fade-in" aria-labelledby="dropdownMenuLink">
                             <div class="dropdown-header">Dropdown Header:</div>
                             <a class="dropdown-item" href="#">Action</a>
                             <a class="dropdown-item" href="#">Another action</a>
@@ -84,7 +84,8 @@ $result = mysqli_query($conn, $sql);
                             <a class="group-by btn btn-success btn-sm mx-2 float-right" id="exportCSV"><i class="fas fa-file-excel"></i></a>
                             <a class="group-by btn btn-info btn-sm float-right" data-column="4">Supplier</a>
                             <a class="group-by btn btn-info btn-sm mx-2 float-right" data-column="3">Category</a>
-                            <input type="text" name="searchCode" id="searchCode" class="float-right" placeholder="Search by item code">
+                            <input type="text" name="searchCode" id="searchCode" class="float-right mx-2" placeholder="Search by item code">
+                            <input type="text" name="searchName" id="searchName" class="float-right mx-2" placeholder="Search by item name">
                         </div>
                         <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
                             <thead>
@@ -207,6 +208,13 @@ $result = mysqli_query($conn, $sql);
         $('#searchCode').on('keyup', function() {
             table
                 .columns(2)
+                .search(this.value)
+                .draw();
+        });
+
+        $('#searchName').on('keyup', function() {
+            table
+                .columns(1)
                 .search(this.value)
                 .draw();
         });

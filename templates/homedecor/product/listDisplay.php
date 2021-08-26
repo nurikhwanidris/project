@@ -1,5 +1,5 @@
 <!-- Title -->
-<?php $title = 'Product Listing'; ?>
+<?php $title = 'Display Listing'; ?>
 
 <!-- Header -->
 <?php include('../../elements/admin/dashboard/header.php') ?>
@@ -18,6 +18,7 @@
 <?php
 // Fetch number of products
 $sql = "SELECT
+homedecor_display_product.id,
 homedecor_display_product.productId AS productId,
 homedecor_display_product.uniqueId AS uniqueId,
 homedecor_display_product.productName AS productName,
@@ -70,7 +71,7 @@ $resultSet = mysqli_query($conn, $selectSet);
     </div>
     <div class="row my-4">
         <div class="col-lg-12">
-            <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#displayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
+            <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#addDisplayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
             <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="4">Supplier</a>
             <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="5">Category</a>
             <select name="" id="searchSet" class="shadow-sm btn-sm float-right mx-2">
@@ -133,7 +134,7 @@ $resultSet = mysqli_query($conn, $selectSet);
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
                                         <td class="text-left align-middle">
-                                            <?= $rowItem['productSupplier'] . '-' . str_pad($rowItem['productitemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
+                                            <a href="#" class="btn-edit" data-toggle="modal" data-target="#editModal" data-id="<?= $rowItem['id']; ?>" data-title="<?= $rowItem['productName']; ?>" data-uniqueid="<?= $rowItem['uniqueId']; ?>" data-productcode="<?= $rowItem['itemId']; ?>" data-set="<?= $rowItem['productSet']; ?>" data-quantity="<?= $rowItem['productQty']; ?>" data-remarks="<?= $rowItem['productRemarks']; ?>"><?= $rowItem['productSupplier'] . '-' . str_pad($rowItem['productitemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?></a>
                                         </td>
                                         <td class="text-center align-middle">
                                             <img src="/project/upload/img/product/2021/<?= $rowItem['img']; ?>" alt="" style="width:100px; height:100px;">
@@ -176,11 +177,11 @@ $resultSet = mysqli_query($conn, $selectSet);
 <!-- Modal begins -->
 <form action="" method="POST">
     <!-- Modal -->
-    <div class="modal fade" id="displayModal" tabindex="-1" aria-labelledby="displayModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addDisplayModal" tabindex="-1" aria-labelledby="addDisplayModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="displayModalLabel">Add Item for Display</h5>
+                    <h5 class="modal-title" id="addDisplayModalLabel">Add Item for Display</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -237,6 +238,71 @@ $resultSet = mysqli_query($conn, $selectSet);
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" id="submit">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row d-none">
+                        <div class="col-lg-12">
+                            <label for="">Display Id</label>
+                            <input type="text" name="editId" id="editId" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="">Product Name</label>
+                            <input type="text" name="editTitle" id="editTitle" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="">Unique Id</label>
+                            <input type="text" name="editUniqueId" id="editUniqueId" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="">Product Code</label>
+                            <input type="text" name="editProductCode" id="editProductCode" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="">Product Set</label>
+                            <input type="text" name="editProductSet" id="editProductSet" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="">Quantity</label>
+                            <input type="text" name="editProductQty" id="editProductQty" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="">Remarks</label>
+                            <textarea name="editProductRemarks" id="editProductRemarks" cols="30" rows="4" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">
+                        <button type="button" class="float-left btn btn-danger btn-delete" data-delete="<?= $deleteId; ?>">Delete</button>
+                        <button type="button" class="float-right btn btn-primary mr-0 ml-2" id="submitEdit">Save changes</button>
+                        <button type="button" class="float-right btn btn-secondary mx-2" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -327,8 +393,9 @@ $resultSet = mysqli_query($conn, $selectSet);
         refreshInputs(item);
     });
 
-    // Submit form
+    // Insert mat
     $(document).ready(function() {
+        var uniqueId = $("#uniqueId").val();
         var uniqueId = $("#uniqueId").val();
         var productId = $("#productDisplay").val();
         var productName = $("#productName").val();
@@ -379,5 +446,90 @@ $resultSet = mysqli_query($conn, $selectSet);
             });
             event.preventDefault();
         });
+    });
+
+    // Edit mat
+    $(document).on("click", ".btn-edit", function() {
+        // Create variables
+        var id = $(this).data("id");
+        var uniqueid = $(this).data("uniqueid");
+        var title = $(this).data("title");
+        var productCode = $(this).data("productcode");
+        var set = $(this).data("set");
+        var quantity = $(this).data("quantity");
+        var remarks = $(this).data("remarks");
+
+        // Display inside all inputs
+        $("#editId").val(id);
+        $("#editUniqueId").val(uniqueid);
+        $("#editTitle").val(title);
+        $("#editProductCode").val(productCode);
+        $("#editProductSet").val(set);
+        $("#editProductQty").val(quantity);
+        $("#editProductRemarks").val(remarks);
+
+        // Relay the information
+        $(document).on('click', '#submitEdit', function(event) {
+            var formData2 = {
+                editId: $("#editId").val(),
+                editProductSet: $("#editProductSet").val(),
+                editProductQty: $("#editProductQty").val(),
+                editProductRemarks: $("#editProductRemarks").val(),
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "editDisplay.php",
+                data: formData2,
+                dataType: "JSON",
+                encode: true,
+            }).done(function(data) {
+                if (data.success = true) {
+                    // console.log(data);
+                    $("#message").html(
+                        '<div class="alert alert-success">Display product has been updated!</div>'
+                    );
+                    $("#message").fadeTo(5000, 500).slideUp(500, function() {
+                        $("#message").slideUp(500);
+                    });
+                } else {
+                    // console.log(data);
+                    $("#message").html(
+                        '<div class="alert alert-danger">Something went wrong.</div>'
+                    );
+                }
+            }).fail(function(data) {
+                $("#message").html(
+                    '<div class="alert alert-danger">Could not reach server, please try again later.</div>'
+                );
+                $("#message").fadeTo(5000, 500).slideUp(500, function() {
+                    $("#message").slideUp(500);
+                });
+            });
+            event.preventDefault();
+        })
+    });
+
+    // Delete mat
+    $(document).on('click', '.btn-delete', function() {
+        var id = $(this).data("id");
+        if (confirm("Are you sure you want to delete this?")) {
+            $.ajax({
+                method: "POST",
+                url: "deleteDisplay.php",
+                data: {
+                    id: id
+                },
+                dataType: "json",
+                encode: true,
+            }).done(function(data) {
+                $("#message").html(
+                    '<div class="alert alert-warning">' + data.message + "</div>"
+                );
+                $("#message").fadeTo(3000, 500).slideUp(500, function() {
+                    $("#message").slideUp(500);
+                });
+            })
+        }
     });
 </script>
