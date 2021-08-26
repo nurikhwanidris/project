@@ -153,6 +153,7 @@ $resultPO = mysqli_query($conn, $selectPO);
 <script>
     $(document).ready(function() {
         var table = $('#myTable').DataTable({
+            dom: 'ltipr',
             orderFixed: [
                 [1, 'asc']
             ],

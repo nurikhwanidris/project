@@ -156,6 +156,18 @@ $sign = "
 <tr>
 <td>Approved by : </td>
 </tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td>Approved Date : </td>
+</tr>
 </table>
 ";
 
