@@ -14,7 +14,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 $modified = date('Y-m-d H:i:s');
 
 // Update into db
-$Update = "UPDATE homedecor_display_product SET productQty = '$editProductQty', productRemarks = '$editProductRemarks', productSet = '$editProductSet' WHERE id = '$editId'";
+$Update = "UPDATE homedecor_display_product SET productQty = '$editProductQty', productRemarks = '$editProductRemarks', productSet = '$editProductSet', modified = '$modified' WHERE id = '$editId'";
 $result = mysqli_query($conn, $Update);
 
 if ($result) {
