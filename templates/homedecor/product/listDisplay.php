@@ -26,6 +26,7 @@ homedecor_display_product.productQty AS productQty,
 homedecor_display_product.productRemarks AS productRemarks,
 homedecor_display_product.productSet AS productSet,
 homedecor_display_product.created AS created,
+homedecor_display_product.modified AS modified,
 -- homedecor_product2.id AS productId,
 homedecor_product2.itemId AS itemId,
 homedecor_product2.itemCode AS productitemCode,
@@ -128,6 +129,7 @@ $resultSet = mysqli_query($conn, $selectSet);
                                     <th class="text-center align-center">Variation</th>
                                     <th class="text-left align-center">Remarks</th>
                                     <th class="text-center align-center">Created</th>
+                                    <th class="text-center align-center">Modified</th>
                                     <th class="text-center align-center">Action</th>
                                 </tr>
                             </thead>
@@ -163,6 +165,9 @@ $resultSet = mysqli_query($conn, $selectSet);
                                         </td>
                                         <td class="text-center align-middle">
                                             <?= $rowItem['created']; ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= $rowItem['modified']; ?>
                                         </td>
                                         <td class="text-center align-middle">
                                             <button type="button" class="btn btn-danger btn-sm btn-delete" data-delete="<?= $rowItem['id']; ?>"><i class="far fa-trash-alt"></i></button>
