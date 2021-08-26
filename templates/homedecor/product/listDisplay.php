@@ -128,6 +128,7 @@ $resultSet = mysqli_query($conn, $selectSet);
                                     <th class="text-center align-center">Variation</th>
                                     <th class="text-left align-center">Remarks</th>
                                     <th class="text-center align-center">Created</th>
+                                    <th class="text-center align-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -160,8 +161,11 @@ $resultSet = mysqli_query($conn, $selectSet);
                                         <td class="text-left align-middle">
                                             <?= $rowItem['productRemarks']; ?>
                                         </td>
-                                        <td class="text-created align-middle">
+                                        <td class="text-center align-middle">
                                             <?= $rowItem['created']; ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-delete="<?= $rowItem['id']; ?>"><i class="far fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -298,11 +302,8 @@ $resultSet = mysqli_query($conn, $selectSet);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="col-lg-12">
-                        <button type="button" class="float-left btn btn-danger btn-delete" data-delete="<?= $deleteId; ?>">Delete</button>
-                        <button type="button" class="float-right btn btn-primary mr-0 ml-2" id="submitEdit">Save changes</button>
-                        <button type="button" class="float-right btn btn-secondary mx-2" data-dismiss="modal">Close</button>
-                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitEdit">Save changes</button>
                 </div>
             </div>
         </div>
@@ -487,15 +488,15 @@ $resultSet = mysqli_query($conn, $selectSet);
                 if (data.success = true) {
                     // console.log(data);
                     $("#message").html(
-                        '<div class="alert alert-success">Display product has been updated!</div>'
+                        '<div class="alert alert-success">' + data.message + "</div>"
                     );
-                    $("#message").fadeTo(5000, 500).slideUp(500, function() {
+                    $("#message").fadeTo(3000, 500).slideUp(500, function() {
                         $("#message").slideUp(500);
                     });
                 } else {
                     // console.log(data);
                     $("#message").html(
-                        '<div class="alert alert-danger">Something went wrong.</div>'
+                        '<div class="alert alert-danger">' + data.message + "</div>"
                     );
                 }
             }).fail(function(data) {
@@ -512,7 +513,7 @@ $resultSet = mysqli_query($conn, $selectSet);
 
     // Delete mat
     $(document).on('click', '.btn-delete', function() {
-        var id = $(this).data("id");
+        var id = $(this).data("delete");
         if (confirm("Are you sure you want to delete this?")) {
             $.ajax({
                 method: "POST",
