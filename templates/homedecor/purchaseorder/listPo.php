@@ -152,6 +152,13 @@ $resultPO = mysqli_query($conn, $selectPO);
 
 <script>
     $(document).ready(function() {
-        var table = $('#myTable').DataTable();
+        var table = $('#myTable').DataTable({
+            orderFixed: [
+                [1, 'asc']
+            ],
+            rowGroup: {
+                dataSrc: 1
+            }
+        });
     })
 </script>
