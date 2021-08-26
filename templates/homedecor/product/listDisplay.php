@@ -26,7 +26,6 @@ homedecor_display_product.productQty AS productQty,
 homedecor_display_product.productRemarks AS productRemarks,
 homedecor_display_product.productSet AS productSet,
 homedecor_display_product.created AS created,
-homedecor_display_product.modified AS modified,
 -- homedecor_product2.id AS productId,
 homedecor_product2.itemId AS itemId,
 homedecor_product2.itemCode AS productitemCode,
@@ -73,8 +72,8 @@ $resultSet = mysqli_query($conn, $selectSet);
     <div class="row my-4">
         <div class="col-lg-12">
             <a href="#" class="btn btn-sm btn-primary shadow-sm float-right mx-2" id="addDisplay" data-toggle="modal" data-target="#addDisplayModal"><i class="fas fa-plus fa-sm text-white-50"></i> Add Display Item</a>
-            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="4">Supplier</a>
-            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="5">Category</a>
+            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="5">Supplier</a>
+            <a class="group-by btn btn-info shadow-sm btn-sm float-right mx-2" data-column="6">Category</a>
             <select name="" id="searchSet" class="shadow-sm btn-sm float-right mx-2">
                 <?php while ($set = mysqli_fetch_assoc($resultSet)) : ?>
                     <?php if (empty($set['productSet'])) : ?>
@@ -122,6 +121,7 @@ $resultSet = mysqli_query($conn, $selectSet);
                                     <th class="text-left align-center">ID</th>
                                     <th class="text-center align-center">Image</th>
                                     <th class="text-left align-center">Name</th>
+                                    <th class="text-center align-center">Quantity</th>
                                     <th class="text-left align-center">Set</th>
                                     <th class="text-center align-center">Supplier</th>
                                     <th class="text-center align-center">Category</th>
@@ -129,7 +129,6 @@ $resultSet = mysqli_query($conn, $selectSet);
                                     <th class="text-center align-center">Variation</th>
                                     <th class="text-left align-center">Remarks</th>
                                     <th class="text-center align-center">Created</th>
-                                    <th class="text-center align-center">Modified</th>
                                     <th class="text-center align-center">Action</th>
                                 </tr>
                             </thead>
@@ -144,6 +143,9 @@ $resultSet = mysqli_query($conn, $selectSet);
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['productName']; ?>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <?= $rowItem['productQty']; ?>
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['productSet']; ?>
@@ -167,10 +169,7 @@ $resultSet = mysqli_query($conn, $selectSet);
                                             <?= $rowItem['created']; ?>
                                         </td>
                                         <td class="text-center align-middle">
-                                            <?= $rowItem['modified']; ?>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <button type="button" class="btn btn-danger btn-sm btn-delete" data-delete="<?= $rowItem['id']; ?>"><i class="far fa-trash-alt"></i></button>
+                                            <button type="button" class="btn btn-danger btn-delete" data-delete="<?= $rowItem['id']; ?>"><i class="far fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -328,10 +327,10 @@ $resultSet = mysqli_query($conn, $selectSet);
                 extend: 'csv',
             }],
             orderFixed: [
-                [4, 'asc']
+                [5, 'asc']
             ],
             rowGroup: {
-                dataSrc: 4
+                dataSrc: 5
             }
         });
 
@@ -493,15 +492,15 @@ $resultSet = mysqli_query($conn, $selectSet);
                 if (data.success = true) {
                     // console.log(data);
                     $("#message").html(
-                        '<div class="alert alert-success">' + data.message + "</div>"
+                        '<div class="alert alert-success">Display product has been updated!</div>'
                     );
-                    $("#message").fadeTo(3000, 500).slideUp(500, function() {
+                    $("#message").fadeTo(5000, 500).slideUp(500, function() {
                         $("#message").slideUp(500);
                     });
                 } else {
                     // console.log(data);
                     $("#message").html(
-                        '<div class="alert alert-danger">' + data.message + "</div>"
+                        '<div class="alert alert-danger">Something went wrong.</div>'
                     );
                 }
             }).fail(function(data) {
