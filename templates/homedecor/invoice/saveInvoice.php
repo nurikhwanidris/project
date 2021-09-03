@@ -70,10 +70,10 @@ $rowReceipt = mysqli_fetch_assoc($resultReceipt);
 ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <div class="container">
     <?php if (isset($msg)) : ?>
@@ -157,4 +157,4 @@ $rowReceipt = mysqli_fetch_assoc($resultReceipt);
 </div>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>

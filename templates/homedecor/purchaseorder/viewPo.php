@@ -2,13 +2,13 @@
 <?php $title = 'Purchase Order' ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <!-- DB Conn -->
-<?php include('../../../src/model/dbconn.php'); ?>
+<?php require('../../../src/model/dbconn.php'); ?>
 
 <?php
 // Get PO details
@@ -225,7 +225,7 @@ $resultOrder = mysqli_query($conn, $needOrder);
 </div>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>
 
 <script>
     var $productSelect = $("#poProduct");

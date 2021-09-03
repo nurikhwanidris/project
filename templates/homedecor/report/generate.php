@@ -2,17 +2,17 @@
 <?php $title = 'Sales Dashboard'; ?>
 
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Datatable CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.1.3/css/rowGroup.dataTables.min.css">
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 
 <div class="container-fluid">

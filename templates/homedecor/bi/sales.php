@@ -2,13 +2,13 @@
 <?php $title = "Sales Reports" ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <!-- Chart -->
 <?php
@@ -156,7 +156,7 @@ $resultChart = mysqli_query($conn, $chartRevenue);
 </script>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>
 
 <script>
     // Set new default font family and font color to mimic Bootstrap's default styling
@@ -241,7 +241,7 @@ $resultChart = mysqli_query($conn, $chartRevenue);
                     ticks: {
                         maxTicksLimit: 5,
                         padding: 10,
-                        // Include a dollar sign in the ticks
+                        //require a dollar sign in the ticks
                         callback: function(value, index, values) {
                             return 'RM' + number_format(value);
                         }

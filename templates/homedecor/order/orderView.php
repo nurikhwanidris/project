@@ -2,13 +2,13 @@
 <?php $title = "Order Details" ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <?php
 // Get source
@@ -317,7 +317,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
 </div>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>
 
 <!-- Insert phone number country code-->
 <script>

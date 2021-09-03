@@ -2,7 +2,7 @@
 <?php $title = 'Purchase Order Listing'; ?>
 
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <!-- Get data from table -->
 <?php
@@ -11,7 +11,7 @@ $resultPO = mysqli_query($conn, $selectPO);
 ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Datatable CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
@@ -19,7 +19,7 @@ $resultPO = mysqli_query($conn, $selectPO);
 
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -148,7 +148,7 @@ $resultPO = mysqli_query($conn, $selectPO);
 </div>
 
 <!-- footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>
 
 <script>
     $(document).ready(function() {

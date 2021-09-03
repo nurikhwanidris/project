@@ -1,5 +1,5 @@
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php');
+<?php require('../../../src/model/dbconn.php');
 
 // Get everything from the post
 $supplier = $_POST['supplier'];

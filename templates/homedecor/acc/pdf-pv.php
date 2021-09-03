@@ -16,7 +16,7 @@ $descriptions = explode(',', $rowPV['description']);
 $amounts = explode(',', $rowPV['amount']);
 $categories = explode(',', $rowPV['category']);
 
-// Include the main TCPDF library (search for installation path).
+//require the main TCPDF library (search for installation path).
 require_once($_SERVER['DOCUMENT_ROOT'] . '/project/assets/vendor/pdf/tcpdf.php');
 
 // create new PDF document

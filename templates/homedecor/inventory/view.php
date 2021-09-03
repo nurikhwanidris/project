@@ -2,13 +2,13 @@
 <?php $title = "Update Inventory"; ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <!-- Database -->
 <?php
@@ -135,7 +135,7 @@ if (isset($_POST['submit'])) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">RM</span>
                                     </div>
-                                    <input type="text" name="itemCost" id="" class="form-control" data-toggle="tooltip" data-placement="top" title="Cost must include shipping">
+                                    <input type="text" name="itemCost" id="" class="form-control" data-toggle="tooltip" data-placement="top" title="Cost mustrequire shipping">
                                 </div>
                             </div>
                         </div>
@@ -243,4 +243,4 @@ if (isset($_POST['submit'])) {
 </div>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>

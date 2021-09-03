@@ -2,13 +2,13 @@
 <?php $title = 'Receipt No. ' . str_pad($_GET['id'], 4, 0, STR_PAD_LEFT) ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- DB Conn -->
-<?php include('../../../src/model/dbconn.php'); ?>
+<?php require('../../../src/model/dbconn.php'); ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <?php
 $receiptId = $_GET['id'];
@@ -116,7 +116,7 @@ $rowInvoice = mysqli_fetch_assoc($resultInvoice);
 </div>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>
 
 <script>
     $(document).ready(function() {

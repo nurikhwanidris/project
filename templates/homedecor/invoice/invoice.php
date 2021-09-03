@@ -40,7 +40,7 @@ if (mysqli_num_rows($resultInvoicee) > 0) {
     $date =  $rowInvoicee['invoice_date'];
 }
 
-// Include the main TCPDF library (search for installation path).
+//require the main TCPDF library (search for installation path).
 require_once($_SERVER['DOCUMENT_ROOT'] . '/assets/vendor/pdf/tcpdf.php');
 
 // Extend the TCPDF class to create custom Header and Footer
@@ -268,7 +268,7 @@ $pdf->Cell(100, 5, 'Terms and Conditions');
 $pdf->Ln();
 $pdf->Cell(100, 5, '1. Price will be rounded up to the nearest point.');
 $pdf->Ln();
-$pdf->Cell(100, 5, '2. Please include the payment slips after the payment was made.');
+$pdf->Cell(100, 5, '2. Pleaserequire the payment slips after the payment was made.');
 $pdf->Ln();
 $pdf->Cell(100, 5, '3. Balance payment must be made within 2 days after the invoice billed to you.');
 $pdf->Ln();

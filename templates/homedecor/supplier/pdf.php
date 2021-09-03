@@ -8,7 +8,7 @@ $id = $_GET['id'];
 $title = str_pad($id, 4, 0, STR_PAD_LEFT);
 
 
-// Include the main TCPDF library (search for installation path).
+//require the main TCPDF library (search for installation path).
 require_once($_SERVER['DOCUMENT_ROOT'] . '/project/assets/vendor/pdf/tcpdf.php');
 
 // create new PDF document

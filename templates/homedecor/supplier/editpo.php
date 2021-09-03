@@ -1,8 +1,8 @@
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <?php
 // Get supplier
@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
 ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <div class="container-fluid">
     <div class="row">
@@ -189,7 +189,7 @@ if (isset($_POST['submit'])) {
 </div>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>
 
 <!-- Get Product Info -->
 <script>

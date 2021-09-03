@@ -11,7 +11,7 @@ $sql = "SELECT * FROM homedecor_payslip WHERE id = '$id'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
-// Include the main TCPDF library (search for installation path).
+//require the main TCPDF library (search for installation path).
 require_once($_SERVER['DOCUMENT_ROOT'] . '/project/assets/vendor/pdf/tcpdf.php');
 
 // create new PDF document

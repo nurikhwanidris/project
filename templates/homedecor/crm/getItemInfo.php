@@ -1,4 +1,4 @@
-<?php include('../../../src/model/dbconn.php');
+<?php require('../../../src/model/dbconn.php');
 header('Content-Type: application/json');
 
 $response = array(

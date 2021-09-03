@@ -32,7 +32,7 @@ while ($row = $result->fetch_assoc()) {
     <input type="text" name="id_text" id="cost" />
 </p>
 
-<!-- Include jQuery -->
+<!--require jQuery -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
 <script>

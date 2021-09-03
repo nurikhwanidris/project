@@ -1,14 +1,14 @@
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <!-- Title -->
 <?php $title = "Invoice" ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <?php
 // Get data from invoice table
@@ -242,7 +242,7 @@ $resultReceipt = mysqli_query($conn, $receipt);
                                                 Price will be rounded up to the nearest point.
                                             </li>
                                             <li>
-                                                Please include the payment slips after the payment was made.
+                                                Pleaserequire the payment slips after the payment was made.
                                             </li>
                                             <li>
                                                 Balance payment must be made within 2 days after the invoice billed to you.
@@ -358,4 +358,4 @@ $resultReceipt = mysqli_query($conn, $receipt);
 </div>
 
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>

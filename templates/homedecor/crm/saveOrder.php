@@ -35,7 +35,7 @@ if ($_POST['voucher'] != '') {
 $subTotal = array_sum($_POST['productPrice']);
 $itemDiscount = array_sum($_POST['discountItem']);
 
-// Total include shipping
+// Totalrequire shipping
 $total = array_sum($discountItems) + $shipping;
 
 // Total discount after voucher

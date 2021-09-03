@@ -1,5 +1,5 @@
 <!-- Get DB conn -->
-<?php include('../../../src/model/dbconn.php') ?>
+<?php require('../../../src/model/dbconn.php') ?>
 
 <?php
 // Get supplier data
@@ -28,7 +28,7 @@ $staffName = explode(',', $rowOrder['staffName']);
 ?>
 
 <!-- Header -->
-<?php include('../../elements/admin/dashboard/header.php') ?>
+<?php require('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Link -->
 <link rel="stylesheet" type="text/css" href="/project/assets/css/print.min.css">
@@ -38,7 +38,7 @@ $staffName = explode(',', $rowOrder['staffName']);
 <script src="/project/assets/js/jspdf.plugin.autotable.js"></script>
 
 <!-- Sidebar -->
-<?php include('../../elements/admin/dashboard/nav.php') ?>
+<?php require('../../elements/admin/dashboard/nav.php') ?>
 
 <style>
     .doubleUnderline {
@@ -240,7 +240,7 @@ $staffName = explode(',', $rowOrder['staffName']);
     </div>
 </div>
 <!-- Footer -->
-<?php include('../../elements/admin/dashboard/footer.php') ?>
+<?php require('../../elements/admin/dashboard/footer.php') ?>
 
 <!-- HTMl to PDF -->
 <script>
