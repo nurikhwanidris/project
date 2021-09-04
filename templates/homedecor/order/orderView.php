@@ -280,7 +280,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">RM</span>
                                             </div>
-                                            <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)" value="15">
+                                            <input type="text" name="shipping" class="form-control" aria-label="Amount (to the nearest ringgit)" value="<?= $rowOrder['shipping']; ?>">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">.00</span>
                                             </div>
@@ -292,7 +292,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">RM</span>
                                             </div>
-                                            <input type="text" name="voucher" class="form-control" aria-label="Amount (to the nearest ringgit)" value="">
+                                            <input type="text" name="voucher" class="form-control" aria-label="Amount (to the nearest ringgit)" value="<?= $rowOrder['voucher']; ?>">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">.00</span>
                                             </div>

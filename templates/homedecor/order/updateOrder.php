@@ -1,5 +1,5 @@
 <?php
-include('../../../src/model/dbconn.php');
+require '../../../src/model/dbconn.php';
 
 // Customer details
 $customerID = $_POST['customerID'];
@@ -25,33 +25,51 @@ $productIds = $_POST['productId'];
 $quantities = $_POST['quantity'];
 $productPrices = $_POST['productPrice'];
 $discountItems = $_POST['discountItem'];
-$promo = 0;
+$voucher = $_POST['voucher'];
 $subTotal = array_sum($_POST['productPrice']);
 $itemDiscount = array_sum($_POST['discountItem']);
 
 // Totalrequire shipping
 $total = array_sum($discountItems) + $shipping;
 
-// Total discount after promo
-if ($promo != 0) {
+// Total discount after voucher
+if ($voucher != 0) {
     // Calculate total discount
-    $discAfterPromo = $total - $promo;
+    $discAfterVoucher = $total - $voucher;
 
     // Calculate grandtotal
-    $grandTotal = $discAfterPromo;
+    $grandTotal = $discAfterVoucher;
 } else {
     // Calculate total discount
-    $discAfterPromo = $total;
+    $discAfterVoucher = $total;
 
     // Calculate grandtotal
-    $grandTotal = $discAfterPromo;
+    $grandTotal = $discAfterVoucher;
 }
 
 // Date time
 date_default_timezone_set("Asia/Kuala_Lumpur");
 $modified = date('Y-m-d H:i:s');
 
-// Check for existing product ids
+// Check for changes made inside order table
+$selectOrder = "SELECT * FROM homedecor_order2 WHERE id = '$id'";
+$resultOrder = mysqli_query($conn, $selectOrder);
+$checkOrder = mysqli_fetch_assoc($resultOrder);
+
+if ($checkOrder['modified'] != $modified || $checkOrder['modified'] = null) {
+    // Update the table
+    $updateOrder = "UPDATE homedecor_order2 SET subTotal = '$subTotal', itemDiscount = '$itemDiscount', shipping = '$shipping', total = '$total', voucher = '$voucher', discount = '$discAfterVoucher', grandTotal = '$grandTotal', modified = '$modified' WHERE id = '$id' AND customerId = '$customerID'";
+    $resultUpdateOrder = mysqli_query($conn, $updateOrder);
+
+    if ($resultUpdateOrder) {
+        echo "Order details succesfully updated. <hr><br>";
+    } else {
+        echo mysqli_error($conn);
+    }
+} else {
+    echo "Nothing inside order has been changed.";
+}
+
 // If product id already existed, skip and go next
 for ($i = 0; $i < count($productIds); $i++) {
 
