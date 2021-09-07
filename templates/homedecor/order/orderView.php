@@ -230,47 +230,10 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-lg-11">
-                                        <table class="table table-sm table-stripped table-bordered" id="tblProducts">
-                                            <thead>
-                                                <tr>
-                                                    <th class="align-middle text-center">/</th>
-                                                    <th class="align-middle text-center">Code</th>
-                                                    <th class="align-middle" style="width: 60%;">Product Name</th>
-                                                    <th class="align-middle text-center">Quantity</th>
-                                                    <th class="align-middle text-right">Unit Price</th>
-                                                    <th class="align-middle text-right">Amount</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php while ($rowOrderItem = mysqli_fetch_assoc($resultOrderItem)) : ?>
-                                                    <tr>
-                                                        <td class="text-center align-middle">
-                                                            <input type='checkbox' name='record'>
-                                                        </td>
-                                                        <td class="text-center align-middle">
-                                                            <?= $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['productItemId']; ?>
-                                                            <!-- <input type="text" name="productItemId" id="" class="form-control d-none" value="<?= $rowOrderItem['productItemId']; ?>"> -->
-                                                        </td>
-                                                        <td class="text-left align-middle">
-                                                            <?= $rowOrderItem['name']; ?>
-                                                            <input type="text" name="productId[]" value="<?= $rowOrderItem['productId']; ?>" class="d-none">
-                                                        </td>
-                                                        <td class="text-center align-middle">
-                                                            <input type="text" name="quantity[]" class="text-center p-0 border-0 form-control" value="<?= $rowOrderItem['quantity']; ?>">
-                                                        </td>
-                                                        <td class="text-right align-middle">
-                                                            <input type="text" name="productPrice[]" class="text-right p-0 m-0 border-0 form-control" value="<?= number_format($rowOrderItem['productPrice'], 2, '.', ''); ?>">
-                                                        </td>
-                                                        <td class="text-right align-middle">
-                                                            <input type="text" name="discountItem[]" class="text-right p-0 m-0 border-0 form-control" value="<?= number_format($rowOrderItem['productDiscount'], 2, '.', ''); ?>">
-                                                        </td>
-                                                    </tr>
-                                                <?php endwhile; ?>
-                                            </tbody>
-                                        </table>
+                                        <div id="liveTable"></div>
                                     </div>
                                     <div class="col-lg-1">
-                                        <button type="button" class="btn btn-danger delete-row float-right"><i class="far fa-trash-alt"></i></button>
+                                        <button type="button" class="btn btn-secondary delete-row float-right"><i class="far fa-trash-alt"></i></button>
                                     </div>
                                 </div>
                                 <div class="row my-2">
@@ -412,6 +375,20 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
 <script>
     $(document).ready(function() {
 
+        function fetch_data() {
+            $.ajax({
+                url: "selectItem.php",
+                data: {
+                    id: <?= $id; ?>
+                },
+                method: "POST",
+                success: function(data) {
+                    $('#liveTable').html(data);
+                }
+            });
+        }
+        fetch_data();
+
         $(".add-row").click(function() {
             var e = $("#product");
             var itemId = $("#itemId").val();
@@ -442,6 +419,23 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                     $(this).parents("tr").remove();
                 }
             });
+        });
+
+        // Remove item
+        $(document).on('click', '#removeItem', function() {
+            var id = $(this).data('removeitem');
+            if (confirm("Are you sure you want to remove this item?")) {
+                $.ajax({
+                    method: "POST",
+                    url: "removeItem.php",
+                    data: {
+                        id: id
+                    },
+                    dataType: 'json',
+                    encode: true,
+                });
+                fetch_data();
+            }
         });
     });
 </script>
