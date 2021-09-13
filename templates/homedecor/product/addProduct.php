@@ -122,7 +122,7 @@ $resultSource = mysqli_query($conn, $selectSource);
                                 <label for="" class="col-sm-2">Product Image</label>
                                 <div class="col-sm-2">
 
-                                    <input type='file' id="productImg" name="productImg" class="form-control" accept="image/x-png,image/gif,image/jpeg">
+                                    <input type='file' id="productImg" name="productImg" class="form-control" accept="image/jpeg">
                                 </div>
                             </div>
                             <div class="form-group row">

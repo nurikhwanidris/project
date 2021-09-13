@@ -38,12 +38,14 @@ if ($resultSearch) {
     $resultInsert = mysqli_query($conn, $insert);
 
     if ($resultInsert) {
+        echo "success <br> Data succesfully inserted.";
         $_SESSION['alert'] = 'success';
         $_SESSION['status'] = "Data succesfully inserted.";
-        header('Location: addProduct.php');
+        // header('Location: addProduct.php');
     } else {
-        $_SESSION['alert'] = '-danger';
+        echo "danger <br>" . mysqli_error($conn);
+        $_SESSION['alert'] = 'danger';
         $_SESSION['status'] =  mysqli_error($conn);
-        header('Location: addProduct.php');
+        // header('Location: addProduct.php');
     }
 }
