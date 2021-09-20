@@ -1,4 +1,4 @@
 <?php
 
-$conn = mysqli_connect('localhost', 'pmauser', 'Ikhwan011!', 'project');
+$conn = mysqli_connect('localhost', 'root', '', 'project');
 // echo "something connected";
