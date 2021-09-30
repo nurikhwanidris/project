@@ -84,6 +84,7 @@ $rowProduct = mysqli_fetch_assoc($resultSelectProduct);
                                         <option value="">Select</option>
                                         <option value="JPUI" <?= ($rowProduct['supplier'] == 'JPUI') ? 'selected' : ''; ?>>Jpui</option>
                                         <option value="NEE" <?= ($rowProduct['supplier'] == 'NEE') ? 'selected' : ''; ?>>Nee</option>
+                                        <option value="BLU" <?= ($rowProduct['supplier'] == 'BLU') ? 'selected' : ''; ?>>Bluwitte</option>
                                     </select>
                                 </div>
                             </div>
@@ -203,6 +204,38 @@ $rowProduct = mysqli_fetch_assoc($resultSelectProduct);
             var categoryName = $("#category option:selected").text();
             $("#productCategoryCode").val(categoryID);
             $("#productCategory").val(categoryName);
+        });
+
+        $('#productSupplier').change(function() {
+            //var optionValue = $(this).val();
+            //var optionText = $('#dropdownList option[value="'+optionValue+'"]').text();
+            // var optionText = $("#productSupplier option:selected").text();
+            // alert("Selected Option Text: " + optionText);
+
+            var supplier = $(this).val();
+
+            if (supplier === 'BLU') {
+                // Change to readonly
+                $("#productCostTHB").attr("readonly", true);
+                $("#productCostTHB").attr("required", false);
+                $("#productCostMYR").attr("readonly", false);
+                $("#productCostMYR").attr("required", true);
+            }
+
+            // Convert THB to MYR
+            $("#productCostMYR").change(function() {
+                // Pull the variable from id
+                var productCostMYR = $("#productCostMYR").val();
+
+                // Calculate the everything in MYR
+                var productSellingMYR = ((productCostMYR * 2.5) + 6 + 10).toFixed(0);
+                var productProfitMYR = productSellingMYR - productCostMYR;
+
+                // Display the data
+                $("#productCostMYR").val(productCostMYR);
+                $("#productSellingMYR").val(productSellingMYR);
+                $("#productProfitMYR").val(productProfitMYR);
+            });
         });
 
         // Convert THB to MYR
