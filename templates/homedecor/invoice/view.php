@@ -39,6 +39,8 @@ $rowInvoice = mysqli_fetch_assoc($resultInvoice);
 // Get ordered items
 $items = "SELECT
 homedecor_order2.id,
+homedecor_order2.hasPreOrder,
+homedecor_order_item.id AS idOrder,
 homedecor_order_item.orderId,
 homedecor_order_item.productId,
 homedecor_order_item.itemId,
@@ -46,6 +48,7 @@ homedecor_order_item.productPrice,
 homedecor_order_item.productDiscount,
 homedecor_order_item.discount,
 homedecor_order_item.quantity,
+homedecor_order_item.preOrder,
 homedecor_item2.itemAvailable,
 homedecor_product2.id,
 homedecor_product2.name,
@@ -150,7 +153,10 @@ $resultReceipt = mysqli_query($conn, $receipt);
                                             <tr>
                                                 <!-- Item description -->
                                                 <td class="align-middle">
-                                                    <?php if ($rowOrderItem['itemAvailable'] <= 0) : ?>
+                                                    <?= $rowOrderItem['idOrder']; ?>
+                                                    <?php if ($rowOrderItem['hasPreOrder'] == true && $rowOrderItem['preOrder'] == true) : ?>
+                                                        <?= $rowOrderItem['name']; ?> [Pre-order]
+                                                    <?php elseif ($rowOrderItem['itemAvailable'] <= 0 && $rowOrderItem['hasPreOrder'] == false) : ?>
                                                         <?= $rowOrderItem['name']; ?> [Pre-order]
                                                     <?php else : ?>
                                                         <?= $rowOrderItem['name']; ?>

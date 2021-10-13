@@ -13,6 +13,7 @@ $rowOrder = mysqli_fetch_assoc($resOrder);
 // Get ordered items data second
 $items = "SELECT
 homedecor_order2.id,
+homedecor_order2.hasPreOrder,
 homedecor_order_item.orderId,
 homedecor_order_item.productId,
 homedecor_order_item.itemId,
@@ -20,6 +21,7 @@ homedecor_order_item.productPrice,
 homedecor_order_item.productDiscount,
 homedecor_order_item.discount,
 homedecor_order_item.quantity,
+homedecor_order_item.preOrder,
 homedecor_item2.itemAvailable,
 homedecor_product2.id,
 homedecor_product2.name,
@@ -173,7 +175,9 @@ $pdf->Ln();
 $pdf->setFont('Helvetica', '', 9);
 while ($rowOrderItem = mysqli_fetch_assoc($resultItems)) :
     // $pdf->MultiCell(90, 10, $rowOrderItem['name'], 1, 'L', 0, 0, '', '', true, 0, false, true, 10, 'M');
-    if ($rowOrderItem['itemAvailable'] <= 0) :
+    if ($rowOrderItem['hasPreOrder'] == true && $rowOrderItem['preOrder'] == true) :
+        $pdf->Cell(83, 6, $rowOrderItem['name'] . ' [Pre-order]', 1, false, 'L', 0, '', 0, false, 'T', 'M');
+    elseif ($rowOrderItem['itemAvailable'] <= 0 && $rowOrderItem['hasPreOrder'] == false) :
         $pdf->Cell(83, 6, $rowOrderItem['name'] . ' [Pre-order]', 1, false, 'L', 0, '', 0, false, 'T', 'M');
     else :
         $pdf->Cell(83, 6, $rowOrderItem['name'], 1, false, 'L', 0, '', 0, false, 'T', 'M');
