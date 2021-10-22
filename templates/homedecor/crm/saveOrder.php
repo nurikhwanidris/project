@@ -36,12 +36,12 @@ $subTotal = array_sum($_POST['productPrice']);
 $itemDiscount = array_sum($_POST['discountItem']);
 
 // Totalrequire shipping
-$total = array_sum($discountItems) + $shipping;
+$total = round(array_sum($discountItems) + $shipping);
 
 // Total discount after voucher
 if ($voucher != '') {
     // Calculate total discount
-    $discAfterVoucher = $total - $voucher;
+    $discAfterVoucher = round($total - $voucher);
 
     // Calculate grandtotal
     $grandTotal = $discAfterVoucher;
