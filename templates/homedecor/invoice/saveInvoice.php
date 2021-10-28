@@ -9,7 +9,7 @@ $title = "Receipt";
 $orderId = $_POST['orderId'];
 $invoiceStatus = $_POST['invoiceStatus'];
 $invoiceDate = $_POST['invoiceDate'];
-$amountPaid = filter_var($_POST['amountPaid'], FILTER_SANITIZE_NUMBER_FLOAT);
+$amountPaid = $_POST['amountPaid'];
 $paymentType = $_POST['paymentType'];
 $grandTotal = $_POST['grandTotal'];
 

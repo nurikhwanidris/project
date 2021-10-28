@@ -2,7 +2,7 @@
 <?php require('../../../src/model/dbconn.php') ?>
 
 <!-- Title -->
-<?php $title = "Invoice" ?>
+<?php $title = "INV-" . str_pad($_GET['id'], 6, 0, STR_PAD_LEFT); ?>
 
 <!-- Header -->
 <?php require('../../elements/admin/dashboard/header.php') ?>
@@ -153,7 +153,7 @@ $resultReceipt = mysqli_query($conn, $receipt);
                                             <tr>
                                                 <!-- Item description -->
                                                 <td class="align-middle">
-                                                    <?= $rowOrderItem['idOrder']; ?>
+                                                    <!-- <?= $rowOrderItem['idOrder']; ?> -->
                                                     <?php if ($rowOrderItem['hasPreOrder'] == true && $rowOrderItem['preOrder'] == true) : ?>
                                                         <?= $rowOrderItem['name']; ?> [Pre-order]
                                                     <?php elseif ($rowOrderItem['itemAvailable'] <= 0 && $rowOrderItem['hasPreOrder'] == false) : ?>
@@ -204,7 +204,7 @@ $resultReceipt = mysqli_query($conn, $receipt);
                                                 Total
                                             </td>
                                             <td class="align-middle text-right">
-                                                RM <?= number_format($rowOrder['total'], 2, '.', ''); ?>
+                                                RM <?= number_format($rowOrder['total'], 2, '.', ','); ?>
                                             </td>
                                         </tr>
                                         <!-- Voucher -->
