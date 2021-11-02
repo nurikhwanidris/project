@@ -9,6 +9,7 @@ $title = "Receipt";
 $orderId = $_POST['orderId'];
 $invoiceStatus = $_POST['invoiceStatus'];
 $invoiceDate = $_POST['invoiceDate'];
+$paymentDate = $_POST['paymentDate'];
 $amountPaid = $_POST['amountPaid'];
 $paymentType = $_POST['paymentType'];
 $grandTotal = $_POST['grandTotal'];
@@ -43,7 +44,7 @@ if (mysqli_num_rows($resultCheckInvoice) > 0) {
 }
 
 // Insert the receipt table
-$insertReceipt = "INSERT INTO homedecor_receipt2 (orderId, invoiceDate, amountPaid, created) VALUES ('$orderId', '$invoiceDate', '$amountPaid', '$created')";
+$insertReceipt = "INSERT INTO homedecor_receipt2 (orderId, invoiceDate, amountPaid, created) VALUES ('$orderId', '$paymentDate', '$amountPaid', '$created')";
 $resultReceipt = mysqli_query($conn, $insertReceipt);
 
 if ($resultInsert && $resultReceipt) {
@@ -100,7 +101,7 @@ $rowReceipt = mysqli_fetch_assoc($resultReceipt);
                             </div>
                             <div class="col-4 float-right text-right">
                                 <h5 class=""><span class="font-weight-bold">No :</span> <u><?= str_pad($rowReceipt['id'], 6, 0, STR_PAD_LEFT); ?></u></h5>
-                                <h5 class=""><span class="font-weight-bold">Date :</span> <u><?= $invoiceDate; ?></u></h5>
+                                <h5 class=""><span class="font-weight-bold">Date :</span> <u><?= $paymentDate; ?></u></h5>
                                 <h5 class=""><span class="font-weight-bold">Payment Method :</span><u>
                                         <?= $paymentType; ?>
                                     </u>

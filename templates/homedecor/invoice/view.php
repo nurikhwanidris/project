@@ -305,6 +305,12 @@ $resultReceipt = mysqli_query($conn, $receipt);
                                 </select>
                             </div>
                         </div>
+                        <div class="row my-3">
+                            <div class="col-lg-12">
+                                <label for="">Payment Date</label>
+                                <input type="date" name="paymentDate" id="" class="form-control">
+                            </div>
+                        </div>
                         <div class="row my-3 ">
                             <div class="col-lg-12">
                                 <label for="">Upload Payment Receipt</label>
