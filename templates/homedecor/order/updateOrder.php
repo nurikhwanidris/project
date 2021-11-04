@@ -86,7 +86,7 @@ for ($i = 0; $i < count($productIds); $i++) {
     if (mysqli_num_rows($resultCheck) > 0) {
         echo "Product already existed inside the table. Check next item. <hr><br>";
         $_SESSION['items'] = 'Product already existed inside the table. Check next item';
-        header("Location: orderView.php?id=" . $id);
+        // header("Location: orderView.php?id=" . $id);
     } else {
         // Insert into homedecor_order_item
         $insertOrderDetails = "INSERT INTO homedecor_order_item (orderId, productId, productPrice, productDiscount, quantity, created) VALUES ('$id', '$productId', '$productPrice', '$discountItem', '$quantity', '$modified')";
@@ -103,7 +103,7 @@ for ($i = 0; $i < count($productIds); $i++) {
                 echo mysqli_error($conn) . '<br>';
             }
             $_SESSION['items'] = 'Successfully created the order and update item details';
-            header("Location: orderView.php?id=" . $id);
+            // header("Location: orderView.php?id=" . $id);
         } else {
             echo mysqli_error($conn) . '<br>';
         }

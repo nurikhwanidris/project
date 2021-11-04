@@ -14,6 +14,7 @@ homedecor_order_item.orderId,
 homedecor_order_item.quantity, 
 homedecor_order_item.productPrice, 
 homedecor_order_item.productDiscount, 
+homedecor_order_item.discount, 
 homedecor_product2.name,
 homedecor_product2.itemId AS productItemId,
 homedecor_product2.supplier,
@@ -37,8 +38,9 @@ $output .= '
             <th class="align-middle text-center">Code</th>
             <th class="align-middle" style="width: 60%;">Product Name</th>
             <th class="align-middle text-center">Quantity</th>
-            <th class="align-middle text-right">Unit Price</th>
-            <th class="align-middle text-right">Amount</th>
+            <th class="align-middle text-center">Unit Price</th>
+            <th class="align-middle text-center">Discount</th>
+            <th class="align-middle text-center">Amount</th>
             <th class="align-middle text-center">Dlt</th>
         </tr>
     </thead>
@@ -50,23 +52,27 @@ while ($rowOrderItem = mysqli_fetch_array($resultOrderItem)) {
         <td class="text-center align-middle">
             <input type="checkbox" name="record">
         </td>
-        <td class="text-center align-middle">' . $rowOrderItem["supplier"] . ' - ' . str_pad($rowOrderItem["itemCode"], 4, 0, STR_PAD_LEFT) . ' - ' . $rowOrderItem["productItemId"] . '
+        <td class="text-center align-middle">' . $rowOrderItem["supplier"] . ' - ' . str_pad($rowOrderItem["itemCode"], 3, 0, STR_PAD_LEFT) . ' - ' . $rowOrderItem["productItemId"] . '
         </td>
         <td class="text-left align-middle">
             ' . $rowOrderItem['name'] . '
             <input type="text" name="productId[]" value="' . $rowOrderItem["productId"] . '" class="d-none">
         </td>
         <td class="text-center align-middle">
-            <input type="text" name="quantity[]" class="text-center p-0 border-0 form-control"
-                value="' . $rowOrderItem["quantity"] . '">
+            <input type="text" name="quantity[]" class="text-center p-0 border-0 form-control d-none"
+                value="' . $rowOrderItem["quantity"] . '"> ' . $rowOrderItem['quantity'] . '
         </td>
-        <td class="text-right align-middle">
-            <input type="text" name="productPrice[]" class="text-right p-0 m-0 border-0 form-control"
-                value="' . number_format($rowOrderItem['productPrice'], 2, '.', '') . '">
+        <td class="text-center align-middle">
+            <input type="text" name="productPrice[]" class="text-center p-0 m-0 border-0 form-control d-none"
+                value="' . number_format($rowOrderItem['productPrice'], 2, '.', '') . '">' . number_format($rowOrderItem['productPrice'], 2, '.', '') . '
         </td>
-        <td class="text-right align-middle">
-            <input type="text" name="discountItem[]" class="text-right p-0 m-0 border-0 form-control"
-                value="' . number_format($rowOrderItem['productDiscount'], 2, '.', '') . '">
+        <td class="text-center align-middle">
+            <input type="text" name="discount[]" class="text-center p-0 m-0 border-0 form-control d-none"
+                value="' . $rowOrderItem['discount'] . '">' . $rowOrderItem['discount'] . '%
+        </td>
+        <td class="text-center align-middle">
+            <input type="text" name="discountItem[]" class="text-center p-0 m-0 border-0 form-control d-none"
+                value="' . number_format($rowOrderItem['productDiscount'], 2, '.', '') . '">' . number_format($rowOrderItem['productDiscount'], 2, '.', '') . '
         </td>
         <td class="text-center align-middle">
             <button type="button" class="btn btn-sm btn-danger" id="removeItem" data-removeitem="' . $rowOrderItem['orderItemId'] . '"><i class="far fa-trash-alt"></i></button>
