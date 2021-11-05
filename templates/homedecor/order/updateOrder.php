@@ -19,11 +19,12 @@ $shipping = $_POST['shipping'];
 
 // Order details
 $id = $_POST['id'];
-$status = "New Order";
+$status = "Updated Order";
 $productIds = $_POST['productId'];
-// $productItemIds = $_POST['productItemId'];
+$itemIds = $_POST['itemId'];
 $quantities = $_POST['quantity'];
 $productPrices = $_POST['productPrice'];
+$discounts = $_POST['discount'];
 $discountItems = $_POST['discountItem'];
 $voucher = $_POST['voucher'];
 $subTotal = array_sum($_POST['productPrice']);
@@ -76,6 +77,7 @@ for ($i = 0; $i < count($productIds); $i++) {
     // Count the items
     $productId = $productIds[$i];
     $quantity = $quantities[$i];
+    $discount = $discounts[$i];
     $productPrice = $productPrices[$i];
     $discountItem = $discountItems[$i];
 
@@ -86,10 +88,10 @@ for ($i = 0; $i < count($productIds); $i++) {
     if (mysqli_num_rows($resultCheck) > 0) {
         echo "Product already existed inside the table. Check next item. <hr><br>";
         $_SESSION['items'] = 'Product already existed inside the table. Check next item';
-        // header("Location: orderView.php?id=" . $id);
+        header("Location: orderView.php?id=" . $id);
     } else {
         // Insert into homedecor_order_item
-        $insertOrderDetails = "INSERT INTO homedecor_order_item (orderId, productId, productPrice, productDiscount, quantity, created) VALUES ('$id', '$productId', '$productPrice', '$discountItem', '$quantity', '$modified')";
+        $insertOrderDetails = "INSERT INTO homedecor_order_item (orderId, productId, productPrice, discount, productDiscount, quantity, created) VALUES ('$id', '$productId', '$productPrice', '$discount', '$discountItem', '$quantity', '$modified')";
         $resultInsertOrderDetails = mysqli_query($conn, $insertOrderDetails);
 
         if ($resultInsertOrderDetails) {
@@ -103,7 +105,7 @@ for ($i = 0; $i < count($productIds); $i++) {
                 echo mysqli_error($conn) . '<br>';
             }
             $_SESSION['items'] = 'Successfully created the order and update item details';
-            // header("Location: orderView.php?id=" . $id);
+            header("Location: orderView.php?id=" . $id);
         } else {
             echo mysqli_error($conn) . '<br>';
         }

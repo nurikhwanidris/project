@@ -455,8 +455,15 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
             }
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemIds[]' value='" + itemId + "' class='d-none'><input type='text' name='sellDefect[]' value='" + sellDefect + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control d-none' value='" + quantity + "'>" + quantity + "</td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + productSellingMYR.toFixed(2) + "'>" + productSellingMYR.toFixed(2) + "</td><td class='text-center align-middle'><input type='text' name='discount[]' class='d-none' value='" + discountItem + "'>" + discountItem + "%</td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + amount.toFixed(2) + "'>" + amount.toFixed(2) + "</td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemId[]' value='" + itemId + "' class='d-none'><input type='text' name='sellDefect[]' value='" + sellDefect + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control d-none' value='" + quantity + "'>" + quantity + "</td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + productSellingMYR.toFixed(2) + "'>" + productSellingMYR.toFixed(2) + "</td><td class='text-center align-middle'><input type='text' name='discount[]' class='d-none' value='" + discountItem + "'>" + discountItem + "%</td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + amount.toFixed(2) + "'>" + amount.toFixed(2) + "</td></tr>";
             $("table tbody").append(markup);
+
+        });
+
+        // On product click, clear the discount input
+        $("#product").change(function() {
+            $("#discountItem").val(0);
+            $("#discountRinggit").val(0);
         });
 
         // Find and remove selected table rows
@@ -481,8 +488,9 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                     dataType: 'json',
                     encode: true,
                 });
-                fetch_data();
             }
+            fetch_data();
         });
+
     });
 </script>
