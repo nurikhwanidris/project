@@ -18,10 +18,10 @@ $quantity = $rowSelect['quantity'];
 // Insert back into homedecor_item2
 $insert = "UPDATE homedecor_item2 SET itemAvailable = itemAvailable + '$quantity', itemSold  = itemSold - '$quantity', modified = '$modified' WHERE productId = '$productId'";
 if (mysqli_query($conn, $insert)) {
-    // Message
+    // Success message
     echo "Item quantity has been updated. <br>";
 } else {
-    // Message
+    // Error message
     echo "Something went wrong. <br>" . mysqli_error($conn);
 }
 
