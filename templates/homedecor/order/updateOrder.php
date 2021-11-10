@@ -15,7 +15,6 @@ $city = $_POST['city'];
 $postcode = $_POST['postcode'];
 $state = $_POST['state'];
 $shipping = $_POST['shipping'];
-// $discountAll = $_POST['discountAll'];
 
 // Order details
 $id = $_POST['id'];
