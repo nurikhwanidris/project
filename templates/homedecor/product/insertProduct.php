@@ -13,6 +13,7 @@ $productCostMYR = $_POST['productCostMYR'];
 $productSellingMYR = $_POST['productSellingMYR'];
 $productImg = $_FILES['productImg']['name'];
 
+// Sambung dkt sini nanti
 // Check if replacement product is empty.
 if (empty($_POST['productReplacement'])) {
     $productReplacement = NULL;
