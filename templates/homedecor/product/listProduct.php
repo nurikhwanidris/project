@@ -88,7 +88,7 @@ $result = mysqli_query($conn, $sql);
                                 <?php while ($rowItem = mysqli_fetch_array($result)) : ?>
                                     <tr>
                                         <td class="text-left align-middle">
-                                            <a href="viewProduct?id=<?= $rowItem['id']; ?>" target="_blank"><?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId'] . $rowItem['replacementPart'] = (!is_null($rowItem['replacementPart'])) ? '-1' : ''; ?></a>
+                                            <a href="viewProduct?id=<?= $rowItem['id']; ?>" target="_blank"><?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId'] . $rowItem['replacementPart'] = ($rowItem['replacementPart'] > 0) ? '-1' : ''; ?></a>
                                         </td>
                                         <td class="text-left align-middle">
                                             <?= $rowItem['name']; ?>

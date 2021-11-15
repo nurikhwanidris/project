@@ -51,12 +51,6 @@ $resultSource = mysqli_query($conn, $selectSource);
                                     <input type="text" name="productName" class="form-control text-capitalize" id="productName" value="" required>
                                 </div>
                             </div>
-                            <div class="form-group row" id="replacement-group">
-                                <label for="productReplacement" class="col-sm-2 col-form-label">Replacement Part</label>
-                                <div class="col-sm-2">
-                                    <input type="number" name="productReplacement" id="productReplacement" class="form-control" data-toggle="tooltip" data-placement="right" title="Insert the part number 1-10" placeholder="0">
-                                </div>
-                            </div>
                             <div class="form-group row" id="productSupplier-group">
                                 <label for="productSupplier" class="col-sm-2 col-form-label">Supplier Name</label>
                                 <div class="col-sm-4">
@@ -123,6 +117,12 @@ $resultSource = mysqli_query($conn, $selectSource);
                                 <label for="productProfitMYR" class="col-sm-1">Profit (MYR)</label>
                                 <div class="col-sm-2">
                                     <input type="text" name="productProfitMYR" id="productProfitMYR" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="productReplacement-group">
+                                <label for="productReplacement" class="col-sm-2 col-form-label">Replacement Part</label>
+                                <div class="col-sm-2">
+                                    <input type="number" name="productReplacement" id="productReplacement" class="form-control" data-toggle="tooltip" data-placement="right" title="Insert the part number 1-10. Leave empty if none" placeholder="Read the tooltip">
                                 </div>
                             </div>
                             <div class="form-group row" id="productImg-group">
