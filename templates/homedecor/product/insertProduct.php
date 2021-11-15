@@ -13,6 +13,13 @@ $productCostMYR = $_POST['productCostMYR'];
 $productSellingMYR = $_POST['productSellingMYR'];
 $productImg = $_FILES['productImg']['name'];
 
+// Check if replacement product is empty.
+if (empty($_POST['productReplacement'])) {
+    $productReplacement = NULL;
+} else {
+    $productReplacement = $_POST['productReplacement'];
+}
+
 // Image folder
 $productImgPath = '../../../upload/img/product/2021/' . $productImg;
 
@@ -34,7 +41,7 @@ $tambah1 = $lastItemId['itemId'] + 1;
 
 if ($resultSearch) {
     // Insert into product table
-    $insert = "INSERT INTO homedecor_product2 (itemId, supplier, itemCode, name, category, size, variation, costTHB, discTHB, costMYR, sellingMYR, img, created) VALUES ('$tambah1', '$productSupplier', '$productCategoryCode', '$productName', '$productCategory', '$productSize', '$productVariation', '$productCostTHB', '$productAfterDiscTHB', '$productCostMYR', '$productSellingMYR', '$productImg', '$created')";
+    $insert = "INSERT INTO homedecor_product2 (itemId, supplier, itemCode, name, category, size, variation, replacementPart, costTHB, discTHB, costMYR, sellingMYR, img, created) VALUES ('$tambah1', '$productSupplier', '$productCategoryCode', '$productName', '$productCategory', '$productSize', '$productVariation', '$productReplacement', '$productCostTHB', '$productAfterDiscTHB', '$productCostMYR', '$productSellingMYR', '$productImg', '$created')";
     $resultInsert = mysqli_query($conn, $insert);
 
     if ($resultInsert) {
