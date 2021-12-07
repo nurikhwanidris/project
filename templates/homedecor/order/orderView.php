@@ -34,6 +34,7 @@ $product = "SELECT
 homedecor_product2.id AS productid,
 homedecor_product2.name AS productName,
 homedecor_product2.variation AS productVariation,
+homedecor_product2.replacementPart AS replacementPart,
 homedecor_product2.supplier AS productSupplier,
 homedecor_product2.itemId AS productItemId,
 homedecor_item2.productId AS itemId,
@@ -43,10 +44,10 @@ JOIN homedecor_item2
 ON homedecor_product2.id = homedecor_item2.productId";
 $resultproduct = mysqli_query($conn, $product);
 
-// Get product details
+// Select product
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
-    $productSelectOptions[$rowProduct['productid']] = $rowProduct['productSupplier'] . ' | ' . $rowProduct['productItemId'] .  ' - ' .  $rowProduct['productName'] . ' - ' . $rowProduct['productVariation'] . ' [' . $rowProduct['itemAvailable'] . ' left]';
+    $productSelectOptions[$rowProduct['productid']] = $rowProduct['productSupplier'] . ' | ' . $rowProduct['productItemId'] .  ' - ' . $rowProduct['replacementPart'] . ' | ' .  $rowProduct['productName'] . ' - ' . $rowProduct['productVariation'] . ' [' . $rowProduct['itemAvailable'] . ' left]';
 }
 
 // Order items
@@ -62,7 +63,8 @@ homedecor_order_item.productDiscount,
 homedecor_product2.name,
 homedecor_product2.itemId AS productItemId,
 homedecor_product2.supplier,
-homedecor_product2.itemCode
+homedecor_product2.itemCode,
+homedecor_product2.replacementPart
 FROM homedecor_order_item 
 INNER JOIN homedecor_order2 ON homedecor_order_item.orderId = '$id' 
 JOIN homedecor_product2 
@@ -234,6 +236,8 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
                                         <input type="text" id="productCategory" />
                                         <label for="">product variation</label>
                                         <input type="text" id="productVariation" />
+                                        <label for="">replacement part</label>
+                                        <input type="text" id="replacementPart" />
                                         <label for="">item id</label>
                                         <input type="text" id="itemId" />
                                         <label for="">item available</label>
@@ -359,6 +363,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
     var $productItemCode = $("#productItemCode");
     var $productCategory = $("#productCategory");
     var $productVariation = $("#productVariation");
+    var $replacementPart = $("#replacementPart");
     var $productSellingMYR = $("#productSellingMYR");
     var $itemId = $("#itemId");
     var $itemAvailable = $("#itemAvailable");
@@ -378,6 +383,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
             $productItemCode.val(r.productItemCode);
             $productCategory.val(r.productCategory);
             $productVariation.val(r.productVariation);
+            $replacementPart.val(r.replacem$replacementPart);
             $itemId.val(r.itemId);
             $itemAvailable.val(r.itemAvailable);
             $itemDefect.val(r.itemDefect);
@@ -423,12 +429,21 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
             $("#discountItem").val(discountedPrice);
         })
 
+        // Check for replacement part
+        var replacementPart = $("#replacementPart").val();
+
+        if (replacementPart != 0) {
+            replacementPart = '-' + 1;
+        } else {
+            replacementPart = '';
+        }
+
         $(".add-row").click(function() {
             var e = $("#product");
             var itemId = $("#itemId").val();
             var getID = e.val();
             var name = $("#product option:selected").text();
-            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(3, '0') + '-' + $("#productId").val();
+            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(3, '0') + '-' + $("#productId").val() + replacementPart;
             var productOrderNo = $("#productOrderNo").val();
             var quantity = parseInt($("#quantity").val());
             var discountItem = parseFloat($("#discountItem").val());
@@ -455,7 +470,7 @@ $resultOrderItem = mysqli_query($conn, $orderItem);
             }
 
             // Create tabel rows
-            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-center align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemId[]' value='" + itemId + "' class='d-none'><input type='text' name='sellDefect[]' value='" + sellDefect + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control d-none' value='" + quantity + "'>" + quantity + "</td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + productSellingMYR.toFixed(2) + "'>" + productSellingMYR.toFixed(2) + "</td><td class='text-center align-middle'><input type='text' name='discount[]' class='d-none' value='" + discountItem + "'>" + discountItem + "%</td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + amount.toFixed(2) + "'>" + amount.toFixed(2) + "</td></tr>";
+            var markup = "<tr><td class='align-middle text-center'><input type='checkbox' name='record'></td><td class='text-left align-middle'>" + itemCode + "</td><td class='align-middle'><input type='text' class='border-0 form-control' value='" + name + "'><input type='text' name='productId[]' value='" + getID + "' class='d-none'><input type='text' name='itemId[]' value='" + itemId + "' class='d-none'><input type='text' name='sellDefect[]' value='" + sellDefect + "' class='d-none'></td><td class='text-center align-middle'><input type='text' name='quantity[]' class='text-center border-0 form-control d-none' value='" + quantity + "'>" + quantity + "</td><td class='text-center align-middle'><input type='text' name='productPrice[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + productSellingMYR.toFixed(2) + "'>" + productSellingMYR.toFixed(2) + "</td><td class='text-center align-middle'><input type='text' name='discount[]' class='d-none' value='" + discountItem + "'>" + discountItem + "%</td><td class='text-center align-middle'><input type='text' name='discountItem[]' class='text-center p-0 m-0 border-0 form-control d-none' value='" + amount.toFixed(2) + "'>" + amount.toFixed(2) + "</td></tr>";
             $("table tbody").append(markup);
 
         });

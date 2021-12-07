@@ -26,10 +26,11 @@ if ($resultCustomer) {
 <?php
 $product = "SELECT 
 homedecor_product2.id AS productid,
-homedecor_product2.name AS productName,
-homedecor_product2.variation AS productVariation,
-homedecor_product2.supplier AS productSupplier,
 homedecor_product2.itemId AS productItemId,
+homedecor_product2.name AS productName,
+homedecor_product2.supplier AS productSupplier,
+homedecor_product2.variation AS productVariation,
+homedecor_product2.replacementPart AS replacementPart,
 homedecor_item2.productId AS itemId,
 homedecor_item2.itemAvailable AS itemAvailable
 FROM homedecor_product2
@@ -40,7 +41,7 @@ $resultproduct = mysqli_query($conn, $product);
 // Select product
 $productSelectOptions = array();
 while ($rowProduct = $resultproduct->fetch_assoc()) {
-    $productSelectOptions[$rowProduct['productid']] = $rowProduct['productSupplier'] . ' | ' . $rowProduct['productItemId'] .  ' - ' .  $rowProduct['productName'] . ' - ' . $rowProduct['productVariation'] . ' [' . $rowProduct['itemAvailable'] . ' left]';
+    $productSelectOptions[$rowProduct['productid']] = $rowProduct['productSupplier'] . ' | ' . $rowProduct['productItemId'] .  ' - ' . $rowProduct['replacementPart'] . ' | ' .  $rowProduct['productName'] . ' - ' . $rowProduct['productVariation'] . ' [' . $rowProduct['itemAvailable'] . ' left]';
 }
 ?>
 
@@ -204,7 +205,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                             </div>
                         </div>
                         <div class="row my-2 d-none">
-                            <div class="col-lg-12">
+                            <div class=" col-lg-12">
                                 <label for="">product id</label>
                                 <input type="text" id="productId" />
                                 <label for="">product name</label>
@@ -217,6 +218,8 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
                                 <input type="text" id="productCategory" />
                                 <label for="">product variation</label>
                                 <input type="text" id="productVariation" />
+                                <label for="">product replacement part</label>
+                                <input type="text" id="replacementPart" />
                                 <label for="">item id</label>
                                 <input type="text" id="itemId" />
                                 <label for="">item available</label>
@@ -350,6 +353,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
     var $productItemCode = $("#productItemCode");
     var $productCategory = $("#productCategory");
     var $productVariation = $("#productVariation");
+    var $replacementPart = $("#replacementPart");
     var $productSellingMYR = $("#productSellingMYR");
     var $itemId = $("#itemId");
     var $itemAvailable = $("#itemAvailable");
@@ -369,6 +373,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             $productItemCode.val(r.productItemCode);
             $productCategory.val(r.productCategory);
             $productVariation.val(r.productVariation);
+            $replacementPart.val(r.replacementPart);
             $itemId.val(r.itemId);
             $itemAvailable.val(r.itemAvailable);
             $itemDefect.val(r.itemDefect);
@@ -399,12 +404,21 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
             $("#discountItem").val(discountedPrice);
         })
 
+        // Check for replacement part
+        var replacementPart = $("#replacementPart").val();
+
+        if (replacementPart != 0) {
+            replacementPart = ' - ' + 1;
+        } else {
+            replacementPart = '';
+        }
+
         $(".add-row").click(function() {
             var e = $("#product");
             var itemId = $("#itemId").val();
             var getID = e.val();
             var name = $("#product option:selected").text();
-            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(3, '0') + '-' + $("#productId").val();
+            var itemCode = $("#productSupplier").val() + '-' + $("#productItemCode").val().padStart(3, '0') + '-' + $("#productId").val() + replacementPart;
             var productOrderNo = $("#productOrderNo").val();
             var quantity = parseInt($("#quantity").val());
             var discountItem = parseFloat($("#discountItem").val());

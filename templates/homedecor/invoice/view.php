@@ -54,7 +54,8 @@ homedecor_product2.id,
 homedecor_product2.name,
 homedecor_product2.supplier,
 homedecor_product2.itemId,
-homedecor_product2.itemCode
+homedecor_product2.itemCode,
+homedecor_product2.replacementPart
 FROM homedecor_order_item
 JOIN homedecor_product2
 ON homedecor_order_item.productId = homedecor_product2.id
@@ -164,7 +165,7 @@ $resultReceipt = mysqli_query($conn, $receipt);
                                                 </td>
                                                 <!-- Product ID -->
                                                 <td class="align-middle text-left">
-                                                    <?= $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId']; ?>
+                                                    <?= ($rowOrderItem['replacementPart'] != 0) ? $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId'] . '-' . $rowOrderItem['replacementPart'] : $rowOrderItem['supplier'] . '-' . str_pad($rowOrderItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowOrderItem['itemId']; ?>
                                                 </td>
                                                 <!-- Selling Price -->
                                                 <td class="align-middle text-right">

@@ -42,6 +42,7 @@ if (array_key_exists('product', $_POST)) {
     $response['productCategory'] = $rowProduct['productCategory'];
     $response['productSize'] = $rowProduct['productSize'];
     $response['productVariation'] = $rowProduct['productVariation'];
+    $response['replacementPart'] = $rowProduct['replacementPart'];
     $response['productSellingMYR'] = $rowProduct['productSellingMYR'];
     $response['itemId'] = $rowItem['itemId'];
     $response['itemProductId'] = $rowItem['itemProductId'];

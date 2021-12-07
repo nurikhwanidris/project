@@ -16,6 +16,7 @@ if (array_key_exists('product', $_POST)) {
     homedecor_product2.category AS productCategory,
     homedecor_product2.size AS productSize,
     homedecor_product2.variation AS productVariation,
+    homedecor_product2.replacementpart AS replacementPart,
     homedecor_product2.sellingMYR AS productSellingMYR
     FROM homedecor_product2
     WHERE homedecor_product2.id = '$product'";
@@ -43,6 +44,7 @@ if (array_key_exists('product', $_POST)) {
     $response['productCategory'] = $rowProduct['productCategory'];
     $response['productSize'] = $rowProduct['productSize'];
     $response['productVariation'] = $rowProduct['productVariation'];
+    $response['replacementPart'] = $rowProduct['replacementPart'];
     $response['productSellingMYR'] = $rowProduct['productSellingMYR'];
     $response['itemId'] = $rowItem['itemId'];
     $response['itemProductId'] = $rowItem['itemProductId'];

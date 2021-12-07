@@ -18,7 +18,8 @@ homedecor_order_item.discount,
 homedecor_product2.name,
 homedecor_product2.itemId AS productItemId,
 homedecor_product2.supplier,
-homedecor_product2.itemCode
+homedecor_product2.itemCode,
+homedecor_product2.replacementPart
 FROM homedecor_order_item 
 INNER JOIN homedecor_order2 ON homedecor_order_item.orderId = '$id' 
 JOIN homedecor_product2 
@@ -35,7 +36,7 @@ $output .= '
     <thead>
         <tr>
             <th class="align-middle text-center">/</th>
-            <th class="align-middle text-center">Code</th>
+            <th class="align-middle text-left">Code</th>
             <th class="align-middle" style="width: 60%;">Product Name</th>
             <th class="align-middle text-center">Quantity</th>
             <th class="align-middle text-center">Unit Price</th>
@@ -47,12 +48,20 @@ $output .= '
 ';
 $output .= '<tbody>';
 while ($rowOrderItem = mysqli_fetch_array($resultOrderItem)) {
+
+    // Check replacement part
+    if ($rowOrderItem["replacementPart"] != 0) {
+        $itemCode = $rowOrderItem["supplier"] . '-' . str_pad($rowOrderItem["itemCode"], 3, 0, STR_PAD_LEFT) . '-' . $rowOrderItem["productItemId"] . '-' . $rowOrderItem["replacementPart"];
+    } else {
+        $itemCode = $rowOrderItem["supplier"] . '-' . str_pad($rowOrderItem["itemCode"], 3, 0, STR_PAD_LEFT) . '-' . $rowOrderItem["productItemId"];
+    }
+
     $output .= '
     <tr>
         <td class="text-center align-middle">
             <input type="checkbox" name="record">
         </td>
-        <td class="text-center align-middle">' . $rowOrderItem["supplier"] . ' - ' . str_pad($rowOrderItem["itemCode"], 3, 0, STR_PAD_LEFT) . ' - ' . $rowOrderItem["productItemId"] . '
+        <td class="text-left align-middle">' . $itemCode . '
         </td>
         <td class="text-left align-middle">
             ' . $rowOrderItem['name'] . '

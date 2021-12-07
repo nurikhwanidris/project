@@ -2,17 +2,17 @@
 <?php $title = 'Item Listing'; ?>
 
 <!-- Header -->
-<?php require('../../elements/admin/dashboard/header.php') ?>
+<?php include('../../elements/admin/dashboard/header.php') ?>
 
 <!-- Datatable CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.1.3/css/rowGroup.dataTables.min.css">
 
 <!-- Get DB conn -->
-<?php require('../../../src/model/dbconn.php') ?>
+<?php include('../../../src/model/dbconn.php') ?>
 
 <!-- Sidebar -->
-<?php require('../../elements/admin/dashboard/nav.php') ?>
+<?php include('../../elements/admin/dashboard/nav.php') ?>
 
 <!-- Get item from database -->
 <?php
@@ -26,6 +26,7 @@ homedecor_product2.supplier AS supplier,
 homedecor_product2.category AS category,
 homedecor_product2.size AS size,
 homedecor_product2.variation AS variation,
+homedecor_product2.replacementPart AS replacementPart,
 homedecor_product2.costTHB AS costTHB,
 homedecor_product2.discTHB AS discTHB,
 homedecor_product2.costMYR AS costMYR,
@@ -112,7 +113,7 @@ $result = mysqli_query($conn, $sql);
                                     <tr>
                                         <td class="text-left align-middle">
                                             <a href="viewItem.php?id=<?= $rowItem['id']; ?>" id="editItem" target="_blank">
-                                                <?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId']; ?>
+                                                <?= $rowItem['supplier'] . '-' . str_pad($rowItem['itemCode'], 4, 0, STR_PAD_LEFT) . '-' . $rowItem['itemId'] . $rowItem['replacementPart'] = ($rowItem['replacementPart'] > 0) ? '-1' : ''; ?>
                                             </a>
                                         </td>
                                         <td class="text-left align-middle">
@@ -171,7 +172,7 @@ $result = mysqli_query($conn, $sql);
 </div>
 
 <!-- footer -->
-<?php require('../../elements/admin/dashboard/footer.php') ?>
+<?php include('../../elements/admin/dashboard/footer.php') ?>
 
 <script>
     $(document).ready(function() {
