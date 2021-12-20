@@ -72,7 +72,7 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 define('BUSINESS', 'Arzu Home & Living Empire');
 
 // Business address
-define('ADDRESS', "No. 243B, Tingkat 2, Jalan Bandar 13, \n53100 Taman Melawati, Kuala Lumpur");
+define('ADDRESS', "No. 5, Jalan Wangsa Delima 2A, Pusat Bandar Wangsa Maju, \n53300 Kuala Lumpur");
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, BUSINESS, ADDRESS);
